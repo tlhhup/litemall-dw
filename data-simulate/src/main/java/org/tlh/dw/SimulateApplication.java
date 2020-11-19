@@ -1,4 +1,4 @@
-package org.linlinjava.litemall.admin;
+package org.tlh.dw;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -6,15 +6,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.linlinjava.litemall.core",
-        "org.linlinjava.litemall.admin"})
+/**
+ * @author 离歌笑
+ * @desc
+ * @date 2020-11-19
+ */
+@EnableScheduling
+@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.linlinjava.litemall.core", "org.tlh.dw"})
 @MapperScan("org.linlinjava.litemall.db.dao")
 @EnableTransactionManagement
-@EnableScheduling
-public class Application {
+public class SimulateApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SimulateApplication.class, args);
     }
 
 }

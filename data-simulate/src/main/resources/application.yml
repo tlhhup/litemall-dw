@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: db, core
+  messages:
+    encoding: UTF-8
+
+logging:
+  level:
+    root:  ERROR
+    org.springframework:  ERROR
+    org.mybatis:  ERROR
+    org.linlinjava.litemall:  ERROR
+    org.tlh.dw: info
