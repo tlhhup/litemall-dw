@@ -1,0 +1,2139 @@
+<?xml version="1.0" encoding="UTF-8"?><Db flnm="litemall" nm="litemall" ver="1.3.4">
+  <VerLbl/>
+  <VerNotes/>
+  <DefTblOpts/>
+  <DocFolder>/Users/stevenhu/IdeaProjects/litemall/litemall-db/sql</DocFolder>
+  <Sch Cm="" nm="schemaA">
+    <Tbl UsSo="1" nm="litemall_ad">
+      <Cm>广告表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='广告表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_ad"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>广告标题</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="link" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>所广告的商品页面或者活动页面链接地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="url" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>广告宣传图片</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="position" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>广告位置：1则是首页</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="content" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>活动内容</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="start_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>广告开始时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="end_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>广告结束时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="enabled" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否启动</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="enabled" spa="0" unq="0">
+        <ClNs>enabled</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_address">
+      <Cm>收货地址表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='收货地址表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_address"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>收货人名称</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="province" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>行政区域表的省ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="city" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>行政区域表的市ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="county" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>行政区域表的区县ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="address_detail" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>详细收货地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="area_code" nu="1">
+        <DT arr="0" ds="Char" en="" id="1" ln="6" sc="null" sg="1" un="0"/>
+        <Cm>地区编码</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="postal_code" nu="1">
+        <DT arr="0" ds="Char" en="" id="1" ln="6" sc="null" sg="1" un="0"/>
+        <Cm>邮政编码</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="tel" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="20" sc="null" sg="1" un="0"/>
+        <Cm>手机号码</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="is_default" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否默认地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_address_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_address" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="user_id" spa="0" unq="0">
+        <ClNs>user_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_admin">
+      <Cm>管理员表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='管理员表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_admin"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="username" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>管理员名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="password" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>管理员密码</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="last_login_ip" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>最近一次登录IP地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="last_login_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>最近一次登录时间</Cm>
+      </Cl>
+      <Cl au="0" df="'" nm="avatar" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>头像图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Cl au="0" df="[]" nm="role_ids" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>角色列表</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_aftersale">
+      <Cm>售后表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='售后表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_aftersale"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="aftersale_sn" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>售后编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="type" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>售后类型，0是未收货退款，1是已收货（无需退货）退款，2用户退货退款</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="reason" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="31" sc="null" sg="1" un="0"/>
+        <Cm>退款原因</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="amount" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>退款金额</Cm>
+      </Cl>
+      <Cl au="0" df="[]" nm="pictures" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>退款凭证图片链接数组</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="comment" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="511" sc="null" sg="1" un="0"/>
+        <Cm>退款说明</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>售后状态，0是可申请，1是用户已申请，2是管理员审核通过，3是管理员退款成功，4是管理员审核拒绝，5是用户已取消</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="handle_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>管理员操作时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>添加时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_aftersale_litemall_order" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_order" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_aftersale" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="order_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_aftersale_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_aftersale" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_brand">
+      <Cm>品牌商表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=1046003 DEFAULT CHARSET=utf8mb4 COMMENT='品牌商表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_brand"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>品牌商名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="desc" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>品牌商简介</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>品牌商页的品牌商图片</Cm>
+      </Cl>
+      <Cl au="0" df="50" nm="sort_order" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0.00" nm="floor_price" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>品牌商的商品低价，仅用于页面展示</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_cart">
+      <Cm>购物车商品表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='购物车商品表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_cart"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_sn" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>商品编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_name" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>商品名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="product_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品货品表的货品ID</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="price" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>商品货品的价格</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="number" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品货品的数量</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="specifications" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>商品规格值列表，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="checked" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>购物车中商品是否选择状态</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品图片或者商品货品图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_cart_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_cart" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_cart_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_cart" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_category">
+      <Cm>类目表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=1036007 DEFAULT CHARSET=utf8mb4 COMMENT='类目表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_category"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>类目名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="keywords" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>类目关键字，以JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="desc" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>类目广告语介绍</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="pid" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>父类目ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="icon_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>类目图标</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>类目图片</Cm>
+      </Cl>
+      <Cl au="0" df="L1" nm="level" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="50" nm="sort_order" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>排序</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="parent_id" spa="0" unq="0">
+        <ClNs>pid</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_collect">
+      <Cm>收藏表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='收藏表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_collect"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="value_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>如果type=0，则是商品ID；如果type=1，则是专题ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="type" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>收藏类型，如果type=0，则是商品ID；如果type=1，则是专题ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_collect_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_collect" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="goods_id" spa="0" unq="0">
+        <ClNs>value_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="user_id" spa="0" unq="0">
+        <ClNs>user_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_comment">
+      <Cm>评论表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=1012 DEFAULT CHARSET=utf8mb4 COMMENT='评论表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_comment"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="value_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>如果type=0，则是商品评论；如果是type=1，则是专题评论。</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="type" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>评论类型，如果type=0，则是商品评论；如果是type=1，则是专题评论；</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="content" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>评论内容</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="admin_content" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="511" sc="null" sg="1" un="0"/>
+        <Cm>管理员回复内容</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="has_picture" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否含有图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_urls" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>图片地址列表，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="star" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>评分， 1-5</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_comment_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_comment" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="id_value" spa="0" unq="0">
+        <ClNs>value_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_coupon">
+      <Cm>优惠券信息及规则表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='优惠券信息及规则表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_coupon"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>优惠券名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="desc" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>优惠券介绍，通常是显示优惠券使用限制文字</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="tag" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>优惠券标签，例如新人专用</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="total" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>优惠券数量，如果是0，则是无限量</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="discount" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>优惠金额，</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="min" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>最少消费金额才能使用优惠券。</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="limit" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户领券限制数量，如果是0，则是不限制；默认是1，限领一张.</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="type" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>优惠券赠送类型，如果是0则通用券，用户领取；如果是1，则是注册赠券；如果是2，则是优惠券码兑换；</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>优惠券状态，如果是0则是正常可用；如果是1则是过期; 如果是2则是下架。</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_type" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品限制类型，如果0则全商品，如果是1则是类目限制，如果是2则是商品限制。</Cm>
+      </Cl>
+      <Cl au="0" df="[]" nm="goods_value" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>商品限制值，goods_type如果是0则空集合，如果是1则是类目集合，如果是2则是商品集合。</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="code" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>优惠券兑换码</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="time_type" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>有效时间限制，如果是0，则基于领取时间的有效天数days；如果是1，则start_time和end_time是优惠券有效期；</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="days" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>基于领取时间的有效天数days。</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="start_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>使用券开始时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="end_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>使用券截至时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="code" spa="0" unq="0">
+        <ClNs>code</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_coupon_user">
+      <Cm>优惠券用户使用表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='优惠券用户使用表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_coupon_user"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="coupon_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>优惠券ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>使用状态, 如果是0则未使用；如果是1则已使用；如果是2则已过期；如果是3则已经下架；</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="used_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>使用时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="start_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>有效期开始时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="end_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>有效期截至时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_coupon_user_litemall_coupon" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_coupon" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_coupon_user" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="coupon_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_coupon_user_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_coupon_user" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_feedback">
+      <Cm>意见反馈表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='意见反馈表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_feedback"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="username" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>用户名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="mobile" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="20" sc="null" sg="1" un="0"/>
+        <Cm>手机号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="feed_type" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>反馈类型</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="content" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>反馈内容</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>状态</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="has_picture" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否含有图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_urls" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>图片地址列表，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="id_value" spa="0" unq="0">
+        <ClNs>status</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_footprint">
+      <Cm>用户浏览足迹表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户浏览足迹表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_footprint"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>浏览商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_goods">
+      <Cm>商品基本信息表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=1181004 DEFAULT CHARSET=utf8mb4 COMMENT='商品基本信息表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_goods"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="goods_sn" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>商品编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>商品名称</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="category_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品所属类目ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="brand_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="gallery" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>商品宣传图片列表，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="keywords" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品关键字，采用逗号间隔</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="brief" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品简介</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="is_on_sale" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否上架</Cm>
+      </Cl>
+      <Cl au="0" df="100" nm="sort_order" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品页面商品图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="share_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品分享海报</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="is_new" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否新品首发，如果设置则可以在新品首发页面展示</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="is_hot" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否人气推荐，如果设置则可以在人气推荐页面展示</Cm>
+      </Cl>
+      <Cl au="0" df="’件‘" nm="unit" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="31" sc="null" sg="1" un="0"/>
+        <Cm>商品单位，例如件、盒</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="counter_price" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>专柜价格</Cm>
+      </Cl>
+      <Cl au="0" df="100000.00" nm="retail_price" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>零售价格</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="detail" nu="1">
+        <DT arr="0" ds="Text" en="" id="703" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品详细介绍，是富文本格式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_goods_litemall_brand" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_brand" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_goods" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="brand_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_goods_litemall_category" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_category" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_goods" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="category_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="brand_id" spa="0" unq="0">
+        <ClNs>brand_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="cat_id" spa="0" unq="0">
+        <ClNs>category_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="goods_sn" spa="0" unq="0">
+        <ClNs>goods_sn</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="sort_order" spa="0" unq="0">
+        <ClNs>sort_order</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_goods_attribute">
+      <Cm>商品参数表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=877 DEFAULT CHARSET=utf8mb4 COMMENT='商品参数表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_goods_attribute"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="attribute" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品参数名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="value" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品参数值</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_goods_attribute_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_goods_attribute" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_goods_product">
+      <Cm>商品货品表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=251 DEFAULT CHARSET=utf8mb4 COMMENT='商品货品表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_goods_product"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="specifications" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>商品规格值列表，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>商品货品价格</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="number" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品货品数量</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="125" sc="null" sg="1" un="0"/>
+        <Cm>商品货品图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_goods_product_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_goods_product" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_goods_specification">
+      <Cm>商品规格表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8mb4 COMMENT='商品规格表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_goods_specification"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="specification" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品规格名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="value" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品规格值</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品规格图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_goods_specification_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_goods_specification" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_groupon">
+      <Cm>团购活动表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='团购活动表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_groupon"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="order_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>关联的订单ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="groupon_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>如果是开团用户，则groupon_id是0；如果是参团用户，则groupon_id是团购活动ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="rules_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>团购规则ID，关联litemall_groupon_rules表ID字段</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="share_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>团购分享图片地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="creator_user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>开团用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="creator_user_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>开团时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>团购活动状态，开团未支付则0，开团中则1，开团失败则2</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_groupon_litemall_coupon" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_coupon" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="groupon_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_groupon_litemall_groupon_rules" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_groupon_rules" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="rules_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_groupon_litemall_order" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_order" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="order_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_groupon_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_groupon_rules">
+      <Cm>团购规则表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='团购规则表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_groupon_rules"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>商品名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品图片或者商品货品图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="discount" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="63" sc="0" sg="1" un="0"/>
+        <Cm>优惠金额</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="discount_member" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>达到优惠条件的人数</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="expire_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>团购过期时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>团购规则状态，正常上线则0，到期自动下线则1，管理手动下线则2</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_groupon_rules_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_groupon_rules" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="goods_id" spa="0" unq="0">
+        <ClNs>goods_id, goods_id, goods_id, goods_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_issue">
+      <Cm>常见问题表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='常见问题表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_issue"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="question" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>问题标题</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="answer" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>问题答案</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_keyword">
+      <Cm>关键字表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='关键字表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_keyword"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="keyword" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>关键字</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="url" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>关键字的跳转链接</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="is_hot" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否是热门关键字</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="is_default" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否是默认关键字</Cm>
+      </Cl>
+      <Cl au="0" df="100" nm="sort_order" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>排序</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_log">
+      <Cm>操作日志表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_log"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="admin" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="45" sc="null" sg="1" un="0"/>
+        <Cm>管理员</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="ip" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="45" sc="null" sg="1" un="0"/>
+        <Cm>管理员地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="type" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>操作分类</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="action" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="45" sc="null" sg="1" un="0"/>
+        <Cm>操作动作</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="status" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>操作状态</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="result" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>操作结果，或者成功消息，或者失败消息</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="comment" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>补充信息</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_notice">
+      <Cm>通知表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='通知表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_notice"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="title" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>通知标题</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="content" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="511" sc="null" sg="1" un="0"/>
+        <Cm>通知内容</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="admin_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建通知的管理员ID，如果是系统内置通知则是0.</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_notice_admin">
+      <Cm>通知管理员表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='通知管理员表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_notice_admin"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="notice_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>通知ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="notice_title" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>通知标题</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="admin_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>接收通知的管理员ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="read_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>阅读时间，如果是NULL则是未读状态</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_order">
+      <Cm>订单表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_order"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order_sn" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>订单编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order_status" nu="0">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单状态</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="aftersale_status" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>售后状态，0是可申请，1是用户已申请，2是管理员审核通过，3是管理员退款成功，4是管理员审核拒绝，5是用户已取消</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="consignee" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>收货人名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="mobile" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>收货人手机号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="address" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>收货具体地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="message" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="512" sc="null" sg="1" un="0"/>
+        <Cm>用户订单留言</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>商品总费用</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="freight_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>配送费用</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="coupon_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>优惠券减免</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="integral_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>用户积分减免</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="groupon_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>团购优惠价减免</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>订单费用， = goods_price + freight_price - coupon_price</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="actual_price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>实付费用， = order_price - integral_price</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pay_id" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>微信付款编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pay_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>微信付款时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="ship_sn" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>发货编号</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="ship_channel" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>发货快递公司</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="ship_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>发货开始时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="refund_amount" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>实际退款金额，（有可能退款金额小于实际支付金额）</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="refund_type" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>退款方式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="refund_content" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>退款备注</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="refund_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>退款时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="confirm_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户确认收货时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="comments" nu="1">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>待评价订单商品数量</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="end_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单关闭时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_order_litemall_user" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_user" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_order" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="user_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_order_goods">
+      <Cm>订单商品表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_order_goods"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="order_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单表的订单ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="goods_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品表的商品ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="127" sc="null" sg="1" un="0"/>
+        <Cm>商品名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods_sn" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>商品编号</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="product_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品货品表的货品ID</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="number" nu="0">
+        <DT arr="0" ds="SmallInt" en="" id="5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>商品货品的购买数量</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="price" nu="0">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>商品货品的售价</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="specifications" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>商品货品的规格列表</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>商品货品图片或者商品图片</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="comment" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>订单商品评论，如果是-1，则超期不能评价；如果是0，则可以评价；如果其他值，则是comment表里面的评论ID。</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_order_goods_litemall_goods" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_order_goods" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="goods_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_litemall_order_goods_litemall_order" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_order" oe="1" sch="schemaA" zr="0"/>
+        <CdTb mn="1" nm="litemall_order_goods" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="order_id" prCl="id"/>
+      </Fk>
+      <Idx clu="0" ftx="0" nm="goods_id" spa="0" unq="0">
+        <ClNs>goods_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="order_id" spa="0" unq="0">
+        <ClNs>order_id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_permission">
+      <Cm>权限表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COMMENT='权限表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_permission"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="role_id" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>角色ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="permission" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>权限</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_litemall_permission_litemall_role" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_role" oe="1" sch="schemaA" zr="1"/>
+        <CdTb mn="1" nm="litemall_permission" oe="0" sch="schemaA" zr="1"/>
+        <ClPr cdCl="role_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_region">
+      <Cm>行政区域表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=3232 DEFAULT CHARSET=utf8mb4 COMMENT='行政区域表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_region"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="0" nm="pid" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>行政区域父ID，例如区县的pid指向市，市的pid指向省，省的pid则是0</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="120" sc="null" sg="1" un="0"/>
+        <Cm>行政区域名称</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="type" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>行政区域类型，如如1则是省， 如果是2则是市，如果是3则是区县</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="code" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>行政区域编码</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="agency_id" spa="0" unq="0">
+        <ClNs>code</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="parent_id" spa="0" unq="0">
+        <ClNs>pid</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <Idx clu="0" ftx="0" nm="region_type" spa="0" unq="0">
+        <ClNs>type</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_role">
+      <Cm>角色表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COMMENT='角色表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_role"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>角色名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="desc" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>角色描述</Cm>
+      </Cl>
+      <Cl au="0" df="1" nm="enabled" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>是否启用</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="name_UNIQUE" spa="0" unq="1">
+        <ClNs>name</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints>
+        <UnCon nm="uc_name">
+          <ClNs>name</ClNs>
+        </UnCon>
+      </UniqueConstraints>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_search_history">
+      <Cm>搜索历史表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='搜索历史表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_search_history"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="user_id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>用户表的用户ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="keyword" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>搜索关键字</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="from" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>搜索来源，如pc、wx、app</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_storage">
+      <Cm>文件存储表</Cm>
+      <TblOpts>ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件存储表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_storage"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="key" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>文件的唯一索引</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>文件名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="type" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="20" sc="null" sg="1" un="0"/>
+        <Cm>文件类型</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="size" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>文件大小</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>文件访问链接</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="key" spa="0" unq="0">
+        <ClNs>key</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_system">
+      <Cm>系统配置表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统配置表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_system"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="key_name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>系统配置名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="key_value" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>系统配置值</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_topic">
+      <Cm>专题表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COMMENT='专题表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_topic"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="'" nm="title" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>专题标题</Cm>
+      </Cl>
+      <Cl au="0" df="'" nm="subtitle" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>专题子标题</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="content" nu="1">
+        <DT arr="0" ds="Text" en="" id="703" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>专题内容，富文本格式</Cm>
+      </Cl>
+      <Cl au="0" df="0.00" nm="price" nu="1">
+        <DT arr="0" ds="Decimal" en="" id="3" ln="10" sc="2" sg="1" un="0"/>
+        <Cm>专题相关商品最低价</Cm>
+      </Cl>
+      <Cl au="0" df="1k" nm="read_count" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>专题阅读量</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pic_url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>专题图片</Cm>
+      </Cl>
+      <Cl au="0" df="100" nm="sort_order" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>排序</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="goods" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1023" sc="null" sg="1" un="0"/>
+        <Cm>专题相关商品，采用JSON数组格式</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="topic_id" spa="0" unq="0">
+        <ClNs>id</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="litemall_user">
+      <Cm>用户表</Cm>
+      <TblOpts>ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户表'</TblOpts>
+      <Pk ClNs="id" nm="pklitemall_user"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="username" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>用户名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="password" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>用户密码</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="gender" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>性别：0 未知， 1男， 1 女</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="birthday" nu="1">
+        <DT arr="0" ds="Date" en="" id="91" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>生日</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="last_login_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>最近一次登录时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="last_login_ip" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>最近一次登录IP地址</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="user_level" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>0 普通用户，1 VIP用户，2 高级VIP用户</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="nickname" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>用户昵称或网络名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="mobile" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="20" sc="null" sg="1" un="0"/>
+        <Cm>用户手机号码</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="avatar" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="255" sc="null" sg="1" un="0"/>
+        <Cm>用户头像图片</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="weixin_openid" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="63" sc="null" sg="1" un="0"/>
+        <Cm>微信登录openid</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="session_key" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>微信登录会话KEY</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="status" nu="0">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>0 可用, 1 禁用, 2 注销</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="add_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="deleted" nu="1">
+        <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>逻辑删除</Cm>
+      </Cl>
+      <Idx clu="0" ftx="0" nm="user_name" spa="0" unq="1">
+        <ClNs>username</ClNs>
+        <OptTx>USES BTREE</OptTx>
+      </Idx>
+      <UniqueConstraints>
+        <UnCon nm="uc_username">
+          <ClNs>username</ClNs>
+        </UnCon>
+      </UniqueConstraints>
+      <SchTrHis/>
+    </Tbl>
+    <CustomTypes/>
+  </Sch>
+  <Dgm nm="diagramA">
+    <RnCf ClkAct="true" FtSz="12" lkStgy="RightAngleStrategy" zm="1.0">
+      <VbCfg>
+        <Fg ky="Auto Number" vl="0"/>
+        <Fg ky="Check" vl="0"/>
+        <Fg ky="Comment" vl="0"/>
+        <Fg ky="Data Type" vl="1"/>
+        <Fg ky="Default" vl="0"/>
+        <Fg ky="ENUM Values" vl="0"/>
+        <Fg ky="Length" vl="1"/>
+        <Fg ky="Name" vl="1"/>
+        <Fg ky="Nullable" vl="0"/>
+        <Fg ky="Schema Name" vl="0"/>
+        <Fg ky="Signed" vl="0"/>
+      </VbCfg>
+    </RnCf>
+    <DiaProps>
+      <Show AllCols="1" FkCols="1" FkNms="1" PkCols="1"/>
+      <ErNotation>BarkerErNotation</ErNotation>
+      <DbTableRectangleFill>HeaderFooterFill</DbTableRectangleFill>
+      <svg path=""/>
+    </DiaProps>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_ad" x="50" y="50"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_address" x="547" y="2261"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_admin" x="998" y="306"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_aftersale" x="347" y="1610"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_brand" x="1266" y="780"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_cart" x="1403" y="2208"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_category" x="1259" y="982"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_collect" x="1129" y="2273"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_comment" x="819" y="2260"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_coupon" x="1409" y="1781"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_coupon_user" x="1139" y="1852"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_feedback" x="1113" y="2459"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_footprint" x="303" y="2276"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods" x="780" y="1378"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_attribute" x="1128" y="1644"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_product" x="1251" y="1452"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_specification" x="1253" y="1271"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_groupon" x="56" y="1630"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_groupon_rules" x="184" y="2028"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_issue" x="977" y="79"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_keyword" x="405" y="72"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_log" x="404" y="300"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_notice" x="676" y="71"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_notice_admin" x="393" y="538"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_order" x="248" y="1018"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_order_goods" x="570" y="1077"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_permission" x="1311" y="75"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_region" x="535" y="2555"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_role" x="1305" y="282"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_search_history" x="813" y="2530"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_storage" x="51" y="315"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_system" x="37" y="517"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_topic" x="695" y="302"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_user" x="808" y="1828"/>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_address.fk_litemall_address_litemall_user" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="808" x2="699" y1="2093" y2="2093"/>
+        <positionableLine lineRole="CHILD_LINE" x1="695" x2="695" y1="2261" y2="2097"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_aftersale.fk_litemall_aftersale_litemall_order" parentEdge="SOUTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="462" x2="462" y1="1556" y2="1610"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_aftersale.fk_litemall_aftersale_litemall_user" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="808" x2="473" y1="1971" y2="1971"/>
+        <positionableLine lineRole="CHILD_LINE" x1="469" x2="469" y1="1876" y2="1967"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_cart.fk_litemall_cart_litemall_goods" parentEdge="EAST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1033" x2="1645" y1="1708" y2="1708"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1649" x2="1649" y1="2208" y2="1712"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_cart.fk_litemall_cart_litemall_user" parentEdge="EAST" positioner="ThreeLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1063" x2="1299" y1="2109" y2="2109"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1403" x2="1307" y1="2213" y2="2213"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="1303" x2="1303" y1="2209" y2="2113"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_collect.fk_litemall_collect_litemall_user" parentEdge="SOUTH" positioner="ThreeLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1000" x2="1000" y1="2142" y2="2198"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1240" x2="1240" y1="2273" y2="2206"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="1236" x2="1004" y1="2202" y2="2202"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_comment.fk_litemall_comment_litemall_user" parentEdge="SOUTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="926" x2="926" y1="2142" y2="2260"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_coupon_user.fk_litemall_coupon_user_litemall_coupon" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1409" x2="1353" y1="1978" y2="1978"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_coupon_user.fk_litemall_coupon_user_litemall_user" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1063" x2="1139" y1="1981" y2="1981"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods.fk_litemall_goods_litemall_brand" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1266" x2="955" y1="961" y2="961"/>
+        <positionableLine lineRole="CHILD_LINE" x1="951" x2="951" y1="1378" y2="965"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods.fk_litemall_goods_litemall_category" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1259" x2="1032" y1="1173" y2="1173"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1028" x2="1028" y1="1378" y2="1177"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods_attribute.fk_litemall_goods_attribute_litemall_goods" parentEdge="EAST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="1033" x2="1193" y1="1623" y2="1623"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1197" x2="1197" y1="1644" y2="1627"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_goods_product.fk_litemall_goods_product_litemall_goods" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1033" x2="1251" y1="1511" y2="1511"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_goods_specification.fk_litemall_goods_specification_litemall_goods" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1033" x2="1253" y1="1408" y2="1408"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_coupon" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1409" x2="330" y1="1822" y2="1822"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_groupon_rules" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="250" x2="250" y1="2028" y2="1864"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_order" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="248" x2="141" y1="1475" y2="1475"/>
+        <positionableLine lineRole="CHILD_LINE" x1="137" x2="137" y1="1630" y2="1479"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_user" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="808" x2="329" y1="2014" y2="2014"/>
+        <positionableLine lineRole="CHILD_LINE" x1="325" x2="325" y1="1864" y2="2010"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_groupon_rules.fk_litemall_groupon_rules_litemall_goods" parentEdge="WEST" positioner="ThreeLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="780" x2="653" y1="1751" y2="1751"/>
+        <positionableLine lineRole="CHILD_LINE" x1="462" x2="645" y1="2098" y2="2098"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="649" x2="649" y1="2094" y2="1755"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_order.fk_litemall_order_litemall_user" parentEdge="WEST" positioner="ThreeLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="PARENT_LINE" x1="808" x2="727" y1="1836" y2="1836"/>
+        <positionableLine lineRole="CHILD_LINE" x1="514" x2="719" y1="1424" y2="1424"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="723" x2="723" y1="1428" y2="1832"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_order_goods.fk_litemall_order_goods_litemall_goods" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="785" x2="785" y1="1378" y2="1343"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_order_goods.fk_litemall_order_goods_litemall_order" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="514" x2="570" y1="1214" y2="1214"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_permission.fk_litemall_permission_litemall_role" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="1438" x2="1438" y1="282" y2="213"/>
+      </positionableLines>
+    </FkGl>
+    <Notes/>
+    <Zones/>
+  </Dgm>
+  <RnmMgr/>
+  <DbDocOptionMgr>
+    <BasicOptionMgr>
+      <Name>db.doc.option.mgr</Name>
+      <BoolOpt lbl="Diagrams" nm="doc.diagrams" on="1" spl="0"/>
+      <BoolOpt lbl="Foreign Keys" nm="doc.fks" on="1" spl="0"/>
+      <BoolOpt lbl="Indexes" nm="doc.indexes" on="1" spl="0"/>
+      <BoolOpt lbl="Overwrite CSS File" nm="doc.overwrite.css" on="1" spl="0"/>
+      <BoolOpt lbl="Procedures" nm="doc.procs" on="1" spl="0"/>
+      <BoolOpt lbl="Schemas" nm="doc.schemas" on="1" spl="0"/>
+      <BoolOpt lbl="Sequences" nm="doc.sequences" on="1" spl="0"/>
+      <BoolOpt lbl="Tables" nm="doc.tables" on="1" spl="0"/>
+      <BoolOpt lbl="Triggers" nm="doc.triggers" on="1" spl="0"/>
+      <BoolOpt lbl="Views" nm="doc.views" on="1" spl="0"/>
+    </BasicOptionMgr>
+  </DbDocOptionMgr>
+  <OpenEditors>
+    <OpenEditor ClsNm="Diagram" fqn="null.diagramA" selected="1"/>
+  </OpenEditors>
+  <TreePaths>
+    <TreePath/>
+    <TreePath>/Schemas (1)</TreePath>
+    <TreePath>/Diagrams (1)</TreePath>
+  </TreePaths>
+  <SqlTexts/>
+</Db>
