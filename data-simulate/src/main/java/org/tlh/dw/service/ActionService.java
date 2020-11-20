@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.tlh.dw.bean.AppBase;
 import org.tlh.dw.bean.AppStart;
 import org.tlh.dw.bean.events.*;
+import org.tlh.dw.dto.ResultMsg;
 import org.tlh.dw.rest.UserAction;
+import retrofit2.Response;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -92,9 +94,15 @@ public class ActionService {
                         eventsArray.add(generatePraise());
                         json.put("et", eventsArray);
                     }
+                    // 用户加购
+                    if (rand.nextBoolean()){
+                        eventsArray.add(generateAddCar());
+                        json.put("et", eventsArray);
+                    }
                     //时间
                     long millis = System.currentTimeMillis();
-                    this.userAction.postAction(millis + "|" + json.toJSONString());
+                    Response<ResultMsg> resultMsgResponse = this.userAction.postAction(millis + "|" + json.toJSONString());
+                    log.info(resultMsgResponse.body().getMsg());
                     break;
             }
             // 延迟
@@ -459,6 +467,19 @@ public class ActionService {
         favorites.setAddTime((System.currentTimeMillis() - rand.nextInt(99999999)) + "");
         JSONObject jsonObject = (JSONObject) JSON.toJSON(favorites);
         return packEventJson("favorites", jsonObject);
+    }
+
+    /**
+     * 加购
+     */
+    private JSONObject generateAddCar() {
+        AppCar appCar=new AppCar();
+        appCar.setUserId(this.commonDataService.randomUserId());
+        appCar.setGoodsId(this.commonDataService.randomGoodId());
+        appCar.setNum(rand.nextInt(10));
+        appCar.setAddTime((System.currentTimeMillis() - rand.nextInt(99999999)) + "");
+        JSONObject jsonObject = (JSONObject) JSON.toJSON(appCar);
+        return packEventJson("addCar", jsonObject);
     }
 
     /**
