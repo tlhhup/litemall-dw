@@ -1,6 +1,7 @@
 package org.tlh.dw.rest;
 
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitClient;
+import okhttp3.RequestBody;
 import org.tlh.dw.dto.ResultMsg;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -15,6 +16,6 @@ import retrofit2.http.POST;
 public interface UserAction {
 
     @POST("/process")
-    Response<ResultMsg> postAction(@Body String data);
+    Response<ResultMsg> postAction(@Body RequestBody data);
 
 }

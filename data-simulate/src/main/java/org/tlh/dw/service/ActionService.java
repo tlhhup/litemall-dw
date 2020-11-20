@@ -4,15 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.tlh.dw.bean.AppBase;
 import org.tlh.dw.bean.AppStart;
 import org.tlh.dw.bean.events.*;
-import org.tlh.dw.dto.ResultMsg;
 import org.tlh.dw.rest.UserAction;
-import retrofit2.Response;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -56,7 +55,8 @@ public class ActionService {
                     //应用启动
                     AppStart appStart = generateStart();
                     String jsonString = JSON.toJSONString(appStart);
-                    this.userAction.postAction(jsonString);
+                    RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), jsonString);
+                    this.userAction.postAction(body);
                     break;
                 case (1):
                     JSONObject json = new JSONObject();
@@ -95,14 +95,14 @@ public class ActionService {
                         json.put("et", eventsArray);
                     }
                     // 用户加购
-                    if (rand.nextBoolean()){
+                    if (rand.nextBoolean()) {
                         eventsArray.add(generateAddCar());
                         json.put("et", eventsArray);
                     }
                     //时间
                     long millis = System.currentTimeMillis();
-                    Response<ResultMsg> resultMsgResponse = this.userAction.postAction(millis + "|" + json.toJSONString());
-                    log.info(resultMsgResponse.body().getMsg());
+                    body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), millis + "|" + json.toJSONString());
+                    this.userAction.postAction(body);
                     break;
             }
             // 延迟
@@ -473,7 +473,7 @@ public class ActionService {
      * 加购
      */
     private JSONObject generateAddCar() {
-        AppCar appCar=new AppCar();
+        AppCar appCar = new AppCar();
         appCar.setUserId(this.commonDataService.randomUserId());
         appCar.setGoodsId(this.commonDataService.randomGoodId());
         appCar.setNum(rand.nextInt(10));
