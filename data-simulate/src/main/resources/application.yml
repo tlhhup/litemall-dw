@@ -6,8 +6,11 @@ spring:
 
 logging:
   level:
-    root:  ERROR
+    root:  info
     org.springframework:  ERROR
     org.mybatis:  ERROR
     org.linlinjava.litemall:  ERROR
     org.tlh.dw: info
+
+simulate:
+  baseUrl: http://log-center
