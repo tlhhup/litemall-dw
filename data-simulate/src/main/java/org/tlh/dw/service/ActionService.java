@@ -500,14 +500,20 @@ public class ActionService {
      */
     private JSONObject generateComment() {
         AppComment comment = new AppComment();
-        comment.setCommentId(rand.nextInt(10));
         comment.setUserId(this.commonDataService.randomUserId());
-        comment.setPCommentId(rand.nextInt(5));
+        comment.setStar(rand.nextInt(5));
         comment.setContent(getCONTENT());
         comment.setAddTime((System.currentTimeMillis() - rand.nextInt(99999999)) + "");
-        comment.setOtherId(rand.nextInt(10));
-        comment.setPraiseCount(rand.nextInt(1000));
-        comment.setReplyCount(rand.nextInt(200));
+        int type = rand.nextInt(2);
+        comment.setType(type);
+        switch (type) {
+            case 0:
+                comment.setValueId(this.commonDataService.randomGoodId());
+                break;
+            case 1:
+                comment.setValueId(this.commonDataService.randomTopicId());
+                break;
+        }
         JSONObject jsonObject = (JSONObject) JSON.toJSON(comment);
         return packEventJson("comment", jsonObject);
     }

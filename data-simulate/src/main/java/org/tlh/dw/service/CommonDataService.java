@@ -2,8 +2,10 @@ package org.tlh.dw.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.linlinjava.litemall.db.dao.LitemallGoodsMapper;
+import org.linlinjava.litemall.db.dao.LitemallTopicMapper;
 import org.linlinjava.litemall.db.dao.LitemallUserMapper;
 import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.domain.LitemallTopic;
 import org.linlinjava.litemall.db.domain.LitemallUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * 公共数据
+ *
  * @author 离歌笑
  * @desc
  * @date 2020-11-20
@@ -27,6 +30,7 @@ public class CommonDataService {
 
     private List<Integer> userId;
     private List<Integer> goodsId;
+    private List<Integer> topicId;
 
     private Random random;
 
@@ -36,9 +40,13 @@ public class CommonDataService {
     @Autowired
     private LitemallGoodsMapper goodsMapper;
 
+    @Autowired
+    private LitemallTopicMapper topicMapper;
+
     public CommonDataService() {
         this.userId = new CopyOnWriteArrayList<>();
         this.goodsId = new CopyOnWriteArrayList<>();
+        this.topicId = new CopyOnWriteArrayList<>();
         this.random = new Random();
     }
 
@@ -54,6 +62,11 @@ public class CommonDataService {
         if (!ObjectUtils.isEmpty(goods)) {
             this.goodsId.addAll(goods.stream().map(item -> item.getId()).collect(Collectors.toList()));
         }
+        //初始化topicId
+        List<LitemallTopic> topics = this.topicMapper.selectByExample(null);
+        if (!ObjectUtils.isEmpty(topics)) {
+            this.topicId.addAll(topics.stream().map(item -> item.getId()).collect(Collectors.toList()));
+        }
     }
 
     public int randomUserId() {
@@ -66,12 +79,21 @@ public class CommonDataService {
         return this.goodsId.get(index);
     }
 
-    public void updateUserId(int userId){
+    public int randomTopicId() {
+        int index = random.nextInt(this.topicId.size());
+        return this.topicId.get(index);
+    }
+
+    public void updateUserId(int userId) {
         this.userId.add(userId);
     }
 
-    public void updateGoodId(int goodsId){
+    public void updateGoodId(int goodsId) {
         this.goodsId.add(goodsId);
+    }
+
+    public void updateTopicId(int topicId) {
+        this.topicId.add(topicId);
     }
 
 }

@@ -10,13 +10,11 @@ import lombok.Data;
 @Data
 public class AppComment {
 
-    private int commentId;//评论表
     private int userId;//用户 id
-    private int pCommentId;//父级评论id(为0则是一级评论,不为0则是回复) private String content;//评论内容
+    private int type;//评论类型，如果type=0，则是商品评论；如果是type=1，则是专题评论；
+    private int valueId;//如果type=0，则是商品评论；如果是type=1，则是专题评论。
     private String content;//评论内容
+    private int star;//评分， 1-5
     private String addTime;//创建时间
-    private int otherId;//评论的相关 id
-    private int praiseCount;//点赞数量
-    private int replyCount;//回复数量
 
 }
