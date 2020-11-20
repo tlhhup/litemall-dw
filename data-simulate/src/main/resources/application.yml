@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: db, core
+    active: db, core, simulate
   messages:
     encoding: UTF-8
 
@@ -11,6 +11,3 @@ logging:
     org.mybatis:  ERROR
     org.linlinjava.litemall:  ERROR
     org.tlh.dw: info
-
-simulate:
-  baseUrl: http://log-center

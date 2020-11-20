@@ -1,0 +1,4 @@
+simulate:
+  baseUrl: http://log-center
+  delay: 1000
+  length: 1000

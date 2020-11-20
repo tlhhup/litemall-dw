@@ -1,4 +1,4 @@
-package org.tlh.dw.bean;
+package org.tlh.dw.dto;
 
 import lombok.Data;
 

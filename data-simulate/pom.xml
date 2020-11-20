@@ -28,6 +28,13 @@
             <version>2.2.1</version>
         </dependency>
 
+        <!--阿里巴巴开源json 解析框架-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.51</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
