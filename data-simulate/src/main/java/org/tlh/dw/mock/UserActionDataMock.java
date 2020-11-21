@@ -1,4 +1,4 @@
-package org.tlh.dw.service;
+package org.tlh.dw.mock;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -7,11 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.tlh.dw.bean.AppBase;
 import org.tlh.dw.bean.AppStart;
 import org.tlh.dw.bean.events.*;
 import org.tlh.dw.rest.UserAction;
+import org.tlh.dw.service.CommonDataService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -22,8 +23,8 @@ import java.util.Random;
  * @date 2020-11-19
  */
 @Slf4j
-@Service
-public class ActionService {
+@Component
+public class UserActionDataMock {
 
     private Random rand = new Random();
     // 设备id

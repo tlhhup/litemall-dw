@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -72,6 +71,17 @@ public class CommonDataService {
     public int randomUserId() {
         int index = random.nextInt(this.userId.size());
         return this.userId.get(index);
+    }
+
+    public Set<Integer> randomUserId(int weight) {
+        int size = this.userId.size();
+        int fetchSize = size * weight / 100;
+        Set<Integer> result = new HashSet<>();
+        for (int i = 0; i < fetchSize; i++) {
+            int index = new Random().nextInt(size);
+            result.add(this.userId.get(index));
+        }
+        return result;
     }
 
     public int randomGoodId() {

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: db, core, simulate
+    active: db, simulate
   messages:
     encoding: UTF-8
 

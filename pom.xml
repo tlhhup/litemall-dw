@@ -19,6 +19,7 @@
         <source.version>1.8</source.version>
         <encoding>UTF-8</encoding>
         <lombok.version>1.18.12</lombok.version>
+        <lang3.version>3.9</lang3.version>
     </properties>
 
     <dependencyManagement>
@@ -27,6 +28,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

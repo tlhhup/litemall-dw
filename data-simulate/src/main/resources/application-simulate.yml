@@ -2,3 +2,41 @@ simulate:
   baseUrl: http://log-center
   delay: 1000
   length: 1000
+  date: 2020-11-20 #业务日期
+  user:
+    count: 50 # 是否生成新用户
+    male-rate: 20 #男性比例
+    update-rate: 20 # 更新用户的比例
+  favor:
+    count: 100 #收藏数量
+    cancel-rate: 10 #收藏取消比例
+  cart:
+    count: 10 #购物车数量
+    sku-max-count-per-cart: 3 # 每个商品最多购物个数
+  order:
+    user-rate: 80 #用户下单比例
+    sku-rate: 70 #用户从购物中购买商品比例
+    join-activity: true #是否参加活动
+    use-coupon: true #是否使用购物券
+  coupon:
+    user-count: 10 #购物券领取人数
+  payment:
+    rate: 70 #支付比例
+    payment-type: #支付方式 支付宝：微信
+      - 40
+      - 60
+  comment:
+    appraise-rate: #评价比例 好：中：差：自动
+      - 30
+      - 10
+      - 10
+      - 50
+  refund:
+    reason-rate: #退款原因比例：质量问题 商品描述与实际描述不一致 缺货 号码不合适 拍错 不想买了 其他
+      - 30
+      - 10
+      - 20
+      - 5
+      - 15
+      - 5
+      - 5

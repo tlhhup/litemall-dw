@@ -3,8 +3,10 @@ package org.tlh.dw;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.tlh.dw.config.SimulateProperty;
 
 /**
  * @author 离歌笑
@@ -12,9 +14,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2020-11-19
  */
 @EnableScheduling
-@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.linlinjava.litemall.core", "org.tlh.dw"})
-@MapperScan("org.linlinjava.litemall.db.dao")
 @EnableTransactionManagement
+@MapperScan("org.linlinjava.litemall.db.dao")
+@EnableConfigurationProperties({SimulateProperty.class})
+@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.linlinjava.litemall.core", "org.tlh.dw"})
 public class SimulateApplication {
 
     public static void main(String[] args) {

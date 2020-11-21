@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 /**
  * @author 离歌笑
  * @desc
- * @date 2020-11-19
+ * @date 2020-11-20
  */
 @Slf4j
 @Service
-public class BusinessService {
+public class PaymentInfoService {
 
-    public void process(){
-        log.info("business simulate process .....");
+    public void genPayments() {
+
     }
-
 }
