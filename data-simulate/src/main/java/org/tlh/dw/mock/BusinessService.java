@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.tlh.dw.service.*;
 
 /**
+ * 1. 用户、收藏
+ * 2. 购物车->下单->付款->发货->确认收货
  * @author 离歌笑
  * @desc
  * @date 2020-11-19
@@ -35,7 +37,10 @@ public class BusinessService {
     @Autowired
     private CommentInfoService commentInfoService;
 
-    public void process(){
+    @Autowired
+    private OrderShipService orderShipService;
+
+    public void process() {
         log.info("business simulate process .....");
         log.info("--------开始生成用户数据--------");
         this.userInfoService.genUserInfo();
@@ -47,6 +52,8 @@ public class BusinessService {
         this.orderInfoService.genOrderInfo();
         log.info("--------开始生成支付数据--------");
         this.paymentInfoService.genPayments();
+        log.info("--------开始生成发货数据--------");
+        this.orderShipService.genShip();
         log.info("--------开始生成退单数据--------");
         this.orderRefundInfoService.genRefundsOrFinish();
         log.info("--------开始生成评论数据--------");

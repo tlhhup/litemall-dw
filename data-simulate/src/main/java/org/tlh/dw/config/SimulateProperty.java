@@ -28,6 +28,8 @@ public class SimulateProperty {
 
     private CouponProps coupon;
 
+    private ShipProps ship;
+
     private PaymentProps payment;
 
     private CommentProps comment;
@@ -67,6 +69,12 @@ public class SimulateProperty {
     }
 
     @Data
+    public static class ShipProps{
+        private int rate;
+        private List<String> shipChannel;
+    }
+
+    @Data
     public static class PaymentProps{
         private int rate;
         private List<Integer> paymentType;
@@ -79,6 +87,7 @@ public class SimulateProperty {
 
     @Data
     public static class RefundProps{
+        private int rate;
         private List<Integer> reasonRate;
     }
 

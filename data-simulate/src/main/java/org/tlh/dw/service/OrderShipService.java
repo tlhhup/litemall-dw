@@ -17,18 +17,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
- * 支付
+ * 发货
  *
  * @author 离歌笑
  * @desc
- * @date 2020-11-20
+ * @date 2020-11-21
  */
 @Slf4j
 @Service
-public class PaymentInfoService {
+public class OrderShipService {
 
     @Autowired
     private SimulateProperty simulateProperty;
@@ -36,38 +37,40 @@ public class PaymentInfoService {
     @Autowired
     private LitemallOrderMapper orderMapper;
 
-    public void genPayments() {
+    public void genShip() {
         Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        int rate = this.simulateProperty.getPayment().getRate();
-        RandomOptionGroup<Boolean> ifPay = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});
+        int rate = this.simulateProperty.getShip().getRate();
+        RandomOptionGroup<Boolean> ifShip = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});
+        List<String> shipChannel = this.simulateProperty.getShip().getShipChannel();
 
-        //1.查询下单的订单
+        //1.查询支付的订单
         LitemallOrderExample example = new LitemallOrderExample();
-        example.createCriteria().andOrderStatusEqualTo(OrderUtil.STATUS_CREATE);
+        example.createCriteria().andOrderStatusEqualTo(OrderUtil.STATUS_PAY);
         List<LitemallOrder> litemallOrders = this.orderMapper.selectByExample(example);
         if (ObjectUtils.isEmpty(litemallOrders)) {
-            log.info("没有需要支付的订单 ");
+            log.info("没有需要发货的订单 ");
             return;
         }
-        //2.支付
-        int payCount = 0;
-        for (LitemallOrder litemallOrder : litemallOrders) {
-            if (ifPay.getRandBoolValue()) {
+        //2.发货
+        Random random = new Random();
+        int shipCount = 0;
+        for (LitemallOrder order : litemallOrders) {
+            if (ifShip.getRandBoolValue()) {
+                //发货信息
+                order.setShipSn(UUID.randomUUID().toString());
+                order.setShipChannel(shipChannel.get(random.nextInt(shipChannel.size())));
+                order.setShipTime(localDateTime);
                 //状态
-                litemallOrder.setOrderStatus(OrderUtil.STATUS_PAY);
-                //支付信息
-                litemallOrder.setPayId(UUID.randomUUID().toString());
-                litemallOrder.setPayTime(localDateTime);
-                //更新操作时间
-                litemallOrder.setUpdateTime(localDateTime);
+                order.setOrderStatus(OrderUtil.STATUS_SHIP);
+                order.setUpdateTime(localDateTime);
 
-                //更新数据
-                this.orderMapper.updateByPrimaryKey(litemallOrder);
-                payCount++;
+                this.orderMapper.updateByPrimaryKey(order);
+                shipCount++;
             }
         }
 
-        log.info("共生成支付{}条", payCount);
+        log.info("共生成发货{}条", shipCount);
     }
+
 }

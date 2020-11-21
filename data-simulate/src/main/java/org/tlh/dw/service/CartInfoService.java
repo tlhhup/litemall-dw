@@ -79,7 +79,6 @@ public class CartInfoService {
 
         //设置时间
         cart.setAddTime(dateTime);
-        cart.setUpdateTime(dateTime);
 
         return cart;
     }

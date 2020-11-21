@@ -22,7 +22,7 @@ public class DataSimulate {
 
     @Scheduled(cron = "0/5 * * * * ?")
     public void action(){
-        userActionDataMock.process();
+        //userActionDataMock.process();
     }
 
     @Scheduled(cron = "0/10 * * * * ?")
