@@ -30,6 +30,7 @@ public class CommonDataService {
     private List<Integer> userId;
     private List<Integer> goodsId;
     private List<Integer> topicId;
+    private List<LitemallGoods> litemallGoods;
 
     private Random random;
 
@@ -60,6 +61,7 @@ public class CommonDataService {
         List<LitemallGoods> goods = this.goodsMapper.selectByExample(null);
         if (!ObjectUtils.isEmpty(goods)) {
             this.goodsId.addAll(goods.stream().map(item -> item.getId()).collect(Collectors.toList()));
+            this.litemallGoods = goods;
         }
         //初始化topicId
         List<LitemallTopic> topics = this.topicMapper.selectByExample(null);
@@ -91,6 +93,11 @@ public class CommonDataService {
 
     public List<Integer> getGoodsId() {
         return goodsId;
+    }
+
+    public LitemallGoods randomGoods(){
+        int index = random.nextInt(this.litemallGoods.size());
+        return this.litemallGoods.get(index);
     }
 
     public int randomTopicId() {
