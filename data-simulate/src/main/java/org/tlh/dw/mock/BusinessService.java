@@ -8,6 +8,7 @@ import org.tlh.dw.service.*;
 /**
  * 1. 用户、收藏
  * 2. 购物车->下单->付款->发货->确认收货
+ *
  * @author 离歌笑
  * @desc
  * @date 2020-11-19
@@ -32,13 +33,17 @@ public class BusinessService {
     private PaymentInfoService paymentInfoService;
 
     @Autowired
+    private OrderShipService orderShipService;
+
+    @Autowired
     private OrderRefundInfoService orderRefundInfoService;
+
+    @Autowired
+    private OrderConfirmService orderConfirmService;
 
     @Autowired
     private CommentInfoService commentInfoService;
 
-    @Autowired
-    private OrderShipService orderShipService;
 
     public void process() {
         log.info("business simulate process .....");
@@ -56,6 +61,8 @@ public class BusinessService {
         this.orderShipService.genShip();
         log.info("--------开始生成退单数据--------");
         this.orderRefundInfoService.genRefundsOrFinish();
+        log.info("--------开始生成确认收货数据--------");
+        this.orderConfirmService.genConfirm();
         log.info("--------开始生成评论数据--------");
         this.commentInfoService.genComments();
     }

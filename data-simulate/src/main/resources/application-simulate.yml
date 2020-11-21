@@ -1,7 +1,5 @@
 simulate:
   baseUrl: http://log-center
-  delay: 1000
-  length: 1000
   date: 2020-11-20 #业务日期
   user:
     count: 2 # 是否生成新用户
@@ -47,6 +45,8 @@ simulate:
       - 10
       - 10
       - 50
+  confirm:
+    rate: 60 # 确认收货比率
   refund:
     rate: 30 # 退款的比率
     reason-rate: #退款原因比例：质量问题 商品描述与实际描述不一致 缺货 号码不合适 拍错 不想买了 其他

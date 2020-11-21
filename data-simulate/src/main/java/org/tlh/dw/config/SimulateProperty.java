@@ -36,6 +36,8 @@ public class SimulateProperty {
 
     private RefundProps refund;
 
+    private ConfirmProps confirm;
+
     @Data
     public static class UserProps{
         private int count;
@@ -89,6 +91,11 @@ public class SimulateProperty {
     public static class RefundProps{
         private int rate;
         private List<Integer> reasonRate;
+    }
+
+    @Data
+    public static class ConfirmProps{
+        private int rate;
     }
 
 }

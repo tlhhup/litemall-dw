@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tlh.dw.bean.AppBase;
 import org.tlh.dw.bean.AppStart;
@@ -36,12 +35,6 @@ public class UserActionDataMock {
     @Autowired
     private CommonDataService commonDataService;
 
-    @Value(("${simulate.delay}"))
-    private long delay;
-
-    @Value(("${simulate.length}"))
-    private int loopLen;
-
     public void process() {
         log.info("user action simulate....");
         // 生成数据
@@ -49,7 +42,7 @@ public class UserActionDataMock {
     }
 
     private void generateLog() {
-        for (int i = 0; i < loopLen; i++) {
+        for (int i = 0; i < 100; i++) {
             int flag = rand.nextInt(2);
             switch (flag) {
                 case (0):
@@ -105,12 +98,6 @@ public class UserActionDataMock {
                     body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), millis + "|" + json.toJSONString());
                     this.userAction.postAction(body);
                     break;
-            }
-            // 延迟
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
