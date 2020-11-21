@@ -109,6 +109,7 @@ public class OrderInfoService {
         order.setMessage("描述" + RandomNumString.getRandNumString(1, 9, 6, ""));
         order.setFreightPrice(BigDecimal.valueOf(RandomNum.getRandInt(5, 20)));
         order.setDeleted(false);
+        order.setProvince(Integer.parseInt(litemallAddress.getProvince()));
 
         //记录活动优惠
         BigDecimal grouponPrice = new BigDecimal(0);//活动优惠金额
