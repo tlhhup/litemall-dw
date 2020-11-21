@@ -61,6 +61,7 @@ public class PaymentInfoService {
                 litemallOrder.setPayTime(localDateTime);
                 //更新操作时间
                 litemallOrder.setUpdateTime(localDateTime);
+                litemallOrder.setDeleted(false);
 
                 //更新数据
                 this.orderMapper.updateByPrimaryKey(litemallOrder);

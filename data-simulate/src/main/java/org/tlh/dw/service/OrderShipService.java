@@ -64,6 +64,7 @@ public class OrderShipService {
                 //状态
                 order.setOrderStatus(OrderUtil.STATUS_SHIP);
                 order.setUpdateTime(localDateTime);
+                order.setDeleted(false);
 
                 this.orderMapper.updateByPrimaryKey(order);
                 shipCount++;

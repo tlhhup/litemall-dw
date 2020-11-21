@@ -152,6 +152,7 @@ public class UserInfoService {
         litemallAddress.setPostalCode(regionInfo.getCode());
         litemallAddress.setTel(mobile);
         litemallAddress.setIsDefault(random.nextBoolean());
+        litemallAddress.setDeleted(false);
 
         litemallAddress.setAddTime(dateTime);
         this.addressMapper.insert(litemallAddress);

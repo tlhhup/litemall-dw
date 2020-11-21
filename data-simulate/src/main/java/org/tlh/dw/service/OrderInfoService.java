@@ -108,6 +108,7 @@ public class OrderInfoService {
         order.setAddress(litemallAddress.getAddressDetail());
         order.setMessage("描述" + RandomNumString.getRandNumString(1, 9, 6, ""));
         order.setFreightPrice(BigDecimal.valueOf(RandomNum.getRandInt(5, 20)));
+        order.setDeleted(false);
 
         //记录活动优惠
         BigDecimal grouponPrice = new BigDecimal(0);//活动优惠金额
@@ -142,6 +143,7 @@ public class OrderInfoService {
                 orderDetail.setSpecifications(cartInfo.getSpecifications());
                 orderDetail.setPicUrl(cartInfo.getPicUrl());
                 orderDetail.setAddTime(localDateTime);
+                orderDetail.setDeleted(false);
 
                 // 判断该商品是否参加活动
                 if (joinActivity) {

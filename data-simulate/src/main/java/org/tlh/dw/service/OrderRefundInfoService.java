@@ -69,6 +69,7 @@ public class OrderRefundInfoService {
                 order.setRefundContent(order.getActualPrice().toEngineeringString());
                 order.setRefundType(refundReasonOptionGroup.getRandStringValue());
                 order.setRefundContent(refundReasonOptionGroup.getRandStringValue());
+                order.setDeleted(false);
                 order.setUpdateTime(localDateTime);
                 this.orderMapper.updateByPrimaryKey(order);
                 refundCount++;

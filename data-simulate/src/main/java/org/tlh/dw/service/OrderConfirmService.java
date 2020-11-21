@@ -61,6 +61,7 @@ public class OrderConfirmService {
                 order.setConfirmTime(localDateTime);
                 order.setEndTime(localDateTime);
                 order.setUpdateTime(localDateTime);
+                order.setDeleted(false);
                 this.orderMapper.updateByPrimaryKey(order);
                 confirmCount++;
             }
