@@ -50,6 +50,7 @@ public class UserInfoService {
         // 更新用户
         updateUsers(localDateTime);
 
+        //添加用户
         for (int i = 0; i < simulateProperty.getUser().getCount(); i++) {
             LitemallUser user = initUserInfo(localDateTime);
             Date birthday = DateUtils.addMonths(date, -1 * RandomNum.getRandInt(15, 55) * 12);
@@ -88,7 +89,6 @@ public class UserInfoService {
         user.setLastLoginIp(RandomIp.getIp());
 
         user.setAddTime(LocalDateTime.from(localDateTime));
-        user.setUpdateTime(localDateTime);
 
         return user;
     }
