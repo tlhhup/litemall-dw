@@ -89,9 +89,17 @@ public class CommonDataService {
         return this.goodsId.get(index);
     }
 
+    public List<Integer> getGoodsId() {
+        return goodsId;
+    }
+
     public int randomTopicId() {
         int index = random.nextInt(this.topicId.size());
         return this.topicId.get(index);
+    }
+
+    public List<Integer> getTopicId() {
+        return topicId;
     }
 
     public void updateUserId(int userId) {
