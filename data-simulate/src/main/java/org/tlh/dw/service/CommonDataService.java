@@ -8,11 +8,17 @@ import org.linlinjava.litemall.db.domain.LitemallGoods;
 import org.linlinjava.litemall.db.domain.LitemallTopic;
 import org.linlinjava.litemall.db.domain.LitemallUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.tlh.dw.bean.RegionInfo;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -31,6 +37,7 @@ public class CommonDataService {
     private List<Integer> goodsId;
     private List<Integer> topicId;
     private List<LitemallGoods> litemallGoods;
+    private List<RegionInfo> regions;
 
     private Random random;
 
@@ -42,6 +49,9 @@ public class CommonDataService {
 
     @Autowired
     private LitemallTopicMapper topicMapper;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public CommonDataService() {
         this.userId = new CopyOnWriteArrayList<>();
@@ -68,6 +78,49 @@ public class CommonDataService {
         if (!ObjectUtils.isEmpty(topics)) {
             this.topicId.addAll(topics.stream().map(item -> item.getId()).collect(Collectors.toList()));
         }
+        //初始化区域数据
+        initRegion();
+    }
+
+    private void initRegion() {
+        String sql = "select\n" +
+                "\tprovince.id as pId,\n" +
+                "\tprovince.name as pName,\n" +
+                "\tcity.id as cId,\n" +
+                "\tcity.name as cName,\n" +
+                "\tcountry.id as tId,\n" +
+                "\tcountry.name as tName,\n" +
+                "\tcountry.code as code\n" +
+                "from\n" +
+                "(\n" +
+                "\tselect\n" +
+                "\t\tid,\n" +
+                "\t\tname\n" +
+                "\tfrom litemall_region\n" +
+                "\twhere type=1\n" +
+                ") as province\n" +
+                "join \n" +
+                "(\n" +
+                "\tselect\n" +
+                "\t\tpid,\n" +
+                "\t\tid,\n" +
+                "\t\tname\n" +
+                "\tfrom litemall_region\n" +
+                "\twhere type=2\n" +
+                ") as city\n" +
+                "on province.id=city.pid\n" +
+                "join \n" +
+                "(\n" +
+                "\tselect\n" +
+                "\t\tpid,\n" +
+                "\t\tid,\n" +
+                "\t\tname,\n" +
+                "\t\tcode\n" +
+                "\tfrom litemall_region\n" +
+                "\twhere type=3\n" +
+                ") as country\n" +
+                "on city.id=country.pid";
+        this.regions = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RegionInfo.class));
     }
 
     public int randomUserId() {
@@ -95,7 +148,7 @@ public class CommonDataService {
         return goodsId;
     }
 
-    public LitemallGoods randomGoods(){
+    public LitemallGoods randomGoods() {
         int index = random.nextInt(this.litemallGoods.size());
         return this.litemallGoods.get(index);
     }
@@ -105,20 +158,17 @@ public class CommonDataService {
         return this.topicId.get(index);
     }
 
+    public RegionInfo randomRegion(){
+        int index = random.nextInt(this.regions.size());
+        return this.regions.get(index);
+    }
+
     public List<Integer> getTopicId() {
         return topicId;
     }
 
     public void updateUserId(int userId) {
         this.userId.add(userId);
-    }
-
-    public void updateGoodId(int goodsId) {
-        this.goodsId.add(goodsId);
-    }
-
-    public void updateTopicId(int topicId) {
-        this.topicId.add(topicId);
     }
 
 }

@@ -2,17 +2,22 @@ package org.tlh.dw.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
+import org.linlinjava.litemall.db.dao.LitemallAddressMapper;
 import org.linlinjava.litemall.db.dao.LitemallUserMapper;
+import org.linlinjava.litemall.db.domain.LitemallAddress;
 import org.linlinjava.litemall.db.domain.LitemallUser;
 import org.linlinjava.litemall.db.service.CouponAssignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.tlh.dw.bean.RegionInfo;
 import org.tlh.dw.config.SimulateProperty;
 import org.tlh.dw.util.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,6 +42,7 @@ public class UserInfoService {
     @Autowired
     private CommonDataService commonDataService;
 
+    @Transactional
     public void genUserInfo() {
         Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -55,6 +61,8 @@ public class UserInfoService {
             couponAssignService.assignForRegister(user.getId());
             // 记录新增用户的ID
             this.commonDataService.updateUserId(user.getId());
+            //生成用户地址
+            this.addressProcess(user.getId(), user.getNickname(), user.getMobile(), localDateTime);
         }
         log.info("共生成{}名用户", simulateProperty.getUser().getCount());
     }
@@ -115,6 +123,38 @@ public class UserInfoService {
         }
         log.info("共有{}名用户发生变更", Integer.valueOf(userInfoList.size()));
 
+    }
+
+    @Autowired
+    private LitemallAddressMapper addressMapper;
+
+    private Random random = new Random();
+
+    private void addressProcess(int userId, String userName, String mobile, LocalDateTime dateTime) {
+        RegionInfo regionInfo = this.commonDataService.randomRegion();
+        LitemallAddress litemallAddress = new LitemallAddress();
+        litemallAddress.setName(userName);
+        litemallAddress.setUserId(userId);
+        litemallAddress.setProvince(regionInfo.getPId());
+        litemallAddress.setCity(regionInfo.getCId());
+        litemallAddress.setCounty(regionInfo.getTId());
+
+        StringBuilder detail = new StringBuilder(regionInfo.getPName())
+                .append(regionInfo.getCName())
+                .append(regionInfo.getTName())
+                .append("第").append(RandomNum.getRandInt(1, 20)).append("大街第")
+                .append(RandomNum.getRandInt(1, 40)).append("号楼")
+                .append(RandomNum.getRandInt(1, 9)).append("单元")
+                .append(RandomNumString.getRandNumString(1, 9, 3, "")).append("门");
+
+        litemallAddress.setAddressDetail(detail.toString());
+        litemallAddress.setAreaCode(regionInfo.getCode());
+        litemallAddress.setPostalCode(regionInfo.getCode());
+        litemallAddress.setTel(mobile);
+        litemallAddress.setIsDefault(random.nextBoolean());
+
+        litemallAddress.setAddTime(dateTime);
+        this.addressMapper.insert(litemallAddress);
     }
 
 }
