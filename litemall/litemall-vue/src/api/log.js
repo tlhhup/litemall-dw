@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 var instance = axios.create({
-  baseURL: 'http://log-center',
+  //baseURL: 'http://log-center',
   timeout: 1000
 });
 

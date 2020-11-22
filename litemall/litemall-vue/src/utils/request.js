@@ -3,7 +3,7 @@ import { Dialog, Toast } from 'vant';
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
+  //baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
   timeout: 5000 // request timeout
 })
 
