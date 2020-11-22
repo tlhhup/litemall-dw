@@ -41,6 +41,9 @@ export function addEvent(event){
 }
 
 function sendEvents(){
+    if(events.length==0){
+        return
+    }
 	//console.info('发送事件日志')
 	var data={
 		  "cm": {
