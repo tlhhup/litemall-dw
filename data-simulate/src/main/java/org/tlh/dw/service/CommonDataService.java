@@ -1,12 +1,8 @@
 package org.tlh.dw.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.linlinjava.litemall.db.dao.LitemallGoodsMapper;
-import org.linlinjava.litemall.db.dao.LitemallTopicMapper;
-import org.linlinjava.litemall.db.dao.LitemallUserMapper;
-import org.linlinjava.litemall.db.domain.LitemallGoods;
-import org.linlinjava.litemall.db.domain.LitemallTopic;
-import org.linlinjava.litemall.db.domain.LitemallUser;
+import org.linlinjava.litemall.db.dao.*;
+import org.linlinjava.litemall.db.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +32,7 @@ public class CommonDataService {
     private List<Integer> userId;
     private List<Integer> goodsId;
     private List<Integer> topicId;
+    private List<Integer> couPonId;
     private List<LitemallGoods> litemallGoods;
     private List<RegionInfo> regions;
 
@@ -51,12 +48,16 @@ public class CommonDataService {
     private LitemallTopicMapper topicMapper;
 
     @Autowired
+    private LitemallCouponMapper couponMapper;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public CommonDataService() {
         this.userId = new CopyOnWriteArrayList<>();
         this.goodsId = new CopyOnWriteArrayList<>();
         this.topicId = new CopyOnWriteArrayList<>();
+        this.couPonId = new CopyOnWriteArrayList<>();
         this.random = new Random();
     }
 
@@ -80,6 +81,13 @@ public class CommonDataService {
         }
         //初始化区域数据
         initRegion();
+        //初始化卷数据
+        LitemallCouponExample example = new LitemallCouponExample();
+        example.createCriteria().andIdNotEqualTo(3);//非新用户卷
+        List<LitemallCoupon> litemallCoupons = this.couponMapper.selectByExample(example);
+        if (!ObjectUtils.isEmpty(litemallCoupons)) {
+            this.couPonId.addAll(litemallCoupons.stream().map(item -> item.getId()).collect(Collectors.toList()));
+        }
     }
 
     private void initRegion() {
@@ -158,17 +166,22 @@ public class CommonDataService {
         return this.topicId.get(index);
     }
 
-    public RegionInfo randomRegion(){
-        int index = random.nextInt(this.regions.size());
-        return this.regions.get(index);
-    }
-
     public List<Integer> getTopicId() {
         return topicId;
     }
 
+    public RegionInfo randomRegion() {
+        int index = random.nextInt(this.regions.size());
+        return this.regions.get(index);
+    }
+
     public void updateUserId(int userId) {
         this.userId.add(userId);
+    }
+
+    public Integer randomCouPonId(){
+        int index = random.nextInt(this.couPonId.size());
+        return this.couPonId.get(index);
     }
 
 }

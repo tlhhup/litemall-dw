@@ -44,11 +44,15 @@ public class BusinessService {
     @Autowired
     private CommentInfoService commentInfoService;
 
+    @Autowired
+    private CouPonUseService couPonUseService;
 
     public void process() {
         log.info("business simulate process .....");
         log.info("--------开始生成用户数据--------");
         this.userInfoService.genUserInfo();
+        log.info("--------开始领卷数据--------");
+        this.couPonUseService.genCouPonUse();
         log.info("--------开始生成收藏数据--------");
         this.favorInfoService.genFavors();
         log.info("--------开始生成购物车数据--------");
