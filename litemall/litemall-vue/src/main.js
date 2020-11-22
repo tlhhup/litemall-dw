@@ -14,7 +14,7 @@ import filters from '@/filter';
 Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(filters);
 
-
+import { start, setSchedule, clearSchedule } from '@/api/log';
 import { Lazyload, Icon, Cell, CellGroup, loading, Button, Toast } from 'vant';
 Vue.use(Icon);
 Vue.use(Cell);
@@ -37,5 +37,14 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  mounted:function(){
+  	start();
+  	console.info('开启定时器');
+  	setSchedule();
+  },
+  beforeDestory:function(){
+  	console.info('清除定时器');
+  	clearSchedule();
+  },
   render: h => h(App)
 }).$mount('#app');

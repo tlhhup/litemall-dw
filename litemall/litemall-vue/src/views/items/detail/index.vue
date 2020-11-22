@@ -63,6 +63,8 @@
 
 <script>
 
+import { addEvent } from '@/api/log';
+
 import { goodsDetail, cartGoodsCount, collectAddOrDelete, cartAdd, cartFastAdd } from '@/api/api';
 
 import { Sku, Swipe, SwipeItem, GoodsAction, GoodsActionButton, GoodsActionIcon, Popup } from 'vant';
@@ -122,6 +124,20 @@ export default {
   created() {
     this.initData();
   },
+  mounted(){
+    //记录商品展示
+    addEvent({
+        "ett":new Date().getTime(),
+        "en":"display",
+        "kv":{
+          "action":2,
+          "goodsId":this.itemId,
+          "place":1,
+          "extend1":2,
+          "category":1
+        }
+    })
+  },
 
   methods: {
     skuClick() {
@@ -154,6 +170,19 @@ export default {
           });
         }
       });
+      //记录收藏
+      if (this.goods.userHasCollect==1) {
+        addEvent({
+          "ett":new Date().getTime(),
+          "en":"favorites",
+          "kv":{
+            "id":0,
+            "courseId":this.itemId,
+            "userId":`${window.localStorage.getItem('userId') || ''}`,
+            "addTime":new Date().getTime()
+          }
+        })
+      }
     },
     getProductId(s1, s2) {
       var productId;
@@ -226,6 +255,17 @@ export default {
         });
         that.showSku = false;
       });
+      //记录加购
+      addEvent({
+          "ett":new Date().getTime(),
+          "en":"addCar",
+          "kv":{
+            "userId":`${window.localStorage.getItem('userId') || ''}`,
+            "goodsId":params.goodsId,
+            "num":params.number,
+            "addTime":new Date().getTime()
+          }
+        })
     },
     buyGoods(data) {
       let that = this;
