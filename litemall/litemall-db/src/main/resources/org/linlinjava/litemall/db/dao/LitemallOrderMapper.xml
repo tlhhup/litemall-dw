@@ -243,7 +243,7 @@
       ship_channel, ship_time, refund_amount, 
       refund_type, refund_content, refund_time, 
       confirm_time, comments, end_time, 
-      add_time, update_time, deleted,province
+      add_time, update_time, deleted,province,city,country
       )
     values (#{userId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{orderStatus,jdbcType=SMALLINT}, 
       #{aftersaleStatus,jdbcType=SMALLINT}, #{consignee,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
@@ -255,7 +255,7 @@
       #{refundType,jdbcType=VARCHAR}, #{refundContent,jdbcType=VARCHAR}, #{refundTime,jdbcType=TIMESTAMP}, 
       #{confirmTime,jdbcType=TIMESTAMP}, #{comments,jdbcType=SMALLINT}, #{endTime,jdbcType=TIMESTAMP}, 
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT},
-      #{province,jdbcType=INTEGER}
+      #{province,jdbcType=INTEGER},#{city,jdbcType=INTEGER},#{country,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.LitemallOrder">

@@ -84,6 +84,7 @@ public class SimulateProperty {
 
     @Data
     public static class CommentProps{
+        private int rate;
         private List<Integer> appraiseRate;
     }
 

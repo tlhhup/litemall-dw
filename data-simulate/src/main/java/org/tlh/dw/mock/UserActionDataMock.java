@@ -39,6 +39,7 @@ public class UserActionDataMock {
         log.info("user action simulate....");
         // 生成数据
         generateLog();
+        log.info("共生成行为数据{}条", 100);
     }
 
     private void generateLog() {

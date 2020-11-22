@@ -40,6 +40,7 @@ simulate:
       - "FEDEX"
       - "FEDEX_GJ"
   comment:
+    rate: 30 # 评论比率
     appraise-rate: #评价比例 好：中：差：自动
       - 30
       - 10

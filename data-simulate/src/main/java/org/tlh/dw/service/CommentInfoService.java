@@ -47,6 +47,9 @@ public class CommentInfoService {
     }
 
     private void saveComment(int type, List<Integer> valueIds) {
+        int rate = this.simulateProperty.getComment().getRate();
+        RandomOptionGroup<Boolean> ifComment = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});
+
         List<Integer> appraiseRate = this.simulateProperty.getComment().getAppraiseRate();
 
         Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
@@ -59,16 +62,20 @@ public class CommentInfoService {
                 new RanOpt(0, appraiseRate.get(2)),
                 new RanOpt(1, appraiseRate.get(3))});
 
+        int commentCount = 0;
         for (int valueId : valueIds) {
-            int userId = this.commonDataService.randomUserId();
-            LitemallComment comment = init(userId, valueId, type, localDateTime);
-            //设置评价
-            int star = appraiseOptionGroup.getRandIntValue();
-            star = star != 1 ? star : random.nextInt(5);
-            comment.setStar((short) star);
-            this.commentMapper.insert(comment);
+            if (ifComment.getRandBoolValue()) {
+                int userId = this.commonDataService.randomUserId();
+                LitemallComment comment = init(userId, valueId, type, localDateTime);
+                //设置评价
+                int star = appraiseOptionGroup.getRandIntValue();
+                star = star != 1 ? star : random.nextInt(5);
+                comment.setStar((short) star);
+                this.commentMapper.insert(comment);
+                commentCount++;
+            }
         }
-        log.info("总共生成{}评价{}条", type == 1 ? "主题" : "商品", valueIds.size());
+        log.info("总共生成{}评价{}条", type == 1 ? "主题" : "商品", commentCount);
     }
 
     private LitemallComment init(int userId, int valueId, int type, LocalDateTime dateTime) {
