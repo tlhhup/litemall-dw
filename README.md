@@ -77,6 +77,41 @@
 				end
 				
 				ngx.say(cjson.encode{code = 200, msg = request_body})
+2. 页面埋点
+	1. 不同日志的处理：监听生命周期函数
+		1. 启动日志：在`main.js`通过绑定`vue`对象的`mounted`事件来处理，保证只有一次请求
+		2. 事件日志
+			1.  在`main.js`通过绑定`vue`对象的`mounted`和`beforeDestory`来启动或清除定时器
+			2. 在定时器中发送事件日志，消除频繁请求日志服务器
+			3. 采用数组来记录事件，并在发送之后清空
+	2. 跨域的处理
+		1. 前端通过代理处理(修改`vue.config.js`配置文件,`vue cli 3.0+`)
+
+				devServer: {
+				    port:6255,
+				    proxy:{
+				      '/process': {
+				        target: process.env.VUE_LOG_BASE_API,
+				        ws: true,
+				        changeOrigin: true //允许跨域
+				      },
+				      '/wx': {
+				        target: process.env.VUE_APP_BASE_API,
+				        ws: true,
+				        changeOrigin: true
+				      }
+				    }
+				  },
+		2. 后端通过nginx处理
+
+				location /process{
+				   default_type application/json;
+				   # 添加响应头，在opthons请求返回的响应中，从而在下个请求中携带
+				   add_header Access-Control-Allow-Credentials true;
+				   add_header Access-Control-Allow-Headers *;
+			         add_header Access-Control-Allow-Origin *;
+				   content_by_lua_file /root/project/litemall/luas/kafka_test.lua;
+				}
 
 
 ## 致谢
