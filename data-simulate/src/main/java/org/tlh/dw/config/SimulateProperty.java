@@ -62,7 +62,9 @@ public class SimulateProperty {
         private int userRate;
         private int skuRate;
         private boolean joinActivity;
+        private int joinActivityRate;
         private boolean useCoupon;
+        private int useCouponRate;
     }
 
     @Data

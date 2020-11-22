@@ -15,7 +15,9 @@ simulate:
     user-rate: 80 #用户下单比例
     sku-rate: 70 #购物中购买商品比例
     join-activity: true #是否参加活动
+    join-activity-rate: 70 #参加活动比率
     use-coupon: true #是否使用购物券
+    use-coupon-rate: 70 #是否使用购物券比率
   coupon:
     user-count: 10 #购物券领取人数
   payment:

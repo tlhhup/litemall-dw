@@ -79,11 +79,17 @@ public class OrderInfoService {
         int skuRate = this.simulateProperty.getOrder().getSkuRate();
 
         boolean joinActivity = this.simulateProperty.getOrder().isJoinActivity();
+        int joinActivityRate = this.simulateProperty.getOrder().getJoinActivityRate();
         boolean useCoupon = this.simulateProperty.getOrder().isUseCoupon();
+        int useCouponRate = this.simulateProperty.getOrder().getUseCouponRate();
 
         RandomOptionGroup<Boolean> isOrderUserOptionGroup = new RandomOptionGroup<>(userRate, 100 - userRate);
 
         RandomOptionGroup<Boolean> isOrderSkuOptionGroup = new RandomOptionGroup<>(skuRate, 100 - skuRate);
+
+        RandomOptionGroup<Boolean> joinActivityRateOptionGroup = new RandomOptionGroup<>(joinActivityRate, 100 - joinActivityRate);
+
+        RandomOptionGroup<Boolean> useCouponRateOptionGroup = new RandomOptionGroup<>(useCouponRate, 100 - useCouponRate);
 
         //用户是否下单
         if (!isOrderUserOptionGroup.getRandBoolValue()) {
@@ -150,7 +156,7 @@ public class OrderInfoService {
                 orderDetail.setDeleted(false);
 
                 // 判断该商品是否参加活动
-                if (joinActivity) {
+                if (joinActivity && joinActivityRateOptionGroup.getRandBoolValue()) {
                     //2.1.1 计算活动优惠
                     Optional<LitemallGrouponRules> grouponRule = litemallGrouponRules.stream().filter(item -> item.getGoodsId() == orderDetail.getGoodsId()).findFirst();
                     if (grouponRule.isPresent()) {
@@ -182,11 +188,14 @@ public class OrderInfoService {
             //3.1.2计算卷的优惠
             List<LitemallCouponUser> litemallCouponUsers = this.couponUserMapper.selectByExample(couponExample);
             for (LitemallCouponUser couponUser : litemallCouponUsers) {
-                LitemallCoupon litemallCoupon = this.couponMapper.selectByPrimaryKey(couponUser.getCouponId());
-                if (litemallCoupon != null) {
-                    couponPrice = couponPrice.add(litemallCoupon.getDiscount());
-                    //记录需要更新的卷信息
-                    updateCouponUsers.add(couponUser);
+                //3.1.3 是否使用该优惠卷
+                if (useCouponRateOptionGroup.getRandBoolValue()) {
+                    LitemallCoupon litemallCoupon = this.couponMapper.selectByPrimaryKey(couponUser.getCouponId());
+                    if (litemallCoupon != null) {
+                        couponPrice = couponPrice.add(litemallCoupon.getDiscount());
+                        //记录需要更新的卷信息
+                        updateCouponUsers.add(couponUser);
+                    }
                 }
             }
         }
