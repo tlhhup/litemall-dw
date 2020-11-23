@@ -20,12 +20,12 @@ public class DataSimulate {
     @Autowired
     private BusinessService businessService;
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "${simulate.schedule.action}")
     public void action(){
         userActionDataMock.process();
     }
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "${simulate.schedule.business}")
     public void business(){
         businessService.process();
     }

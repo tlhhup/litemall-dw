@@ -1,6 +1,9 @@
 simulate:
   baseUrl: http://log-center
   date: 2020-11-20 #业务日期
+  schedule:
+    action: 0/10 * * * * ?
+    business: 0/10 * * * * ?
   user:
     count: 2 # 是否生成新用户
     male-rate: 20 #男性比例
