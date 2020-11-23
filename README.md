@@ -4,7 +4,7 @@
 2. 推荐系统
 3. 反爬虫
 
-## 数据模拟
+## 数据准备
 ### 埋点
 处理用户行为数据，采用json数据格式
 
@@ -113,6 +113,16 @@
 				   content_by_lua_file /root/project/litemall/luas/kafka_test.lua;
 				}
 
+### 预处理
+#### 将数据导入hdfs
+
+	hdfs dfs -mkdir -p {/original_data/litemall/db,/original_data/litemall/log}
+
+1. 将事件日志导入hdfs
+	1. 自定义flume的interceptor将数据拆分为start和event类型的数据，并存储到hdfs中不同的文件夹
+	2. 打包之后的jar放入到flume的`plugins.d/interceptor/lib`文件夹下
+		1. `plugins.d`文件夹用于集成第三方的`plugin`
+2. 将业务数据导入hdfs
 
 ## 致谢
 

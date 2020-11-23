@@ -11,6 +11,7 @@
     <modules>
         <module>data-simulate</module>
         <module>litemall</module>
+        <module>data-pretreatment</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -20,6 +21,7 @@
         <encoding>UTF-8</encoding>
         <lombok.version>1.18.12</lombok.version>
         <lang3.version>3.9</lang3.version>
+        <flume.version>1.9.0</flume.version>
     </properties>
 
     <dependencyManagement>
@@ -33,6 +35,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flume</groupId>
+                <artifactId>flume-ng-core</artifactId>
+                <version>${flume.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
