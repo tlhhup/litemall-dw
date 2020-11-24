@@ -123,6 +123,14 @@
 	2. 打包之后的jar放入到flume的`plugins.d/interceptor/lib`文件夹下
 		1. `plugins.d`文件夹用于集成第三方的`plugin`
 2. 将业务数据导入hdfs
+	1. sqoop将mysql中`tinyint`的数据在HDFS 上面显示的`true、false`及在hive中需要使用`boolean`存储
+		1.  原因：jdbc会把tinyint 认为是`java.sql.Types.BIT`
+		2. 解决：`jdbc:mysql://localhost/test?tinyInt1isBit=false`
+	2. sqoop：源数据含有默认换行符导致的数据不正确(出现数据错位)
+		1. 解决：import添加参数
+
+				# Drops \n, \r, and \01 from string fields when importing to Hive.
+				--hive-drop-import-delims
 
 ## 致谢
 
