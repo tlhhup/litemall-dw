@@ -12,6 +12,7 @@
         <module>data-simulate</module>
         <module>litemall</module>
         <module>data-pretreatment</module>
+        <module>hive-function</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -22,6 +23,7 @@
         <lombok.version>1.18.12</lombok.version>
         <lang3.version>3.9</lang3.version>
         <flume.version>1.9.0</flume.version>
+        <hive.version>3.1.2</hive.version>
     </properties>
 
     <dependencyManagement>
@@ -40,6 +42,11 @@
                 <groupId>org.apache.flume</groupId>
                 <artifactId>flume-ng-core</artifactId>
                 <version>${flume.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-exec</artifactId>
+                <version>${hive.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -131,6 +131,17 @@
 
 				# Drops \n, \r, and \01 from string fields when importing to Hive.
 				--hive-drop-import-delims
+3. 自定义hive函数来解析events事件日志
+	1. `hive-function`：中定义UDF和UDTF
+		1. 将打包后的jar包上传到hdfs
+
+				hdfs dfs -put hive-function.jar /user/hive/jars
+	2. 注册全局函数
+
+			# udf
+			create function litemall.parse_json_object as 'org.tlh.litemall.udf.ParseJsonObject' using jar 'hdfs:///user/hive/jars/hive-function.jar'	
+			# udtf
+			create function litemall.extract_event_type as 'org.tlh.litemall.udtf.ExtractEventType' using jar 'hdfs:///user/hive/jars/hive-function.jar'
 
 ## 致谢
 
