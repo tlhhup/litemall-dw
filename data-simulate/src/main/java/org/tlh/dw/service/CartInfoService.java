@@ -41,7 +41,7 @@ public class CartInfoService {
     private Random random = new Random();
 
     public void genCartInfo() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int count = this.simulateProperty.getCart().getCount();
 

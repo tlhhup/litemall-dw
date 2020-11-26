@@ -38,7 +38,7 @@ public class OrderShipService {
     private LitemallOrderMapper orderMapper;
 
     public void genShip() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int rate = this.simulateProperty.getShip().getRate();
         RandomOptionGroup<Boolean> ifShip = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});

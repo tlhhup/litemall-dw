@@ -1,6 +1,7 @@
 simulate:
   baseUrl: http://log-center
   date: 2020-11-20 #业务日期
+  use-date: true # 是否使用指定日期
   schedule:
     action: 0/10 * * * * ?
     business: 0/10 * * * * ?

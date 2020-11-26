@@ -33,13 +33,14 @@ public class CouPonUseService {
     private LitemallCouponUserMapper couponUserMapper;
 
     public void genCouPonUse() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int userCount = this.simulateProperty.getCoupon().getUserCount();
         for (int i = 0; i < userCount; i++) {
             int userId = commonDataService.randomUserId();
             Integer couPonId = commonDataService.randomCouPonId();
             LitemallCouponUser couponUser = new LitemallCouponUser();
+            // todo 记录优惠卷的规则信息
             couponUser.setUserId(userId);
             couponUser.setCouponId(couPonId);
             couponUser.setStatus((short) 0);

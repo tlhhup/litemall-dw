@@ -17,6 +17,7 @@ import java.util.List;
 public class SimulateProperty {
 
     private String date;
+    private boolean useDate;
 
     private UserProps user;
 

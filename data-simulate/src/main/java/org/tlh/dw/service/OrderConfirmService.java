@@ -39,7 +39,7 @@ public class OrderConfirmService {
 
     @Transactional
     public void genConfirm() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int rate = this.simulateProperty.getConfirm().getRate();
         RandomOptionGroup<Boolean> ifConfirm = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});

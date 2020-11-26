@@ -37,7 +37,7 @@ public class OrderRefundInfoService {
     private LitemallOrderMapper orderMapper;
 
     public void genRefundsOrFinish() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int rate = this.simulateProperty.getRefund().getRate();
         List<Integer> reasonRate = this.simulateProperty.getRefund().getReasonRate();

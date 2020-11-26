@@ -52,7 +52,7 @@ public class CommentInfoService {
 
         List<Integer> appraiseRate = this.simulateProperty.getComment().getAppraiseRate();
 
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         Random random = new Random();
 

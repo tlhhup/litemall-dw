@@ -72,7 +72,7 @@ public class OrderInfoService {
     }
 
     public void createOrder(int userId) {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         int userRate = this.simulateProperty.getOrder().getUserRate();
@@ -188,6 +188,7 @@ public class OrderInfoService {
             //3.1.2计算卷的优惠
             List<LitemallCouponUser> litemallCouponUsers = this.couponUserMapper.selectByExample(couponExample);
             for (LitemallCouponUser couponUser : litemallCouponUsers) {
+                // todo 校验该优惠卷的使用规则
                 //3.1.3 是否使用该优惠卷
                 if (useCouponRateOptionGroup.getRandBoolValue()) {
                     LitemallCoupon litemallCoupon = this.couponMapper.selectByPrimaryKey(couponUser.getCouponId());

@@ -37,7 +37,7 @@ public class PaymentInfoService {
     private LitemallOrderMapper orderMapper;
 
     public void genPayments() {
-        Date date = ParamUtil.checkDate(this.simulateProperty.getDate());
+        Date date = this.simulateProperty.isUseDate() ? ParamUtil.checkDate(this.simulateProperty.getDate()) : new Date();
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         int rate = this.simulateProperty.getPayment().getRate();
         RandomOptionGroup<Boolean> ifPay = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});
