@@ -13,7 +13,7 @@ hive=/opt/apache-hive/bin/hive
 
 # 定义sql
 sql="
-INSERT OVERWRITE TABLE dwd_event_ad_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_ad_log
 PARTITION(dt='$do_date')
     select
     mid,
@@ -39,7 +39,7 @@ PARTITION(dt='$do_date')
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='ad';
 
-INSERT OVERWRITE TABLE dwd_event_addCar_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_addCar_log
 PARTITION(dt='$do_date')
 select
     mid,
@@ -63,7 +63,7 @@ select
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='addCar';
 
-INSERT OVERWRITE TABLE dwd_event_comment_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_comment_log
 PARTITION(dt='$do_date')
 select
     mid,
@@ -89,7 +89,7 @@ select
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='comment';
 
-INSERT OVERWRITE TABLE dwd_event_display_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_display_log
 PARTITION(dt='$do_date')
 select
     mid,
@@ -114,7 +114,7 @@ select
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='display';
 
-INSERT OVERWRITE TABLE dwd_event_favorites_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_favorites_log
 PARTITION(dt='$do_date')
     select
     mid,
@@ -137,7 +137,7 @@ PARTITION(dt='$do_date')
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='favorites';
 
-INSERT OVERWRITE TABLE dwd_event_loading_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_loading_log
 PARTITION(dt='$do_date')
     select
     mid,
@@ -164,7 +164,7 @@ PARTITION(dt='$do_date')
 from ${APP}.dwd_event_base_log
 where dt='$do_date' and event_type='loading';
 
-INSERT OVERWRITE TABLE dwd_event_praise_log
+INSERT OVERWRITE TABLE ${APP}.dwd_event_praise_log
 PARTITION(dt='$do_date')
     select
     mid,

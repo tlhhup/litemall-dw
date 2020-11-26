@@ -13,7 +13,7 @@ hive=/opt/apache-hive/bin/hive
 
 # 定义sql
 sql="
-INSERT OVERWRITE TABLE dwd_start_log
+INSERT OVERWRITE TABLE ${APP}.dwd_start_log
 PARTITION(dt='$do_date')
 select
     get_json_object(line,'$.mid'),
