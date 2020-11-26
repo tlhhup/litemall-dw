@@ -48,8 +48,18 @@ LOAD DATA  INPATH '/original_data/litemall/db/litemall_order/$do_date' OVERWRITE
 LOAD DATA  INPATH '/original_data/litemall/db/litemall_user/$do_date' OVERWRITE INTO TABLE ${APP}.ods_user PARTITION (dt='$do_date');
 
 LOAD DATA  INPATH '/original_data/litemall/db/litemall_coupon_user/$do_date' OVERWRITE INTO TABLE ${APP}.ods_coupon_user PARTITION (dt='$do_date');
-
+"
+sql1="
 LOAD DATA  INPATH '/original_data/litemall/db/litemall_region/$do_date' OVERWRITE INTO TABLE ${APP}.ods_region PARTITION (dt='$do_date');
 "
+
 # 执行导入
-$hive -e "$sql"
+case $1 in
+     first)
+	$hive -e "$sql"
+	$hive -e "$sql1"
+;;
+     all)
+	$hive -e "$sql"
+;;
+esac
