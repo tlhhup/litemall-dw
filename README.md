@@ -131,6 +131,10 @@
 
 				# Drops \n, \r, and \01 from string fields when importing to Hive.
 				--hive-drop-import-delims
+	3. 支付和退款数据
+		1. 因该数据都存在于订单表中，所以进行特殊处理
+			1. 支付：除了分区数据以外，同时添加`pay_time`作为过滤条件
+			2. 退款：除了分区数据以外，同时添加`refund_time`作为过滤条件
 3. 自定义hive函数来解析events事件日志
 	1. `hive-function`：中定义UDF和UDTF
 		1. 将打包后的jar包上传到hdfs
