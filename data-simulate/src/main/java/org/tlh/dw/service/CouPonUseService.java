@@ -2,6 +2,7 @@ package org.tlh.dw.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.linlinjava.litemall.db.dao.LitemallCouponUserMapper;
+import org.linlinjava.litemall.db.domain.LitemallCoupon;
 import org.linlinjava.litemall.db.domain.LitemallCouponUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,13 @@ public class CouPonUseService {
         int userCount = this.simulateProperty.getCoupon().getUserCount();
         for (int i = 0; i < userCount; i++) {
             int userId = commonDataService.randomUserId();
-            Integer couPonId = commonDataService.randomCouPonId();
+            LitemallCoupon litemallCoupon = commonDataService.randomCouPonId();
             LitemallCouponUser couponUser = new LitemallCouponUser();
-            // todo 记录优惠卷的规则信息
             couponUser.setUserId(userId);
-            couponUser.setCouponId(couPonId);
-            couponUser.setStatus((short) 0);
+            couponUser.setCouponId(litemallCoupon.getId());
+            couponUser.setStatus(litemallCoupon.getStatus());
+            couponUser.setStartTime(litemallCoupon.getStartTime());
+            couponUser.setEndTime(litemallCoupon.getEndTime());
             couponUser.setAddTime(localDateTime);
             couponUser.setDeleted(false);
             this.couponUserMapper.insert(couponUser);

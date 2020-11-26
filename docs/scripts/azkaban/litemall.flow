@@ -1,0 +1,49 @@
+nodes:
+  - name: mysql_to_hdfs
+    type: command
+    config:
+      command: echo "load mysql data to hdfs."
+      command: sh /home/hadoop/project/litemall/sqoop/mysql_to_hdfs.sh all ${dt}
+  - name: hdfs_to_ods_db
+    type: command
+    dependsOn:
+      - mysql_to_hdfs
+    config:
+      command: echo "import db data from hdfs to ods."
+      command: sh /home/hadoop/project/litemall/hive/hdfs_to_ods_db.sh all ${dt}
+  - name: ods_to_dwd_db
+    type: command
+    dependsOn:
+      - hdfs_to_ods_db
+    config:
+      command: echo "import db data from ods to dwd."
+      command: sh /home/hadoop/project/litemall/hive/ods_to_dwd_db.sh all ${dt}
+  - name: hdfs_to_ods_log
+    type: command
+    config:
+      command: echo "import logs from hdfs to ods."
+      command: sh /home/hadoop/project/litemall/hive/hdfs_to_ods_log.sh ${dt}
+  - name: ods_to_dwd_start_log
+    type: command
+    dependsOn:
+      - hdfs_to_ods_log
+    config:
+      command: echo "import start logs from ods to dwd."
+      command: sh /home/hadoop/project/litemall/hive/ods_to_dwd_start_log.sh ${dt}
+  - name: ods_to_dwd_event_log
+    type: flow
+    dependsOn:
+      - hdfs_to_ods_log
+    nodes:
+      - name: ods_to_dwd_event_base_log
+        type: command
+        config:
+          command: echo "parse event logs."
+          command: sh /home/hadoop/project/litemall/hive/ods_to_dwd_event_base_log.sh ${dt}
+      - name: dwd_event_base_to_event_log
+        type: command
+        dependsOn:
+          - ods_to_dwd_event_base_log
+        config:
+          command: echo "parse event logs."
+          command: sh /home/hadoop/project/litemall/hive/dwd_event_base_to_event_log.sh ${dt}

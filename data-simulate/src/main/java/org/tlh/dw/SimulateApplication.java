@@ -17,7 +17,7 @@ import org.tlh.dw.config.SimulateProperty;
 @EnableTransactionManagement
 @MapperScan("org.linlinjava.litemall.db.dao")
 @EnableConfigurationProperties({SimulateProperty.class})
-@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.linlinjava.litemall.core", "org.tlh.dw"})
+@SpringBootApplication(scanBasePackages = {"org.linlinjava.litemall.db", "org.tlh.dw"})
 public class SimulateApplication {
 
     public static void main(String[] args) {

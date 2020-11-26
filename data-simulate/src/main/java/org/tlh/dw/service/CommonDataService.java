@@ -32,7 +32,7 @@ public class CommonDataService {
     private List<Integer> userId;
     private List<Integer> goodsId;
     private List<Integer> topicId;
-    private List<Integer> couPonId;
+    private List<LitemallCoupon> litemallCoupons;
     private List<LitemallGoods> litemallGoods;
     private List<RegionInfo> regions;
 
@@ -57,7 +57,7 @@ public class CommonDataService {
         this.userId = new CopyOnWriteArrayList<>();
         this.goodsId = new CopyOnWriteArrayList<>();
         this.topicId = new CopyOnWriteArrayList<>();
-        this.couPonId = new CopyOnWriteArrayList<>();
+        this.litemallCoupons = new CopyOnWriteArrayList<>();
         this.random = new Random();
     }
 
@@ -86,7 +86,7 @@ public class CommonDataService {
         example.createCriteria().andIdNotEqualTo(3);//非新用户卷
         List<LitemallCoupon> litemallCoupons = this.couponMapper.selectByExample(example);
         if (!ObjectUtils.isEmpty(litemallCoupons)) {
-            this.couPonId.addAll(litemallCoupons.stream().map(item -> item.getId()).collect(Collectors.toList()));
+            this.litemallCoupons = litemallCoupons;
         }
     }
 
@@ -179,9 +179,9 @@ public class CommonDataService {
         this.userId.add(userId);
     }
 
-    public Integer randomCouPonId(){
-        int index = random.nextInt(this.couPonId.size());
-        return this.couPonId.get(index);
+    public LitemallCoupon randomCouPonId() {
+        int index = random.nextInt(this.litemallCoupons.size());
+        return this.litemallCoupons.get(index);
     }
 
 }

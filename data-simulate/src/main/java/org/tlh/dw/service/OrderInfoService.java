@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.linlinjava.litemall.db.dao.*;
 import org.linlinjava.litemall.db.domain.*;
+import org.linlinjava.litemall.db.service.LitemallGoodsService;
+import org.linlinjava.litemall.db.util.CouponConstant;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,7 @@ import org.tlh.dw.util.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 订单
@@ -60,6 +59,9 @@ public class OrderInfoService {
 
     @Autowired
     private LitemallCouponUserMapper couponUserMapper;
+
+    @Autowired
+    private LitemallGoodsService goodsService;
 
     @Transactional
     public void genOrderInfo() {
@@ -122,11 +124,16 @@ public class OrderInfoService {
 
         //记录活动优惠
         BigDecimal grouponPrice = new BigDecimal(0);//活动优惠金额
-        List<LitemallGrouponRules> litemallGrouponRules = new ArrayList<>();
+        Map<Integer, LitemallGrouponRules> litemallGrouponRules = new HashMap<>();
         List<LitemallGrouponRules> updateGrouponRules = new ArrayList<>();
         if (joinActivity) {
             //获取活动的商品
-            litemallGrouponRules = this.grouponRulesMapper.selectByExample(null);
+            List<LitemallGrouponRules> grouponRules = this.grouponRulesMapper.selectByExample(null);
+            if (ObjectUtils.isEmpty(grouponRules)) {
+                for (LitemallGrouponRules item : grouponRules) {
+                    litemallGrouponRules.put(item.getGoodsId(), item);
+                }
+            }
         }
 
         //2. 商品信息
@@ -158,11 +165,11 @@ public class OrderInfoService {
                 // 判断该商品是否参加活动
                 if (joinActivity && joinActivityRateOptionGroup.getRandBoolValue()) {
                     //2.1.1 计算活动优惠
-                    Optional<LitemallGrouponRules> grouponRule = litemallGrouponRules.stream().filter(item -> item.getGoodsId() == orderDetail.getGoodsId()).findFirst();
-                    if (grouponRule.isPresent()) {
-                        grouponPrice = grouponPrice.add(grouponRule.get().getDiscount());
+                    LitemallGrouponRules grouponRule = litemallGrouponRules.get(cartInfo.getGoodsId());
+                    if (grouponRule != null) {
+                        grouponPrice = grouponPrice.add(grouponRule.getDiscount());
                         //记录需要更新的团购规则
-                        updateGrouponRules.add(grouponRule.get());
+                        updateGrouponRules.add(grouponRule);
                     }
                 }
 
@@ -188,11 +195,11 @@ public class OrderInfoService {
             //3.1.2计算卷的优惠
             List<LitemallCouponUser> litemallCouponUsers = this.couponUserMapper.selectByExample(couponExample);
             for (LitemallCouponUser couponUser : litemallCouponUsers) {
-                // todo 校验该优惠卷的使用规则
                 //3.1.3 是否使用该优惠卷
                 if (useCouponRateOptionGroup.getRandBoolValue()) {
                     LitemallCoupon litemallCoupon = this.couponMapper.selectByPrimaryKey(couponUser.getCouponId());
-                    if (litemallCoupon != null) {
+                    // 3.1.4 校验该优惠卷是否可用
+                    if (litemallCoupon != null && isValid(litemallCoupon, couponUser, goodsPrice, orderDetailList)) {
                         couponPrice = couponPrice.add(litemallCoupon.getDiscount());
                         //记录需要更新的卷信息
                         updateCouponUsers.add(couponUser);
@@ -245,6 +252,88 @@ public class OrderInfoService {
             updateCouponUser.setUpdateTime(localDateTime);
             this.couponUserMapper.updateByPrimaryKey(updateCouponUser);
         }
+    }
+
+    /**
+     * 校验优惠卷是否可用
+     *
+     * @param litemallCoupon
+     * @param couponUser
+     * @param goodsPrice
+     * @param orderDetailList
+     * @return
+     */
+    private boolean isValid(LitemallCoupon litemallCoupon, LitemallCouponUser couponUser, BigDecimal goodsPrice, List<LitemallOrderGoods> orderDetailList) {
+        //校验使用的优惠卷和规则ID是否相等
+        if (!litemallCoupon.getId().equals(couponUser.getCouponId())) {
+            return false;
+        }
+
+        // 检测优惠卷状态
+        Short status = litemallCoupon.getStatus();
+        if (!status.equals(CouponConstant.STATUS_NORMAL)) {
+            return false;
+        }
+
+        // 检查是否超期
+        Short timeType = litemallCoupon.getTimeType();
+        Short days = litemallCoupon.getDays();
+        LocalDateTime now = LocalDateTime.now();
+        if (timeType.equals(CouponConstant.TIME_TYPE_TIME)) {
+            if (now.isBefore(litemallCoupon.getStartTime()) || now.isAfter(litemallCoupon.getEndTime())) {
+                couponUser.setStatus((short) 1);
+                return false;
+            }
+        } else if (timeType.equals(CouponConstant.TIME_TYPE_DAYS)) {
+            LocalDateTime expired = couponUser.getAddTime().plusDays(days);
+            if (now.isAfter(expired)) {
+                couponUser.setStatus((short) 1);
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        // 检测商品是否符合
+        Map<Integer, List<LitemallOrderGoods>> cartMap = new HashMap<>();
+        //可使用优惠券的商品或分类
+        List<Integer> goodsValueList = new ArrayList<>(Arrays.asList(litemallCoupon.getGoodsValue()));
+        Short goodType = litemallCoupon.getGoodsType();
+
+        if (goodType.equals(CouponConstant.GOODS_TYPE_CATEGORY) ||
+                goodType.equals((CouponConstant.GOODS_TYPE_ARRAY))) {
+            for (LitemallOrderGoods cart : orderDetailList) {
+                // 商品ID或分类ID
+                Integer key = goodType.equals(CouponConstant.GOODS_TYPE_ARRAY) ? cart.getGoodsId() : goodsService.findById(cart.getGoodsId()).getCategoryId();
+                List<LitemallOrderGoods> carts = cartMap.get(key);
+                if (carts == null) {
+                    carts = new LinkedList<>();
+                }
+                carts.add(cart);
+                cartMap.put(key, carts);
+            }
+            //购物车中可以使用优惠券的商品或分类
+            goodsValueList.retainAll(cartMap.keySet());
+            //可使用优惠券的商品的总价格
+            BigDecimal total = new BigDecimal(0);
+
+            for (Integer goodsId : goodsValueList) {
+                List<LitemallOrderGoods> carts = cartMap.get(goodsId);
+                for (LitemallOrderGoods cart : carts) {
+                    total = total.add(cart.getPrice().multiply(new BigDecimal(cart.getNumber())));
+                }
+            }
+            //是否达到优惠券满减金额
+            if (total.compareTo(litemallCoupon.getMin()) == -1) {
+                return false;
+            }
+        }
+
+        // 检测是否满足最低消费
+        if (goodsPrice.compareTo(litemallCoupon.getMin()) == -1) {
+            return false;
+        }
+        return true;
     }
 
 }
