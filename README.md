@@ -122,6 +122,13 @@
 	1. 自定义flume的interceptor将数据拆分为start和event类型的数据，并存储到hdfs中不同的文件夹
 	2. 打包之后的jar放入到flume的`plugins.d/interceptor/lib`文件夹下
 		1. `plugins.d`文件夹用于集成第三方的`plugin`
+	3. **flume守护进程**问题
+		1. 原因：启动配置参数`-c`设置不正确
+		2. 解决：
+
+				FLUME_HOME=/opt/apache-flume-1.9.0-bin
+				# 需要配置到flume安装路径下的conf文件夹
+				nohup $FLUME_HOME/bin/flume-ng agent -c $FLUME_HOME/conf -f $FLUME_HOME/conf/litemall_kafka_to_hdfs.conf --name a1 -Dflume.root.logger=INFO,console >$FLUME_HOME/logs/litemall 2>&1 &
 2. 将业务数据导入hdfs
 	1. sqoop将mysql中`tinyint`的数据在HDFS 上面显示的`true、false`及在hive中需要使用`boolean`存储
 		1.  原因：jdbc会把tinyint 认为是`java.sql.Types.BIT`
