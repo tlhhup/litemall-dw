@@ -66,7 +66,8 @@ public class OrderRefundInfoService {
             if (ifRefund.getRandBoolValue()) {
                 order.setRefundTime(localDateTime);
                 order.setOrderStatus(OrderUtil.STATUS_REFUND);
-                order.setRefundContent(order.getActualPrice().toEngineeringString());
+                //申请退款金额
+                order.setRefundAmount(order.getActualPrice());
                 order.setRefundType(refundReasonOptionGroup.getRandStringValue());
                 order.setRefundContent(refundReasonOptionGroup.getRandStringValue());
                 order.setDeleted(false);

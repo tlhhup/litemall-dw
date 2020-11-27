@@ -1,10 +1,13 @@
 simulate:
   baseUrl: http://log-center
   date: 2020-11-20 #业务日期
-  use-date: true # 是否使用指定日期
+  use-date: false # 是否使用指定日期
   schedule:
     action: 0/10 * * * * ?
-    business: 0/10 * * * * ?
+    business: 0/50 * * * * ?
+    reload:
+      enable: false
+      cron: 0 0 0 * * ?
   user:
     count: 2 # 是否生成新用户
     male-rate: 20 #男性比例
@@ -25,12 +28,12 @@ simulate:
   coupon:
     user-count: 10 #购物券领取人数
   payment:
-    rate: 70 #支付比例
+    rate: 50 #支付比例
     payment-type: #支付方式 支付宝：微信
       - 40
       - 60
   ship:
-    rate: 70 # 发货比率
+    rate: 40 # 发货比率
     ship-channel:
       - "ZTO"
       - "YTO"
@@ -46,14 +49,14 @@ simulate:
       - "FEDEX"
       - "FEDEX_GJ"
   comment:
-    rate: 30 # 评论比率
+    rate: 10 # 评论比率
     appraise-rate: #评价比例 好：中：差：自动
       - 30
       - 10
       - 10
       - 50
   confirm:
-    rate: 60 # 确认收货比率
+    rate: 50 # 确认收货比率
   refund:
     rate: 30 # 退款的比率
     reason-rate: #退款原因比例：质量问题 商品描述与实际描述不一致 缺货 号码不合适 拍错 不想买了 其他

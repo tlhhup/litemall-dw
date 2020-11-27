@@ -56,6 +56,7 @@ public class CommonDataService {
     public CommonDataService() {
         this.userId = new CopyOnWriteArrayList<>();
         this.goodsId = new CopyOnWriteArrayList<>();
+        this.litemallGoods = new CopyOnWriteArrayList<>();
         this.topicId = new CopyOnWriteArrayList<>();
         this.litemallCoupons = new CopyOnWriteArrayList<>();
         this.random = new Random();
@@ -68,26 +69,10 @@ public class CommonDataService {
         if (!ObjectUtils.isEmpty(users)) {
             this.userId.addAll(users.stream().map(item -> item.getId()).collect(Collectors.toList()));
         }
-        //初始化商品id
-        List<LitemallGoods> goods = this.goodsMapper.selectByExample(null);
-        if (!ObjectUtils.isEmpty(goods)) {
-            this.goodsId.addAll(goods.stream().map(item -> item.getId()).collect(Collectors.toList()));
-            this.litemallGoods = goods;
-        }
-        //初始化topicId
-        List<LitemallTopic> topics = this.topicMapper.selectByExample(null);
-        if (!ObjectUtils.isEmpty(topics)) {
-            this.topicId.addAll(topics.stream().map(item -> item.getId()).collect(Collectors.toList()));
-        }
         //初始化区域数据
         initRegion();
-        //初始化卷数据
-        LitemallCouponExample example = new LitemallCouponExample();
-        example.createCriteria().andIdNotEqualTo(3);//非新用户卷
-        List<LitemallCoupon> litemallCoupons = this.couponMapper.selectByExample(example);
-        if (!ObjectUtils.isEmpty(litemallCoupons)) {
-            this.litemallCoupons = litemallCoupons;
-        }
+        //加载数据
+        reloadCommonData();
     }
 
     private void initRegion() {
@@ -129,6 +114,34 @@ public class CommonDataService {
                 ") as country\n" +
                 "on city.id=country.pid";
         this.regions = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RegionInfo.class));
+    }
+
+    public void reloadCommonData() {
+        //1.清空数据
+        this.litemallGoods.clear();
+        this.goodsId.clear();
+        this.topicId.clear();
+        this.litemallCoupons.clear();
+
+        //2.重新加载
+        //初始化商品id
+        List<LitemallGoods> goods = this.goodsMapper.selectByExample(null);
+        if (!ObjectUtils.isEmpty(goods)) {
+            this.goodsId.addAll(goods.stream().map(item -> item.getId()).collect(Collectors.toList()));
+            this.litemallGoods.addAll(goods);
+        }
+        //初始化topicId
+        List<LitemallTopic> topics = this.topicMapper.selectByExample(null);
+        if (!ObjectUtils.isEmpty(topics)) {
+            this.topicId.addAll(topics.stream().map(item -> item.getId()).collect(Collectors.toList()));
+        }
+        //初始化卷数据
+        LitemallCouponExample example = new LitemallCouponExample();
+        example.createCriteria().andIdNotEqualTo(3);//非新用户卷
+        List<LitemallCoupon> litemallCoupons = this.couponMapper.selectByExample(example);
+        if (!ObjectUtils.isEmpty(litemallCoupons)) {
+            this.litemallCoupons.addAll(litemallCoupons);
+        }
     }
 
     public int randomUserId() {
