@@ -265,7 +265,8 @@ create external table dwd_dim_date_info(
     `is_workday` int COMMENT '是否是周末', 
     `holiday_id` int COMMENT '是否是节假日'
 )comment '时间维度表'
-STORED AS PARQUET
+row format delimited fields terminated by '\t'
+STORED AS TEXTFILE
 LOCATION '/warehouse/litemall/dwd/dwd_dim_date_info'
 TBLPROPERTIES ('parquet.compression'='lzo');
 
