@@ -422,8 +422,8 @@ create external table dwd_fact_refund_info(
 	`refund_amount` decimal(10,2) COMMENT '实际退款金额，（有可能退款金额小于实际支付金额）',
 	`refund_type` string COMMENT '退款方式',
 	`refund_content` string COMMENT '退款备注',
-	`refund_time` string COMMENT '退款时间',
-	`add_time` string COMMENT '创建时间',
+	`refund_time` string COMMENT '申请退款时间',
+	`confirm_time` string COMMENT '确认退款时间',
 	`province` int COMMENT '省份ID',
 	`city` int COMMENT '城市ID',
 	`country` int COMMENT '乡镇ID'

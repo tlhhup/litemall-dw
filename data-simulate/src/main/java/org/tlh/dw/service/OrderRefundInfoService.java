@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 退单或者完成
+ * 申请退款
  *
  * @author 离歌笑
  * @desc
@@ -64,9 +64,9 @@ public class OrderRefundInfoService {
         for (LitemallOrder order : litemallOrders) {
             //2.随机退单
             if (ifRefund.getRandBoolValue()) {
-                order.setRefundTime(localDateTime);
                 order.setOrderStatus(OrderUtil.STATUS_REFUND);
-                //申请退款金额
+                //申请退款金额和申请时间
+                order.setRefundTime(localDateTime);
                 order.setRefundAmount(order.getActualPrice());
                 order.setRefundType(refundReasonOptionGroup.getRandStringValue());
                 order.setRefundContent(refundReasonOptionGroup.getRandStringValue());

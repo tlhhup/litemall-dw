@@ -195,12 +195,12 @@ select
     refund_type,
     refund_content,
     refund_time,
-    add_time,
+    confirm_time,
     province,
     city,
     country
 from ods_order
-where dt='$do_date' and date_format(refund_time,'yyyy-MM-dd')='$do_date';
+where dt='$do_date' and order_status=203 and date_format(confirm_time,'yyyy-MM-dd')='$do_date';
 
 INSERT OVERWRITE TABLE dwd_fact_cart_info
 PARTITION(dt='$do_date')
