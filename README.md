@@ -129,6 +129,18 @@
 				FLUME_HOME=/opt/apache-flume-1.9.0-bin
 				# 需要配置到flume安装路径下的conf文件夹
 				nohup $FLUME_HOME/bin/flume-ng agent -c $FLUME_HOME/conf -f $FLUME_HOME/conf/litemall_kafka_to_hdfs.conf --name a1 -Dflume.root.logger=INFO,console >$FLUME_HOME/logs/litemall 2>&1 &
+	4. 处理**hive**报错:**Cannot obtain block length for LocatedBlock**
+		1. 在跑Azkaban任务的时候出现以上错误，其原因是：文件处于`openforwrite`的状态，没有关闭
+		2. 解决：
+			1. 查看文件状态
+
+					hdfs fsck dir -files
+			2. 查看路径下是否有`openforwrite的文件`
+
+					hdfs fsck dir -openforwrite
+			3. 释放租约 
+
+					hdfs debug recoverLease -path filepath [-retries retry-num]
 2. 将业务数据导入hdfs
 	1. sqoop将mysql中`tinyint`的数据在HDFS 上面显示的`true、false`及在hive中需要使用`boolean`存储
 		1.  原因：jdbc会把tinyint 认为是`java.sql.Types.BIT`
