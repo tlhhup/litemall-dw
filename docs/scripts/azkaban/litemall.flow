@@ -47,3 +47,12 @@ nodes:
         config:
           command: echo "parse event logs."
           command: sh /home/hadoop/project/litemall/hive/dwd_event_base_to_event_log.sh ${dt}
+  - name: dwd_to_dws
+    type: command
+    dependsOn:
+      - ods_to_dwd_db
+      - ods_to_dwd_event_log
+      - ods_to_dwd_start_log
+    config:
+      command: echo "import data from dwd to dws."
+      command: sh /home/hadoop/project/litemall/hive/dwd_to_dws.sh ${dt}
