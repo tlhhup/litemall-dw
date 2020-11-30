@@ -147,6 +147,19 @@ STORED AS PARQUET
 LOCATION '/warehouse/litemall/dws/dws_goods_sale_detail_daycount'
 TBLPROPERTIES ('parquet.compression'='lzo');
 
+-- dws_coupon_daycount
+drop table if exists dws_coupon_daycount;
+create external table dws_coupon_daycount(
+    `id` int comment '优惠卷ID',
+    `name` string COMMENT '优惠券名称',
+    `get_count` bigint comment '领用数量',
+    `used_count` bigint comment '使用数量'
+)comment '每日优惠卷情况'
+PARTITIONED BY (dt string)
+STORED AS PARQUET
+LOCATION '/warehouse/litemall/dws/dws_coupon_daycount'
+TBLPROPERTIES ('parquet.compression'='lzo');
+
 -- dws_groupon_info_daycount
 drop table if exists dws_groupon_info_daycount; 
 create external table dws_groupon_info_daycount(

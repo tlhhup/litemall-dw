@@ -960,6 +960,44 @@ select
 from temp_groupon g
 left join temp_order o on g.id=o.groupon_id
 left join temp_payment p on g.id=p.groupon_id;
+
+-- dws_coupon_daycount
+
+with
+temp_get as(
+	select
+		coupon_id as id,
+		count(1) as get_count
+	from dwd_fact_coupon_user_info
+	where dt='$do_date'
+	group by coupon_id
+),
+temp_use as(
+	select
+		coupon_id as id,
+		count(1) as used_count
+	from dwd_fact_coupon_user_info
+	where dt='$do_date' and order_id is not null
+	group by coupon_id
+),
+temp_coupon as(
+	select
+		id,
+		name
+	from dwd_dim_coupon_info
+	where dt='$do_date'
+)
+
+INSERT OVERWRITE TABLE dws_coupon_daycount
+PARTITION(dt='$do_date')
+select
+	c.id,
+	c.name,
+	g.get_count,
+	o.used_count
+from temp_coupon c
+join temp_get g on g.id=c.id
+join temp_use o on c.id=o.id;
 "
 
 # 执行导入
