@@ -679,7 +679,7 @@ temp_payment as
         select
             id
         from dwd_fact_order_info
-        where dt='$do_date' and order_status=201
+        where dt='$do_date' and order_status in(201,301,401)
     ) group by goods_id
 ),
 temp_refund as
