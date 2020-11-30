@@ -943,7 +943,7 @@ temp_payment as(
         groupon_id,
         count(1) as payment_count
     from dwd_fact_order_info
-    where dt='$do_date' and groupon_id is not null and order_status in(201,301)
+    where dt='$do_date' and groupon_id is not null and order_status in(201,301,401)
     group by groupon_id
 )
 
