@@ -111,6 +111,9 @@ public class UserActionDataMock {
         //设备id
         appBase.setMid(s_mid + "");
         s_mid++;
+        if (s_mid>1000){
+            s_mid=0;
+        }
         // 用户id
         appBase.setUid(this.commonDataService.randomUserId());
         // 程序版本号5,6 等
@@ -297,6 +300,9 @@ public class UserActionDataMock {
         //设备id
         appStart.setMid(s_mid + "");
         s_mid++;
+        if (s_mid>1000){
+            s_mid=0;
+        }
         // 用户id
         appStart.setUid(this.commonDataService.randomUserId());
         // 程序版本号5,6 等
