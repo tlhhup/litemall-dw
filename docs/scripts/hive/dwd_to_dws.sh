@@ -393,11 +393,11 @@ join
 with
 temp_user as(
     select
-        id as user_id,
-        sum(if(date_format(last_login_time,'yyyy-MM-dd')='$do_date',1,0)) as login_count
-    from ods_user
+        uid as user_id,
+        count(1) as login_count
+    from dwd_start_log
     where dt='$do_date'
-    group by id
+    group by uid
 ),
 temp_cart as(
     select
