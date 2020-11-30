@@ -393,7 +393,7 @@ join
 with
 temp_user as(
     select
-        uid as user_id,
+        cast(uid as int) as user_id,
         count(1) as login_count
     from dwd_start_log
     where dt='$do_date'
