@@ -141,6 +141,8 @@
 			3. 释放租约 
 
 					hdfs debug recoverLease -path filepath [-retries retry-num]
+		3. [分析](https://www.cnblogs.com/cssdongl/p/6700512.html)：
+			1. 没有关闭flume重启了hdfs 
 2. 将业务数据导入hdfs
 	1. sqoop将mysql中`tinyint`的数据在HDFS 上面显示的`true、false`及在hive中需要使用`boolean`存储
 		1.  原因：jdbc会把tinyint 认为是`java.sql.Types.BIT`
