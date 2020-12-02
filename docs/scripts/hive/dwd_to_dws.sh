@@ -343,51 +343,64 @@ on t.date_id=dd.date_id;
 INSERT OVERWRITE TABLE dws_region_detail_daycount
 PARTITION(dt='$do_date')
 select
-    dfo.province,
-    dfo.city,
-    dfo.country,
-    dfo.order_count,
-    dfo.order_total_amount,
-    payment.payment_count,
-    payment.payment_total_amount,
-    refund.refund_count,
-    refund.refund_total_amount
-from 
+    province,
+    city,
+    country,
+    sum(order_count),
+    sum(order_total_amount),
+    sum(payment_count),
+    sum(payment_total_amount),
+    sum(refund_count),
+    sum(refund_total_amount)
+from
 (
     select
         province,
         city,
         country,
         count(1) as order_count,
-        sum(order_price) as order_total_amount
+        sum(order_price) as order_total_amount,
+        0 as payment_count,
+        0 as payment_total_amount,
+        0 as refund_count,
+        0 as refund_total_amount
     from dwd_fact_order_info
     where dt='$do_date'
     group by province,city,country
-)dfo
-join
-(
+
+    union all
+
     select
         province,
         city,
         country,
+        0 as order_count,
+        0 as order_total_amount,
         count(1) as payment_count,
-        sum(pay_price) as payment_total_amount
+        sum(pay_price) as payment_total_amount,
+        0 as refund_count,
+        0 as refund_total_amount
     from dwd_fact_payment_info
     where dt='$do_date'
     group by province,city,country
-)payment on payment.country=dfo.country
-join
-(
+
+    union all
+
     select
         province,
         city,
         country,
+        0 as order_count,
+        0 as order_total_amount,
+        0 as payment_count,
+        0 as payment_total_amount,
         count(1) as refund_count,
         sum(refund_amount) as refund_total_amount
     from dwd_fact_refund_info
     where dt='$do_date'
     group by province,city,country
-)refund on refund.country=dfo.country;
+) t
+group by province,city,country;
 
 -- dws_user_action_daycount
 with
