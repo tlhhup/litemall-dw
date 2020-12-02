@@ -692,7 +692,7 @@ temp_payment as
         select
             id
         from dwd_fact_order_info
-        where dt='$do_date' and order_status in(201,301,401)
+        where dt='$do_date' and pay_time is not null
     ) group by goods_id
 ),
 temp_refund as
@@ -707,7 +707,7 @@ temp_refund as
         select
             id
         from dwd_fact_order_info
-        where dt='$do_date' and order_status in(202,203)
+        where dt='$do_date' and order_status=203
     ) group by goods_id
 )
 
@@ -956,7 +956,7 @@ temp_payment as(
         groupon_id,
         count(1) as payment_count
     from dwd_fact_order_info
-    where dt='$do_date' and groupon_id is not null and order_status in(201,301,401)
+    where dt='$do_date' and groupon_id is not null and pay_time is not null
     group by groupon_id
 )
 
