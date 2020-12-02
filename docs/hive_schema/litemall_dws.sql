@@ -25,36 +25,6 @@ LOCATION '/warehouse/litemall/dws/dws_uv_detail_daycount'
 TBLPROPERTIES ('parquet.compression'='lzo');
 
 -- 业务数据
--- dws_date_detail_daycount
-drop table if exists dws_date_detail_daycount;
-create external table dws_date_detail_daycount(
-	`date` string comment '统计日期',
-    `week_id` int COMMENT '周',
-    `week_day` int COMMENT '周的第几天', 
-    `day` int COMMENT '每月的第几天', 
-    `month` int COMMENT '第几月', 
-    `quarter` int COMMENT '第几季度', 
-    `year` int COMMENT '年',
-    `is_workday` int COMMENT '是否是周末', 
-    `holiday_id` int COMMENT '是否是节假日',
-	`uv_count` bigint comment '活跃用户数',
-	`register_count` bigint comment '新增用户数',
-	`cart_count` bigint comment '加购数量',
-	`cart_amount` decimal(10,2) comment '加购金额',
-	`comment_count` bigint comment '评论次数',
-	`collect_count` bigint comment '收藏次数',
-	`order_count` bigint comment '下单次数',
-	`order_total_amount` decimal(10,2) comment '下单总金额',
-	`payment_count` bigint comment '支付次数',
-	`payment_total_amount` decimal(10,2) comment '支付金额',
-	`refund_count` bigint comment '退单次数',
-	`refund_total_amount` decimal(10,2) comment '退单金额',
-	`coupon_count` bigint comment '领用优惠卷次数'
-)comment '每日数据总汇表'
-STORED AS PARQUET
-LOCATION '/warehouse/litemall/dws/dws_date_detail_daycount'
-TBLPROPERTIES ('parquet.compression'='lzo');
-
 -- dws_region_detail_daycount
 drop table if exists dws_region_detail_daycount;
 create external table dws_region_detail_daycount(
@@ -105,8 +75,10 @@ create external table dws_goods_action_daycount(
 	`order_num` bigint comment '下单件数',
 	`order_total_amount` decimal(10,2) comment '下单总金额',
 	`payment_count` bigint comment '支付次数',
+	`payment_num` bigint comment '支付件数',
 	`payment_total_amount` decimal(10,2) comment '支付金额',
 	`refund_count` bigint comment '退单次数',
+	`refund_num` bigint comment '退单件数',
 	`refund_total_amount` decimal(10,2) comment '退单金额',
 	`collect_count` bigint comment '收藏次数',
 	`comment_count` bigint comment '评论次数',
@@ -175,24 +147,3 @@ PARTITIONED BY (dt string)
 STORED AS PARQUET
 LOCATION '/warehouse/litemall/dws/dws_groupon_info_daycount'
 TBLPROPERTIES ('parquet.compression'='lzo');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
