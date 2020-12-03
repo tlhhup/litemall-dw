@@ -172,7 +172,7 @@ join
 insert into table ads_continuity_uv_count
 select
     '$do_date' as dt,
-    concat(date_sub('do_date',7),'_','do_date'),
+    concat(date_sub('$do_date',7),'_','$do_date'),
     count(1) as continuity_count
 from
 (
@@ -194,7 +194,7 @@ from
                     dt,
                     rank() over (partition by mid order by dt) as rank
                 from dws_uv_detail_daycount
-                where dt>=date_sub('do_date',6)
+                where dt>=date_sub('$do_date',6)
                 order by mid,dt
             )t1
         )t2 group by mid,diff having count(1)>3

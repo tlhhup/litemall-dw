@@ -70,3 +70,10 @@ nodes:
     config:
       command: echo "import data from dwt to ads."
       command: sh /home/hadoop/project/litemall/hive/dwt_to_ads.sh ${dt}
+  - name: ads_to_mysql
+    type: command
+    dependsOn:
+      - dwt_to_ads
+    config:
+      command: echo "import data from hdfs to mysql."
+      command: sh /home/hadoop/project/litemall/sqoop/hdfs_to_mysql.sh
