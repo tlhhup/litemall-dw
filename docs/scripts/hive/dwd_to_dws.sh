@@ -614,7 +614,7 @@ select
     g.category_name,
     g.category2_id,
     g.category2_name,
-    g.product_id,
+    g.id,
     s.goods_num,
     g.retail_price,
     s.order_count,

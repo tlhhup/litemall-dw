@@ -108,7 +108,7 @@ create external table dws_goods_sale_detail_daycount (
 	`goods_category1_name` string comment '商品一级品类名称',
 	`goods_category2_id` int comment '商品二级品类ID',
 	`goods_category2_name` string comment '商品二级品类名称',
-	`goods_product_id` int comment '商品 spu',
+	`goods_id` int comment '商品 spu',
 	`goods_num` int comment '购买个数',
 	`goods_price` decimal(10,2) comment '商品价格',
 	`order_count` bigint comment '当日下单单数',
