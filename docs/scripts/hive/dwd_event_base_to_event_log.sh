@@ -58,6 +58,7 @@ select
     app_time,
     get_json_object(event_json,'$.kv.addTime'),
     get_json_object(event_json,'$.kv.goodsId'),
+    get_json_object(event_json,'$.kv.skuId'),
     get_json_object(event_json,'$.kv.num'),
     get_json_object(event_json,'$.kv.userId')
 from ${APP}.dwd_event_base_log

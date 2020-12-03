@@ -5,7 +5,7 @@ use litemall;
 drop table if exists dwd_start_log;
 create external table dwd_start_log(
 	`mid` string comment '设备id',
-	`uid` string comment '用户id',
+	`uid` int comment '用户id',
 	`mail` string comment '邮箱',
 	`version_code` string comment '程序版本号',
 	`version_name` string comment '程序版本名',
@@ -100,7 +100,8 @@ create external table dwd_event_addCar_log(
 	`hw` string comment '屏幕宽高',
 	`app_time` string comment '时间戳',
 	`add_time` string comment '加入购物车时间',
-	`goods_id` int comment '商品id',
+	`goods_id` int comment 'spu id',
+	`sku_id` int comment 'sku id',
 	`num` int comment '商品数量',
 	`user_id` int comment '用户id'
 )comment '加购事件表'
@@ -334,9 +335,9 @@ TBLPROPERTIES ('parquet.compression'='lzo');
 -- dwd_dim_goods_info
 drop table if exists dwd_dim_goods_info;
 create external table dwd_dim_goods_info(
-	`id` int,
+	`sku_id` int COMMENT '商品货品表的货品ID',
   	`goods_sn` string COMMENT '商品编号',
-  	`product_id` int COMMENT '商品货品表的货品ID',
+  	`spu_id` int COMMENT '商品表的ID',
   	`name` string COMMENT '商品名称',
   	`category_id` int COMMENT '商品所属一级类目ID',
   	`category_name` string comment '商品所属一级类目名称',
@@ -346,6 +347,7 @@ create external table dwd_dim_goods_info(
   	`brand_name` string comment '品牌名称',
   	`brief` string COMMENT '商品简介',
   	`unit` string COMMENT '商品单位，例如件、盒',
+  	`product_price` decimal(10,2) comment '商品货品表的价格',
   	`counter_price` decimal(10,2) COMMENT '专柜价格',
   	`retail_price` decimal(10,2) COMMENT '零售价格',
   	`add_time` string COMMENT '创建时间'
@@ -362,10 +364,10 @@ drop table if exists dwd_fact_order_goods_info;
 create external table dwd_fact_order_goods_info(
 	`id` int,
 	`order_id` int COMMENT '订单表的订单ID',
-	`goods_id` int COMMENT '商品表的商品ID',
+	`goods_id` int COMMENT '商品表的商品ID  spu_id',
 	`goods_name` string COMMENT '商品名称',
 	`goods_sn` string COMMENT '商品编号',
-	`product_id` int COMMENT '商品货品表的货品ID',
+	`product_id` int COMMENT '商品货品表的货品ID sku_id',
 	`number` smallint COMMENT '商品货品的购买数量',
 	`price` decimal(10,2)  COMMENT '商品货品的售价',
 	`add_time` string COMMENT '创建时间',
@@ -439,10 +441,10 @@ drop table if exists dwd_fact_cart_info;
 create external table dwd_fact_cart_info(
 	`id` int,
 	`user_id` int COMMENT '用户表的用户ID',
-	`goods_id` int COMMENT '商品表的商品ID',
+	`goods_id` int COMMENT '商品表的商品ID spu_id',
 	`goods_sn` string COMMENT '商品编号',
 	`goods_name` string COMMENT '商品名称',
-	`product_id` int COMMENT '商品货品表的货品ID',
+	`product_id` int COMMENT '商品货品表的货品ID sku_id',
 	`price` decimal(10,2) COMMENT '商品货品的价格',
 	`number` smallint COMMENT '商品货品的数量',
 	`checked` tinyint COMMENT '购物车中商品是否选择状态'
@@ -562,46 +564,4 @@ create external table dwd_dim_user_info_his_temp(
 STORED AS PARQUET
 LOCATION '/warehouse/litemall/dwd/dwd_dim_user_info_his_temp'
 TBLPROPERTIES ('parquet.compression'='lzo');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

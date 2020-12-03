@@ -60,9 +60,9 @@ where dt='$do_date';
 INSERT OVERWRITE TABLE dwd_dim_goods_info
 PARTITION(dt='$do_date')
 select
-    og.id,
-    og.goods_sn,
     ogp.id,
+    og.goods_sn,
+    og.id,
     og.name,
     c1.id,
     c1.name,
@@ -72,10 +72,20 @@ select
     ogb.name,
     og.brief,
     og.unit,
+    ogp.price,
     og.counter_price,
     og.retail_price,
     og.add_time
 from
+(
+    select
+        id,
+        goods_id,
+        price
+    from ods_goods_product
+    where dt='$do_date'
+) ogp 
+join
 (
     select
         id,
@@ -90,7 +100,7 @@ from
         add_time
     from ods_goods
     where dt='$do_date'
-) og 
+) og on ogp.goods_id=og.id
 join
 (
     select
@@ -115,15 +125,7 @@ join
         name
     from ods_goods_brand
     where dt='$do_date'
-)ogb on og.brand_id=ogb.id
-join
-(
-    select
-        id,
-        goods_id
-    from ods_goods_product
-    where dt='$do_date'
-) ogp on ogp.goods_id=og.id;
+)ogb on og.brand_id=ogb.id;
 
 INSERT OVERWRITE TABLE dwd_fact_order_goods_info
 PARTITION(dt='$do_date')
