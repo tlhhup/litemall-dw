@@ -45,6 +45,78 @@ full outer join
     where dt='$do_date'
 )new on old.mid=new.mid;
 
+with
+temp_uv as(
+    select
+        '$do_date' as dt,
+        count(1) as uv_count
+    from dws_uv_detail_daycount
+    where dt='$do_date'
+),
+temp_user as(
+    select
+        '$do_date' as dt,
+        count(1) as register_count
+    from dwd_dim_user_info_his
+    where date_format(add_time,'yyyy-MM-dd')='$do_date' and end_date='9999-99-99'
+),
+temp_goods as(
+    select
+        '$do_date' as dt,
+        t.*
+    from
+    (
+        select
+            sum(cart_count) as cart_count,
+            sum(comment_count) as comment_count,
+            sum(collect_count) as collect_count,
+            sum(order_count) as order_count,
+            sum(order_total_amount) as order_total_amount,
+            sum(payment_count) as payment_count,
+            sum(payment_total_amount) as payment_total_amount,
+            sum(refund_count) as refund_count,
+            sum(refund_total_amount) as refund_total_amount
+        from dws_goods_action_daycount
+        where dt='$do_date'
+    )t
+),
+temp_coupon as(
+    select
+        '$do_date' as dt,
+        sum(get_count) as coupon_count
+    from dws_coupon_daycount
+    where dt='$do_date'
+)
+
+INSERT INTO TABLE dwt_date_topic
+select
+    di.date_id,
+    di.week_id,
+    di.week_day,
+    di.day,
+    di.month,
+    di.quarter,
+    di.year,
+    di.is_workday,
+    di.holiday_id,
+    uv.uv_count,
+    u.register_count,
+    g.cart_count,
+    g.comment_count,
+    g.collect_count,
+    g.order_count,
+    g.order_total_amount,
+    g.payment_count,
+    g.payment_total_amount,
+    g.refund_count,
+    g.refund_total_amount,
+    c.coupon_count
+from temp_uv uv
+join temp_user u on uv.dt=u.dt
+join temp_goods g on g.dt=u.dt
+join temp_coupon c on c.dt=g.dt
+join dwd_dim_date_info di on di.date_id=c.dt;
+
 INSERT OVERWRITE TABLE dwt_region_topic
 select
     nvl(old.province,new.province),
@@ -90,7 +162,7 @@ select
     nvl(old.payment_amount,0)+nvl(new.payment_dt_amount,0),
     nvl(new.payment_30_days_count,0),
     nvl(new.payment_30_days_amount,0),
-    if(old.refund_first_date is not null and new.refund_dt_count>0,'$do_date',old.refund_first_date),
+    if(old.refund_first_date is null and new.refund_dt_count>0,'$do_date',old.refund_first_date),
     if(new.refund_dt_count>0,'$do_date',old.refund_last_date),
     nvl(old.refund_count,0)+nvl(new.refund_dt_count,0),
     nvl(old.refund_amount,0)+nvl(new.refund_dt_amount,0),
@@ -122,7 +194,7 @@ full outer join
 
 INSERT OVERWRITE TABLE dwt_sku_topic
 select
-    nvl(old.sku_id,new.goods_id),
+    nvl(old.sku_id,new.sku_id),
     nvl(old.order_count,0)+nvl(new.order_dt_count,0),
     nvl(old.order_amount,0)+nvl(new.order_dt_amount,0),
     nvl(old.order_num,0)+nvl(new.order_dt_num,0),
@@ -130,12 +202,16 @@ select
     nvl(new.order_30_days_amount,0),
     nvl(new.order_30_days_num,0),
     nvl(old.payment_count,0)+nvl(new.payment_dt_count,0),
+    nvl(old.payment_num,0)+nvl(new.payment_dt_num,0),
     nvl(old.payment_amount,0)+nvl(new.payment_dt_amount,0),
     nvl(new.payment_30_days_count,0),
+    nvl(new.payment_30_days_num,0),
     nvl(new.payment_30_days_amount,0),
     nvl(old.refund_count,0)+nvl(new.refund_dt_count,0),
+    nvl(old.refund_num,0)+nvl(new.refund_dt_num,0),
     nvl(old.refund_amount,0)+nvl(new.refund_dt_amount,0),
     nvl(new.refund_30_days_count,0),
+    nvl(new.refund_30_days_num,0),
     nvl(new.refund_30_days_amount,0),
     nvl(old.cart_count,0)+nvl(new.cart_dt_count,0),
     nvl(old.cart_num,0)+nvl(new.cart_dt_num,0),
@@ -154,7 +230,7 @@ from dwt_sku_topic old
 full outer join
 (
     select
-        goods_id,
+        sku_id,
         sum(if(dt='$do_date',order_count,0)) as order_dt_count,
         sum(if(dt='$do_date',order_total_amount,0)) as order_dt_amount,
         sum(if(dt='$do_date',order_num,0)) as order_dt_num,
@@ -162,12 +238,16 @@ full outer join
         sum(order_total_amount) as order_30_days_amount,
         sum(order_num) as order_30_days_num,
         sum(if(dt='$do_date',payment_count,0)) as payment_dt_count,
+        sum(if(dt='$do_date',payment_num,0)) as payment_dt_num,
         sum(if(dt='$do_date',payment_total_amount,0)) as payment_dt_amount,
         sum(payment_count) as payment_30_days_count,
+        sum(payment_num) as payment_30_days_num,
         sum(payment_total_amount) as payment_30_days_amount,
         sum(if(dt='$do_date',refund_count,0)) as refund_dt_count,
+        sum(if(dt='$do_date',refund_num,0)) as refund_dt_num,
         sum(if(dt='$do_date',refund_total_amount,0)) as refund_dt_amount,
         sum(refund_count) as refund_30_days_count,
+        sum(refund_num) as refund_30_days_num,
         sum(refund_total_amount) as refund_30_days_amount,
         sum(if(dt='$do_date',cart_count,0)) as cart_dt_count,
         sum(if(dt='$do_date',cart_num,0)) as cart_dt_num,
@@ -184,8 +264,8 @@ full outer join
         sum(if(dt='$do_date',appraise_default_count,0)) as comment_default_dt_count
     from dws_goods_action_daycount
     where dt between date_sub('$do_date',30) and '$do_date'
-    group by goods_id
-)new on old.sku_id=new.goods_id;
+    group by sku_id
+)new on old.sku_id=new.sku_id;
 
 INSERT OVERWRITE TABLE dwt_coupon_topic
 select
