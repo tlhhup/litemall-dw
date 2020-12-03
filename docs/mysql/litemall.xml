@@ -351,8 +351,8 @@
         <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
         <Cm>逻辑删除</Cm>
       </Cl>
-      <Fk deAc="3" nm="fk_litemall_cart_litemall_goods" prLkCl="id" upAc="3">
-        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="1"/>
+      <Fk deAc="3" nm="fk_litemall_cart_litemall_goods_product" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods_product" oe="1" sch="schemaA" zr="1"/>
         <CdTb mn="1" nm="litemall_cart" oe="0" sch="schemaA" zr="1"/>
         <ClPr cdCl="goods_id" prCl="id"/>
       </Fk>
@@ -1063,11 +1063,6 @@
         <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
         <Cm>逻辑删除</Cm>
       </Cl>
-      <Fk deAc="3" nm="fk_litemall_groupon_litemall_coupon" prLkCl="id" upAc="3">
-        <PrTb mn="0" nm="litemall_coupon" oe="1" sch="schemaA" zr="1"/>
-        <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
-        <ClPr cdCl="groupon_id" prCl="id"/>
-      </Fk>
       <Fk deAc="3" nm="fk_litemall_groupon_litemall_groupon_rules" prLkCl="id" upAc="3">
         <PrTb mn="0" nm="litemall_groupon_rules" oe="1" sch="schemaA" zr="0"/>
         <CdTb mn="1" nm="litemall_groupon" oe="0" sch="schemaA" zr="1"/>
@@ -1533,8 +1528,8 @@
         <DT arr="0" ds="TinyInt" en="" id="-6" ln="null" sc="null" sg="1" un="0"/>
         <Cm>逻辑删除</Cm>
       </Cl>
-      <Fk deAc="3" nm="fk_litemall_order_goods_litemall_goods" prLkCl="id" upAc="3">
-        <PrTb mn="0" nm="litemall_goods" oe="1" sch="schemaA" zr="0"/>
+      <Fk deAc="3" nm="fk_litemall_order_goods_litemall_goods_product" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="litemall_goods_product" oe="1" sch="schemaA" zr="0"/>
         <CdTb mn="1" nm="litemall_order_goods" oe="0" sch="schemaA" zr="1"/>
         <ClPr cdCl="goods_id" prCl="id"/>
       </Fk>
@@ -1947,19 +1942,19 @@
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_address" x="547" y="2261"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_admin" x="998" y="306"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_aftersale" x="347" y="1610"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_brand" x="1266" y="780"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_cart" x="1403" y="2208"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_category" x="1259" y="982"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_brand" x="1450" y="862"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_cart" x="1446" y="2208"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_category" x="1453" y="1083"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_collect" x="1129" y="2273"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_comment" x="819" y="2260"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_coupon" x="1409" y="1781"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_coupon_user" x="1139" y="1852"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_feedback" x="1113" y="2459"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_footprint" x="303" y="2276"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods" x="780" y="1378"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_attribute" x="1128" y="1644"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_product" x="1251" y="1452"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_specification" x="1253" y="1271"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods" x="1059" y="1366"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_attribute" x="1459" y="1548"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_product" x="745" y="1432"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_goods_specification" x="1455" y="1347"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_groupon" x="56" y="1630"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_groupon_rules" x="184" y="2028"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_issue" x="977" y="79"/>
@@ -1968,7 +1963,7 @@
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_notice" x="676" y="71"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_notice_admin" x="393" y="538"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_order" x="248" y="1018"/>
-    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_order_goods" x="570" y="1077"/>
+    <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_order_goods" x="735" y="1063"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_permission" x="1311" y="75"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_region" x="535" y="2555"/>
     <TbGl bkCl="ff4c78ff" sch="schemaA" tbl="litemall_role" x="1305" y="282"/>
@@ -1994,17 +1989,18 @@
         <positionableLine lineRole="CHILD_LINE" x1="469" x2="469" y1="1876" y2="1967"/>
       </positionableLines>
     </FkGl>
-    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_cart.fk_litemall_cart_litemall_goods" parentEdge="EAST" positioner="TwoLineUserLinkPositioner">
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_cart.fk_litemall_cart_litemall_goods_product" parentEdge="SOUTH" positioner="ThreeLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="1033" x2="1645" y1="1708" y2="1708"/>
-        <positionableLine lineRole="CHILD_LINE" x1="1649" x2="1649" y1="2208" y2="1712"/>
+        <positionableLine lineRole="PARENT_LINE" x1="871" x2="871" y1="1618" y2="1770"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1695" x2="1695" y1="2208" y2="1778"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="1691" x2="875" y1="1774" y2="1774"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_cart.fk_litemall_cart_litemall_user" parentEdge="EAST" positioner="ThreeLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="1063" x2="1299" y1="2109" y2="2109"/>
-        <positionableLine lineRole="CHILD_LINE" x1="1403" x2="1307" y1="2213" y2="2213"/>
-        <positionableLine lineRole="MIDDLE_LINE" x1="1303" x2="1303" y1="2209" y2="2113"/>
+        <positionableLine lineRole="PARENT_LINE" x1="1063" x2="1342" y1="2109" y2="2109"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1446" x2="1350" y1="2248" y2="2248"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="1346" x2="1346" y1="2244" y2="2113"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_collect.fk_litemall_collect_litemall_user" parentEdge="SOUTH" positioner="ThreeLineUserLinkPositioner">
@@ -2031,35 +2027,29 @@
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods.fk_litemall_goods_litemall_brand" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="1266" x2="955" y1="961" y2="961"/>
-        <positionableLine lineRole="CHILD_LINE" x1="951" x2="951" y1="1378" y2="965"/>
+        <positionableLine lineRole="PARENT_LINE" x1="1450" x2="1234" y1="1043" y2="1043"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1230" x2="1230" y1="1366" y2="1047"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods.fk_litemall_goods_litemall_category" parentEdge="WEST" positioner="TwoLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="1259" x2="1032" y1="1173" y2="1173"/>
-        <positionableLine lineRole="CHILD_LINE" x1="1028" x2="1028" y1="1378" y2="1177"/>
+        <positionableLine lineRole="PARENT_LINE" x1="1453" x2="1311" y1="1274" y2="1274"/>
+        <positionableLine lineRole="CHILD_LINE" x1="1307" x2="1307" y1="1366" y2="1278"/>
       </positionableLines>
     </FkGl>
-    <FkGl bkCl="ff000000" childEdge="NORTH" nm="schemaA.litemall_goods_attribute.fk_litemall_goods_attribute_litemall_goods" parentEdge="EAST" positioner="TwoLineUserLinkPositioner">
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_goods_attribute.fk_litemall_goods_attribute_litemall_goods" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="1033" x2="1193" y1="1623" y2="1623"/>
-        <positionableLine lineRole="CHILD_LINE" x1="1197" x2="1197" y1="1644" y2="1627"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="1312" x2="1459" y1="1614" y2="1614"/>
       </positionableLines>
     </FkGl>
-    <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_goods_product.fk_litemall_goods_product_litemall_goods" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_goods_product.fk_litemall_goods_product_litemall_goods" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="1033" x2="1251" y1="1511" y2="1511"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="1059" x2="994" y1="1466" y2="1466"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_goods_specification.fk_litemall_goods_specification_litemall_goods" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="1033" x2="1253" y1="1408" y2="1408"/>
-      </positionableLines>
-    </FkGl>
-    <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_coupon" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
-      <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="1409" x2="330" y1="1822" y2="1822"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="1312" x2="1455" y1="1396" y2="1396"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_groupon.fk_litemall_groupon_litemall_groupon_rules" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
@@ -2081,26 +2071,26 @@
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_groupon_rules.fk_litemall_groupon_rules_litemall_goods" parentEdge="WEST" positioner="ThreeLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="PARENT_LINE" x1="780" x2="653" y1="1751" y2="1751"/>
+        <positionableLine lineRole="PARENT_LINE" x1="1059" x2="653" y1="1739" y2="1739"/>
         <positionableLine lineRole="CHILD_LINE" x1="462" x2="645" y1="2098" y2="2098"/>
-        <positionableLine lineRole="MIDDLE_LINE" x1="649" x2="649" y1="2094" y2="1755"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="649" x2="649" y1="2094" y2="1743"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="EAST" nm="schemaA.litemall_order.fk_litemall_order_litemall_user" parentEdge="WEST" positioner="ThreeLineUserLinkPositioner">
       <positionableLines>
         <positionableLine lineRole="PARENT_LINE" x1="808" x2="727" y1="1836" y2="1836"/>
-        <positionableLine lineRole="CHILD_LINE" x1="514" x2="719" y1="1424" y2="1424"/>
-        <positionableLine lineRole="MIDDLE_LINE" x1="723" x2="723" y1="1428" y2="1832"/>
+        <positionableLine lineRole="CHILD_LINE" x1="514" x2="719" y1="1509" y2="1509"/>
+        <positionableLine lineRole="MIDDLE_LINE" x1="723" x2="723" y1="1513" y2="1832"/>
       </positionableLines>
     </FkGl>
-    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_order_goods.fk_litemall_order_goods_litemall_goods" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
+    <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_order_goods.fk_litemall_order_goods_litemall_goods_product" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="785" x2="785" y1="1378" y2="1343"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="852" x2="852" y1="1432" y2="1329"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="WEST" nm="schemaA.litemall_order_goods.fk_litemall_order_goods_litemall_order" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="514" x2="570" y1="1214" y2="1214"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="514" x2="735" y1="1214" y2="1214"/>
       </positionableLines>
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="SOUTH" nm="schemaA.litemall_permission.fk_litemall_permission_litemall_role" parentEdge="NORTH" positioner="OneLineUserLinkPositioner">
