@@ -44,7 +44,7 @@ public class FavorInfoService {
         for (int i = 0; i < count; i++) {
             int type = random.nextInt(2);
             int userId = this.commonDataService.randomUserId();
-            int valueId = type == 0 ? this.commonDataService.randomGoodId() : this.commonDataService.randomTopicId();
+            int valueId = type == 0 ? this.commonDataService.randomSkuId() : this.commonDataService.randomTopicId();
             LitemallCollect litemallCollect = init(userId, valueId, type, localDateTime);
             this.collectMapper.insert(litemallCollect);
         }

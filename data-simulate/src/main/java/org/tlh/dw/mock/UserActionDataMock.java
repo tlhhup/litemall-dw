@@ -516,7 +516,7 @@ public class UserActionDataMock implements Observer {
         AppPraise praise = new AppPraise();
         praise.setId(rand.nextInt(10));
         praise.setUserId(this.commonDataService.randomUserId());
-        praise.setTargetId(this.commonDataService.randomGoodId());
+        praise.setTargetId(this.commonDataService.randomSkuId());
         praise.setAddTime((System.currentTimeMillis() - rand.nextInt(99999999)) + "");
         JSONObject jsonObject = (JSONObject) JSON.toJSON(praise);
         return packEventJson("praise", jsonObject);

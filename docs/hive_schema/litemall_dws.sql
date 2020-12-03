@@ -5,7 +5,7 @@ use litemall;
 drop table if exists dws_uv_detail_daycount; 
 create external table dws_uv_detail_daycount (
 	`mid` string comment '设备id',
-	`uid` array<string> comment '用户id',
+	`uid` array<int> comment '用户id',
 	`mail` string comment '邮箱',
 	`version_code` string comment '程序版本号',
 	`version_name` string comment '程序版本名',
@@ -68,7 +68,7 @@ TBLPROPERTIES ('parquet.compression'='lzo');
 -- dws_goods_action_daycount
 drop table if exists dws_goods_action_daycount;
 create external table dws_goods_action_daycount(
-	`goods_id` int comment '商品ID',
+	`sku_id` int comment '商品 sku ID',
 	`cart_count` bigint comment '加购次数',
 	`cart_num` bigint comment '加购数量',
 	`order_count` bigint comment '下单次数',
@@ -97,7 +97,7 @@ TBLPROPERTIES ('parquet.compression'='lzo');
 drop table if exists dws_goods_sale_detail_daycount; 
 create external table dws_goods_sale_detail_daycount (
 	`user_id` int comment '用户ID',
-	`goods_id` int comment '商品ID',
+	`sku_id` int comment '商品 sku id',
 	`user_gender` string comment '用户性别',
 	`user_age` int comment '用户年龄',
 	`user_level` tinyint comment '用户等级',

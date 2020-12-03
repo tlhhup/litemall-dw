@@ -337,28 +337,28 @@ with
 temp_cart as
 (
     select
-        goods_id,
+        product_id as sku_id,
         count(1) as cart_count,
         sum(number) as cart_num
     from dwd_fact_cart_info
     where dt='$do_date'
-    group by goods_id
+    group by product_id
 ),
 temp_order as
 (
     select
-        goods_id,
+        product_id as sku_id,
         count(1) as order_count,
         sum(number) as order_num,
         sum(price*number) as order_total_amount
     from dwd_fact_order_goods_info
     where dt='$do_date'
-    group by goods_id
+    group by product_id
 ),
 temp_collect as
 (
     select
-        value_id as goods_id,
+        value_id as sku_id,
         count(1) as collect_count
     from dwd_fact_collect_info
     where dt='$do_date' and type=0 and is_cancel=0
@@ -367,7 +367,7 @@ temp_collect as
 temp_comment as
 (
     select
-        value_id as goods_id,
+        value_id as sku_id,
         count(1) as comment_count,
         sum(if(star=5,1,0)) as appraise_good_count,
         sum(if(star=3,1,0)) as appraise_mid_count,
@@ -380,7 +380,7 @@ temp_comment as
 temp_payment as
 (
     select
-        goods_id,
+        product_id as sku_id,
         count(1) as payment_count,
         sum(number) as payment_num,
         sum(number*price) as payment_total_amount
@@ -391,12 +391,12 @@ temp_payment as
             id
         from dwd_fact_order_info
         where dt='$do_date' and pay_time is not null
-    ) group by goods_id
+    ) group by product_id
 ),
 temp_refund as
 (
     select
-        goods_id,
+        product_id as sku_id,
         count(1) as refund_count,
         sum(number) as refund_num,
         sum(number*price) as refund_total_amount
@@ -407,13 +407,13 @@ temp_refund as
             id
         from dwd_fact_order_info
         where dt='$do_date' and order_status=203
-    ) group by goods_id
+    ) group by product_id
 )
 
 INSERT OVERWRITE TABLE dws_goods_action_daycount
 PARTITION(dt='$do_date')
 select
-    goods_id,
+    sku_id,
     sum(cart_count),
     sum(cart_num),
     sum(order_count),
@@ -434,7 +434,7 @@ select
 from
 (
     select
-        goods_id,
+        sku_id,
         cart_count,
         cart_num,
         0 as order_count,
@@ -457,7 +457,7 @@ from
     union all
 
     select
-        goods_id,
+        sku_id,
         0 as cart_count,
         0 as cart_num,
         order_count,
@@ -480,7 +480,7 @@ from
     union all
 
     select
-        goods_id,
+        sku_id,
         0 as cart_count,
         0 as cart_num,
         0 as order_count,
@@ -503,7 +503,7 @@ from
     union all
 
     select
-        goods_id,
+        sku_id,
         0 as cart_count,
         0 as cart_num,
         0 as order_count,
@@ -526,7 +526,7 @@ from
     union all
 
     select
-        goods_id,
+        sku_id,
         0 as cart_count,
         0 as cart_num,
         0 as order_count,
@@ -549,7 +549,7 @@ from
     union all
 
     select
-        goods_id,
+        sku_id,
         0 as cart_count,
         0 as cart_num,
         0 as order_count,
@@ -568,7 +568,7 @@ from
         appraise_bad_count,
         appraise_default_count
     from temp_comment
-) t group by goods_id;
+) t group by sku_id;
 
 -- dws_goods_sale_detail_daycount
 with
@@ -584,13 +584,13 @@ temp_user as(
 temp_sale as(
     select
         user_id,
-        goods_id,
+        product_id as sku_id,
         sum(number) as goods_num,
         count(1) as order_count,
         sum(number*price) as order_amount
     from dwd_fact_order_goods_info
     where dt='$do_date'
-    group by user_id,goods_id
+    group by user_id,product_id
 ),
 temp_goods as(
     select
@@ -603,7 +603,7 @@ INSERT OVERWRITE TABLE dws_goods_sale_detail_daycount
 PARTITION(dt='$do_date')
 select
     u.user_id,
-    g.id,
+    s.sku_id,
     u.user_gender,
     u.user_age,
     u.user_level,
@@ -620,7 +620,7 @@ select
     s.order_count,
     s.order_amount
 from temp_sale s
-join temp_goods g on s.goods_id=g.id
+join temp_goods g on s.sku_id=g.sku_id
 join temp_user u on u.user_id=s.user_id;
 
 -- dws_groupon_info_daycount
