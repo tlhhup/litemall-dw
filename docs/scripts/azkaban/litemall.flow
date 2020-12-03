@@ -63,3 +63,10 @@ nodes:
     config:
       command: echo "import data from dws to dwt."
       command: sh /home/hadoop/project/litemall/hive/dws_to_dwt.sh ${dt}
+  - name: dwt_to_ads
+    type: command
+    dependsOn:
+      - dws_to_dwt
+    config:
+      command: echo "import data from dwt to ads."
+      command: sh /home/hadoop/project/litemall/hive/dwt_to_ads.sh ${dt}
