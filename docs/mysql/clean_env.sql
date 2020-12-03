@@ -1,6 +1,8 @@
 use litemall;
 -- 清除用户表
 delete from litemall_user where id >1;
+-- 重置用户表自增值
+alter table litemall_user auto_increment=2;
 -- 清除地址表
 truncate table litemall_address;
 -- 清除加购表
