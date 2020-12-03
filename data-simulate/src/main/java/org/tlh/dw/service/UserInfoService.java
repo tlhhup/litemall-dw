@@ -16,10 +16,7 @@ import org.tlh.dw.util.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author 离歌笑
@@ -28,7 +25,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Service
-public class UserInfoService {
+public class UserInfoService extends Observable {
 
     @Autowired
     private LitemallUserMapper userMapper;
@@ -57,6 +54,9 @@ public class UserInfoService {
             user.setBirthday(birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
             this.userMapper.insertSelective(user);
+            //生成start log
+            this.setChanged();
+            this.notifyObservers(user.getId());
 
             // 给新用户发送注册优惠券
             couponAssignService.assignForRegister(user.getId());

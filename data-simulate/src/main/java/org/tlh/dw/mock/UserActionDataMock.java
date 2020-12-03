@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.RequestBody;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tlh.dw.bean.AppBase;
@@ -12,8 +15,13 @@ import org.tlh.dw.bean.AppStart;
 import org.tlh.dw.bean.events.*;
 import org.tlh.dw.rest.UserAction;
 import org.tlh.dw.service.CommonDataService;
+import org.tlh.dw.util.RanOpt;
+import org.tlh.dw.util.RandomOptionGroup;
 
+import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 /**
@@ -23,9 +31,13 @@ import java.util.Random;
  */
 @Slf4j
 @Component
-public class UserActionDataMock {
+public class UserActionDataMock implements Observer {
 
     private Random rand = new Random();
+    private RandomOptionGroup<Boolean> newMachine;//新设备概率
+    private static final int NEW_MACHINE_RATE = 10;
+    private static final int OLD_MACHINE_MAX = 1000;
+    private static final int NEW_MACHINE_MAX = 1500;
     // 设备id
     private int s_mid = 0;
 
@@ -34,6 +46,11 @@ public class UserActionDataMock {
 
     @Autowired
     private CommonDataService commonDataService;
+
+    @PostConstruct
+    public void init() {
+        newMachine = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, NEW_MACHINE_RATE), new RanOpt(false, 100 - NEW_MACHINE_RATE)});
+    }
 
     public void process() {
         log.info("user action simulate....");
@@ -48,10 +65,8 @@ public class UserActionDataMock {
             switch (flag) {
                 case (0):
                     //应用启动
-                    AppStart appStart = generateStart();
-                    String jsonString = JSON.toJSONString(appStart);
-                    RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), jsonString);
-                    this.userAction.postAction(body);
+                    AppStart appStart = generateStart(null);
+                    this.sendStartLog(appStart);
                     break;
                 case (1):
                     JSONObject json = new JSONObject();
@@ -96,7 +111,7 @@ public class UserActionDataMock {
                     }
                     //时间
                     long millis = System.currentTimeMillis();
-                    body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), millis + "|" + json.toJSONString());
+                    RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), millis + "|" + json.toJSONString());
                     this.userAction.postAction(body);
                     break;
             }
@@ -109,10 +124,15 @@ public class UserActionDataMock {
     private JSONObject generateComFields() {
         AppBase appBase = new AppBase();
         //设备id
-        appBase.setMid(s_mid + "");
+        if (newMachine.getRandBoolValue()) {
+            //新的设备ID
+            appBase.setMid((s_mid + RandomUtils.nextInt(OLD_MACHINE_MAX, NEW_MACHINE_MAX)) + "");
+        } else {
+            appBase.setMid(s_mid + "");
+        }
         s_mid++;
-        if (s_mid>1000){
-            s_mid=0;
+        if (s_mid > OLD_MACHINE_MAX) {
+            s_mid = 0;
         }
         // 用户id
         appBase.setUid(this.commonDataService.randomUserId());
@@ -292,19 +312,29 @@ public class UserActionDataMock {
         return packEventJson("ad", jsonObject);
     }
 
+    private void sendStartLog(AppStart appStart) {
+        String jsonString = JSON.toJSONString(appStart);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), jsonString);
+        this.userAction.postAction(body);
+    }
+
     /**
      * 启动日志
      */
-    private AppStart generateStart() {
+    private AppStart generateStart(Integer userId) {
         AppStart appStart = new AppStart();
         //设备id
-        appStart.setMid(s_mid + "");
+        if (newMachine.getRandBoolValue()){
+            appStart.setMid((s_mid + RandomUtils.nextInt(OLD_MACHINE_MAX, NEW_MACHINE_MAX)) + "");
+        }else {
+            appStart.setMid(s_mid + "");
+        }
         s_mid++;
-        if (s_mid>1000){
-            s_mid=0;
+        if (s_mid > OLD_MACHINE_MAX) {
+            s_mid = 0;
         }
         // 用户id
-        appStart.setUid(this.commonDataService.randomUserId());
+        appStart.setUid(userId != null ? userId : this.commonDataService.randomUserId());
         // 程序版本号5,6 等
         appStart.setVc("" + rand.nextInt(20));
         //程序版本名v1.1.1
@@ -470,7 +500,9 @@ public class UserActionDataMock {
     private JSONObject generateAddCar() {
         AppCar appCar = new AppCar();
         appCar.setUserId(this.commonDataService.randomUserId());
-        appCar.setGoodsId(this.commonDataService.randomGoodId());
+        LitemallGoodsProduct sku = this.commonDataService.randomSku();
+        appCar.setGoodsId(sku.getGoodsId());
+        appCar.setSkuId(sku.getId());
         appCar.setNum(rand.nextInt(10));
         appCar.setAddTime((System.currentTimeMillis() - rand.nextInt(99999999)) + "");
         JSONObject jsonObject = (JSONObject) JSON.toJSON(appCar);
@@ -503,7 +535,7 @@ public class UserActionDataMock {
         comment.setType(type);
         switch (type) {
             case 0:
-                comment.setValueId(this.commonDataService.randomGoodId());
+                comment.setValueId(this.commonDataService.randomSkuId());
                 break;
             case 1:
                 comment.setValueId(this.commonDataService.randomTopicId());
@@ -547,4 +579,20 @@ public class UserActionDataMock {
         return str.toString();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (ObjectUtils.isNotEmpty(arg)){
+            this.sendRegisterUserStartLog((Integer) arg);
+        }
+    }
+
+    /**
+     * 用户注册之后启动日志
+     * @param userId
+     */
+    public void sendRegisterUserStartLog(int userId) {
+        log.info("send register start log");
+        AppStart appStart = generateStart(userId);
+        this.sendStartLog(appStart);
+    }
 }

@@ -11,7 +11,7 @@ import lombok.Data;
 public class AppBase {
 
     private String mid; // (String) 设备唯一标识
-    private int uid; // (String) 用户uid
+    private int uid; // (Integer) 用户uid
     private String vc; // (String) versionCode，程序版本号
     private String vn; // (String) versionName，程序版本名
     private String l; // (String) 系统语言

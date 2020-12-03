@@ -2,11 +2,10 @@ package org.tlh.dw.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.linlinjava.litemall.db.dao.LitemallCartMapper;
-import org.linlinjava.litemall.db.dao.LitemallGoodsProductMapper;
+import org.linlinjava.litemall.db.dao.LitemallGoodsMapper;
 import org.linlinjava.litemall.db.domain.LitemallCart;
 import org.linlinjava.litemall.db.domain.LitemallGoods;
 import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
-import org.linlinjava.litemall.db.domain.LitemallGoodsProductExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tlh.dw.config.SimulateProperty;
@@ -36,7 +35,7 @@ public class CartInfoService {
     private LitemallCartMapper cartMapper;
 
     @Autowired
-    private LitemallGoodsProductMapper goodsProductMapper;
+    private LitemallGoodsMapper goodsMapper;
 
     private Random random = new Random();
 
@@ -47,31 +46,28 @@ public class CartInfoService {
 
         for (int i = 0; i < count; i++) {
             int userId = this.commonDataService.randomUserId();
-            LitemallCart cart = init(userId, this.commonDataService.randomGoods(), localDateTime);
+            LitemallCart cart = init(userId, this.commonDataService.randomSku(), localDateTime);
             this.cartMapper.insert(cart);
         }
 
         log.info("共生成购物车{}条", count);
     }
 
-    private LitemallCart init(int userId, LitemallGoods goods, LocalDateTime dateTime) {
+    private LitemallCart init(int userId, LitemallGoodsProduct sku, LocalDateTime dateTime) {
         LitemallCart cart = new LitemallCart();
         //设置用户
         cart.setUserId(userId);
-        //设置商品
-        cart.setGoodsId(goods.getId());
-        cart.setGoodsSn(goods.getGoodsSn());
-        cart.setGoodsName(goods.getName());
-        cart.setPicUrl(goods.getPicUrl());
-        //设置库存信息
-        LitemallGoodsProductExample example = new LitemallGoodsProductExample();
-        example.createCriteria().andGoodsIdEqualTo(goods.getId());
-        LitemallGoodsProduct litemallGoodsProduct = this.goodsProductMapper.selectOneByExample(example);
-        if (litemallGoodsProduct != null) {
-            cart.setProductId(litemallGoodsProduct.getId());
-            cart.setSpecifications(litemallGoodsProduct.getSpecifications());
-            cart.setPrice(litemallGoodsProduct.getPrice());
-        }
+        //设置sku信息
+        cart.setProductId(sku.getId());
+        cart.setPrice(sku.getPrice());
+        cart.setSpecifications(sku.getSpecifications());
+        //设置spu信息
+        LitemallGoods litemallGoods = this.goodsMapper.selectByPrimaryKey(sku.getGoodsId());
+        cart.setGoodsName(litemallGoods.getName());
+        cart.setPicUrl(litemallGoods.getPicUrl());
+        cart.setGoodsId(litemallGoods.getId());
+        cart.setGoodsSn(litemallGoods.getGoodsSn());
+
         //设置数量
         cart.setNumber((short) (random.nextInt(this.simulateProperty.getCart().getSkuMaxCountPerCart()) + 1));
         //设置是否选中

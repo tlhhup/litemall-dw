@@ -41,7 +41,7 @@ public class CommentInfoService {
 
     public void genComments() {
         //商品评论
-        saveComment(0, this.commonDataService.getGoodsId());
+        saveComment(0, this.commonDataService.getSkuId());
         //主题评论
         saveComment(1, this.commonDataService.getTopicId());
     }

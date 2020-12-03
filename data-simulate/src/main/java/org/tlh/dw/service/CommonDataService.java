@@ -35,6 +35,8 @@ public class CommonDataService {
     private List<LitemallCoupon> litemallCoupons;
     private List<LitemallGoods> litemallGoods;
     private List<RegionInfo> regions;
+    private List<Integer> skuId;
+    private List<LitemallGoodsProduct> skus;
 
     private Random random;
 
@@ -43,6 +45,9 @@ public class CommonDataService {
 
     @Autowired
     private LitemallGoodsMapper goodsMapper;
+
+    @Autowired
+    private LitemallGoodsProductMapper goodsProductMapper;
 
     @Autowired
     private LitemallTopicMapper topicMapper;
@@ -55,11 +60,15 @@ public class CommonDataService {
 
     public CommonDataService() {
         this.userId = new CopyOnWriteArrayList<>();
+        // spu
         this.goodsId = new CopyOnWriteArrayList<>();
         this.litemallGoods = new CopyOnWriteArrayList<>();
         this.topicId = new CopyOnWriteArrayList<>();
         this.litemallCoupons = new CopyOnWriteArrayList<>();
         this.random = new Random();
+        //sku
+        this.skuId = new CopyOnWriteArrayList<>();
+        this.skus = new CopyOnWriteArrayList<>();
     }
 
     @PostConstruct
@@ -122,6 +131,8 @@ public class CommonDataService {
         this.goodsId.clear();
         this.topicId.clear();
         this.litemallCoupons.clear();
+        this.skus.clear();
+        this.skuId.clear();
 
         //2.重新加载
         //初始化商品id
@@ -141,6 +152,12 @@ public class CommonDataService {
         List<LitemallCoupon> litemallCoupons = this.couponMapper.selectByExample(example);
         if (!ObjectUtils.isEmpty(litemallCoupons)) {
             this.litemallCoupons.addAll(litemallCoupons);
+        }
+        //加载sku信息
+        List<LitemallGoodsProduct> litemallGoodsProducts = this.goodsProductMapper.selectByExample(null);
+        if(!ObjectUtils.isEmpty(litemallGoodsProducts)){
+            this.skus.addAll(litemallGoodsProducts);
+            this.skuId.addAll(litemallGoodsProducts.stream().map(item->item.getId()).collect(Collectors.toSet()));
         }
     }
 
@@ -172,6 +189,20 @@ public class CommonDataService {
     public LitemallGoods randomGoods() {
         int index = random.nextInt(this.litemallGoods.size());
         return this.litemallGoods.get(index);
+    }
+
+    public int randomSkuId(){
+        int index = random.nextInt(this.skuId.size());
+        return this.skuId.get(index);
+    }
+
+    public List<Integer> getSkuId() {
+        return skuId;
+    }
+
+    public LitemallGoodsProduct randomSku(){
+        int index = random.nextInt(this.skus.size());
+        return this.skus.get(index);
     }
 
     public int randomTopicId() {
