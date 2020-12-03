@@ -110,7 +110,8 @@ TBLPROPERTIES ('parquet.compression'='lzo');
 -- dwt_sku_topic
 drop table if exists dwt_sku_topic;
 create external table dwt_sku_topic(
-	`sku_id` int comment '商品ID',
+	`sku_id` int comment '库存ID',
+	`spu_id` int comment '商品ID',
 	`order_count` bigint comment '累计被下单次数',
 	`order_amount` decimal(10,2) comment '累计被下单金额',
 	`order_num` bigint comment '累计被下单件数',

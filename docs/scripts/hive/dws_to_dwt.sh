@@ -195,6 +195,7 @@ full outer join
 INSERT OVERWRITE TABLE dwt_sku_topic
 select
     nvl(old.sku_id,new.sku_id),
+    sku_info.spu_id,
     nvl(old.order_count,0)+nvl(new.order_dt_count,0),
     nvl(old.order_amount,0)+nvl(new.order_dt_amount,0),
     nvl(old.order_num,0)+nvl(new.order_dt_num,0),
@@ -265,7 +266,15 @@ full outer join
     from dws_goods_action_daycount
     where dt between date_sub('$do_date',30) and '$do_date'
     group by sku_id
-)new on old.sku_id=new.sku_id;
+)new on old.sku_id=new.sku_id
+left join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info 
+on nvl(new.sku_id,old.sku_id)= sku_info.sku_id;
 
 INSERT OVERWRITE TABLE dwt_coupon_topic
 select
