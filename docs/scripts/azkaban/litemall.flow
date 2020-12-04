@@ -76,4 +76,4 @@ nodes:
       - dwt_to_ads
     config:
       command: echo "import data from hdfs to mysql."
-      command: sh /home/hadoop/project/litemall/sqoop/hdfs_to_mysql.sh
+      command: sh /home/hadoop/project/litemall/sqoop/hdfs_to_mysql.sh all
