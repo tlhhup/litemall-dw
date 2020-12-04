@@ -262,6 +262,7 @@ export default {
           "kv":{
             "userId":`${window.localStorage.getItem('userId') || ''}`,
             "goodsId":params.goodsId,
+            "skuId":params.productId,
             "num":params.number,
             "addTime":new Date().getTime()
           }
