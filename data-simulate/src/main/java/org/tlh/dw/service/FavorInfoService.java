@@ -3,6 +3,7 @@ package org.tlh.dw.service;
 import lombok.extern.slf4j.Slf4j;
 import org.linlinjava.litemall.db.dao.LitemallCollectMapper;
 import org.linlinjava.litemall.db.domain.LitemallCollect;
+import org.linlinjava.litemall.db.domain.LitemallCollectExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tlh.dw.config.SimulateProperty;
@@ -44,30 +45,41 @@ public class FavorInfoService {
         for (int i = 0; i < count; i++) {
             int type = random.nextInt(2);
             int userId = this.commonDataService.randomUserId();
-            int valueId = type == 0 ? this.commonDataService.randomSkuId() : this.commonDataService.randomTopicId();
-            LitemallCollect litemallCollect = init(userId, valueId, type, localDateTime);
-            this.collectMapper.insert(litemallCollect);
+            int valueId = type == 0 ? this.commonDataService.randomGoodId() : this.commonDataService.randomTopicId();
+            this.collectOrCancel(userId, valueId, type, localDateTime);
         }
 
         log.info("共生成收藏{}条", count);
     }
 
-    private LitemallCollect init(int userId, int valueId, int type, LocalDateTime date) {
-        LitemallCollect collect = new LitemallCollect();
-        collect.setUserId(userId);
-        collect.setValueId(valueId);
-        collect.setType((byte) type);
-        collect.setAddTime(date);
-        //是否取消
-        int cancelRate = this.simulateProperty.getFavor().getCancelRate();
-        RandomOptionGroup<Boolean> isCancelOptionGroup = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, cancelRate), new RanOpt(false, 100 - cancelRate)});
-        Boolean isCancel = isCancelOptionGroup.getRandBoolValue();
-        collect.setDeleted(isCancel);
-        if (isCancel) {
-            collect.setUpdateTime(date);
-        }
+    private void collectOrCancel(int userId, int valueId, int type, LocalDateTime date) {
+        //1.检查该数据是否收藏过
+        LitemallCollectExample example = new LitemallCollectExample();
+        example.or().andUserIdEqualTo(userId).andValueIdEqualTo(valueId).andTypeEqualTo((byte) type);
+        LitemallCollect collect = this.collectMapper.selectOneByExample(example);
+        if (collect != null) {
+            //2.是否取消
+            int cancelRate = this.simulateProperty.getFavor().getCancelRate();
+            RandomOptionGroup<Boolean> isCancelOptionGroup = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, cancelRate), new RanOpt(false, 100 - cancelRate)});
+            Boolean isCancel = isCancelOptionGroup.getRandBoolValue();
+            if (isCancel && !collect.getDeleted()) {
+                collect.setDeleted(true);
+                collect.setUpdateTime(date);
 
-        return collect;
+                //更新
+                this.collectMapper.updateByPrimaryKey(collect);
+            }
+        } else {
+            //3.收藏
+            collect = new LitemallCollect();
+            collect.setUserId(userId);
+            collect.setValueId(valueId);
+            collect.setType((byte) type);
+            collect.setAddTime(date);
+            collect.setDeleted(false);
+
+            this.collectMapper.insert(collect);
+        }
     }
 
 }

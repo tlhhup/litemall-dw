@@ -358,11 +358,17 @@ temp_order as
 temp_collect as
 (
     select
-        value_id as sku_id,
+        sku_id,
         count(1) as collect_count
-    from dwd_fact_collect_info
-    where dt='$do_date' and type=0 and is_cancel=0
-    group by value_id
+    from dwd_dim_goods_info
+    where dt='$do_date' and spu_id in
+    (
+        select
+            value_id as spu_id
+        from dwd_fact_collect_info
+        where dt='$do_date' and type=0 and is_cancel=0
+    )
+    group by sku_id
 ),
 temp_comment as
 (
@@ -406,7 +412,7 @@ temp_refund as
         select
             id
         from dwd_fact_order_info
-        where dt='$do_date' and order_status=203 date_format(confirm_time,'yyyy-MM-dd')='$do_date'
+        where dt='$do_date' and order_status=203 and date_format(confirm_time,'yyyy-MM-dd')='$do_date'
     ) group by product_id
 )
 
