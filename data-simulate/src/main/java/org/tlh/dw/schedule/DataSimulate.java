@@ -27,7 +27,7 @@ public class DataSimulate {
 
     @Scheduled(cron = "${simulate.schedule.action}")
     public void action() {
-        //userActionDataMock.process();
+        userActionDataMock.process();
     }
 
     @Scheduled(cron = "${simulate.schedule.business}")
