@@ -55,19 +55,16 @@ public class FavorInfoService {
     private void collectOrCancel(int userId, int valueId, int type, LocalDateTime date) {
         //1.检查该数据是否收藏过
         LitemallCollectExample example = new LitemallCollectExample();
-        example.or().andUserIdEqualTo(userId).andValueIdEqualTo(valueId).andTypeEqualTo((byte) type);
+        example.or().andUserIdEqualTo(userId).andValueIdEqualTo(valueId).andTypeEqualTo((byte) type).andDeletedEqualTo(false);
         LitemallCollect collect = this.collectMapper.selectOneByExample(example);
         if (collect != null) {
             //2.是否取消
             int cancelRate = this.simulateProperty.getFavor().getCancelRate();
             RandomOptionGroup<Boolean> isCancelOptionGroup = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, cancelRate), new RanOpt(false, 100 - cancelRate)});
             Boolean isCancel = isCancelOptionGroup.getRandBoolValue();
-            if (isCancel && !collect.getDeleted()) {
-                collect.setDeleted(true);
-                collect.setUpdateTime(date);
-
-                //更新
-                this.collectMapper.updateByPrimaryKey(collect);
+            if (isCancel) {
+                //删除
+                this.collectMapper.deleteByPrimaryKey(collect.getId());
             }
         } else {
             //3.收藏

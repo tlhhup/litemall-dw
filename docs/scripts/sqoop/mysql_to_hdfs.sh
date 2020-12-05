@@ -188,18 +188,6 @@ import_cart(){
 								from litemall_cart where 1=1'
 }
 
-import_collect(){
-	import_data litemall_collect 'select
-									  `id`,
-									  `user_id`,
-									  `value_id`,
-									  `type`,
-									  `add_time`,
-									  `update_time`,
-									  `deleted`
-									from litemall_collect where 1=1'
-}
-
 import_system(){
 	import_data litemall_system 'select
 								  `id`,
@@ -266,6 +254,19 @@ import_groupon(){
 								    deleted
 								from litemall_groupon
 								where date_format(add_time,'%Y-%m-%d')='${do_date}'"
+}
+
+import_collect(){
+	import_data litemall_collect "select
+									  id,
+									  user_id,
+									  value_id,
+									  type,
+									  add_time,
+									  update_time,
+									  deleted
+									from litemall_collect
+									where date_format(add_time,'%Y-%m-%d')='${do_date}'"
 }
 
 # 新增及变化表
