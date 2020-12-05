@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listCategory(query) {
   return request({
-    url: '/category/list',
+    url: '/admin/category/list',
     method: 'get',
     params: query
   })
@@ -10,14 +10,14 @@ export function listCategory(query) {
 
 export function listCatL1() {
   return request({
-    url: '/category/l1',
+    url: '/admin/category/l1',
     method: 'get'
   })
 }
 
 export function createCategory(data) {
   return request({
-    url: '/category/create',
+    url: '/admin/category/create',
     method: 'post',
     data
   })
@@ -25,7 +25,7 @@ export function createCategory(data) {
 
 export function readCategory(data) {
   return request({
-    url: '/category/read',
+    url: '/admin/category/read',
     method: 'get',
     data
   })
@@ -33,7 +33,7 @@ export function readCategory(data) {
 
 export function updateCategory(data) {
   return request({
-    url: '/category/update',
+    url: '/admin/category/update',
     method: 'post',
     data
   })
@@ -41,7 +41,7 @@ export function updateCategory(data) {
 
 export function deleteCategory(data) {
   return request({
-    url: '/category/delete',
+    url: '/admin/category/delete',
     method: 'post',
     data
   })

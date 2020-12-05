@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listComment(query) {
   return request({
-    url: '/comment/list',
+    url: '/admin/comment/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listComment(query) {
 
 export function deleteComment(data) {
   return request({
-    url: '/comment/delete',
+    url: '/admin/comment/delete',
     method: 'post',
     data
   })

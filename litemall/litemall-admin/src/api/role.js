@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listRole(query) {
   return request({
-    url: '/role/list',
+    url: '/admin/role/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listRole(query) {
 
 export function createRole(data) {
   return request({
-    url: '/role/create',
+    url: '/admin/role/create',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createRole(data) {
 
 export function readRole(data) {
   return request({
-    url: '/role/read',
+    url: '/admin/role/read',
     method: 'get',
     data
   })
@@ -26,7 +26,7 @@ export function readRole(data) {
 
 export function updateRole(data) {
   return request({
-    url: '/role/update',
+    url: '/admin/role/update',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function updateRole(data) {
 
 export function deleteRole(data) {
   return request({
-    url: '/role/delete',
+    url: '/admin/role/delete',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function deleteRole(data) {
 
 export function getPermission(query) {
   return request({
-    url: '/role/permissions',
+    url: '/admin/role/permissions',
     method: 'get',
     params: query
   })
@@ -50,7 +50,7 @@ export function getPermission(query) {
 
 export function updatePermission(data) {
   return request({
-    url: '/role/permissions',
+    url: '/admin/role/permissions',
     method: 'post',
     data
   })
@@ -58,7 +58,7 @@ export function updatePermission(data) {
 
 export function roleOptions(query) {
   return request({
-    url: '/role/options',
+    url: '/admin/role/options',
     method: 'get',
     params: query
   })

@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function listRegion() {
   return request({
-    url: '/region/list',
+    url: '/admin/region/list',
     method: 'get'
   })
 }
 
 export function listSubRegion(query) {
   return request({
-    url: '/region/clist',
+    url: '/admin/region/clist',
     method: 'get',
     params: query
   })

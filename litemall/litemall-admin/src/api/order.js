@@ -3,7 +3,7 @@ import Qs from 'qs'
 
 export function listOrder(query) {
   return request({
-    url: '/order/list',
+    url: '/admin/order/list',
     method: 'get',
     params: query,
     paramsSerializer: function(params) {
@@ -14,7 +14,7 @@ export function listOrder(query) {
 
 export function detailOrder(id) {
   return request({
-    url: '/order/detail',
+    url: '/admin/order/detail',
     method: 'get',
     params: { id }
   })
@@ -22,7 +22,7 @@ export function detailOrder(id) {
 
 export function shipOrder(data) {
   return request({
-    url: '/order/ship',
+    url: '/admin/order/ship',
     method: 'post',
     data
   })
@@ -30,7 +30,7 @@ export function shipOrder(data) {
 
 export function refundOrder(data) {
   return request({
-    url: '/order/refund',
+    url: '/admin/order/refund',
     method: 'post',
     data
   })
@@ -38,7 +38,7 @@ export function refundOrder(data) {
 
 export function deleteOrder(data) {
   return request({
-    url: '/order/delete',
+    url: '/admin/order/delete',
     method: 'post',
     data
   })
@@ -46,7 +46,7 @@ export function deleteOrder(data) {
 
 export function replyComment(data) {
   return request({
-    url: '/order/reply',
+    url: '/admin/order/reply',
     method: 'post',
     data
   })
@@ -54,7 +54,7 @@ export function replyComment(data) {
 
 export function listChannel(id) {
   return request({
-    url: '/order/channel',
+    url: '/admin/order/channel',
     method: 'get'
   })
 }

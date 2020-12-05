@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listGoods(query) {
   return request({
-    url: '/goods/list',
+    url: '/admin/goods/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listGoods(query) {
 
 export function deleteGoods(data) {
   return request({
-    url: '/goods/delete',
+    url: '/admin/goods/delete',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function deleteGoods(data) {
 
 export function publishGoods(data) {
   return request({
-    url: '/goods/create',
+    url: '/admin/goods/create',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function publishGoods(data) {
 
 export function detailGoods(id) {
   return request({
-    url: '/goods/detail',
+    url: '/admin/goods/detail',
     method: 'get',
     params: { id }
   })
@@ -34,7 +34,7 @@ export function detailGoods(id) {
 
 export function editGoods(data) {
   return request({
-    url: '/goods/update',
+    url: '/admin/goods/update',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function editGoods(data) {
 
 export function listCatAndBrand() {
   return request({
-    url: '/goods/catAndBrand',
+    url: '/admin/goods/catAndBrand',
     method: 'get'
   })
 }

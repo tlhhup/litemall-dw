@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listRecord(query) {
   return request({
-    url: '/groupon/listRecord',
+    url: '/admin/groupon/listRecord',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listRecord(query) {
 
 export function listGroupon(query) {
   return request({
-    url: '/groupon/list',
+    url: '/admin/groupon/list',
     method: 'get',
     params: query
   })
@@ -18,7 +18,7 @@ export function listGroupon(query) {
 
 export function deleteGroupon(data) {
   return request({
-    url: '/groupon/delete',
+    url: '/admin/groupon/delete',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function deleteGroupon(data) {
 
 export function publishGroupon(data) {
   return request({
-    url: '/groupon/create',
+    url: '/admin/groupon/create',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function publishGroupon(data) {
 
 export function editGroupon(data) {
   return request({
-    url: '/groupon/update',
+    url: '/admin/groupon/update',
     method: 'post',
     data
   })

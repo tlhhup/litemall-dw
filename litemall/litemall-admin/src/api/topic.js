@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listTopic(query) {
   return request({
-    url: '/topic/list',
+    url: '/admin/topic/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listTopic(query) {
 
 export function createTopic(data) {
   return request({
-    url: '/topic/create',
+    url: '/admin/topic/create',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createTopic(data) {
 
 export function readTopic(query) {
   return request({
-    url: '/topic/read',
+    url: '/admin/topic/read',
     method: 'get',
     params: query
   })
@@ -26,7 +26,7 @@ export function readTopic(query) {
 
 export function updateTopic(data) {
   return request({
-    url: '/topic/update',
+    url: '/admin/topic/update',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function updateTopic(data) {
 
 export function deleteTopic(data) {
   return request({
-    url: '/topic/delete',
+    url: '/admin/topic/delete',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function deleteTopic(data) {
 
 export function batchDeleteTopic(data) {
   return request({
-    url: '/topic/batch-delete',
+    url: '/admin/topic/batch-delete',
     method: 'post',
     data
   })

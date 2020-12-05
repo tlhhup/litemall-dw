@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listAftersale(query) {
   return request({
-    url: '/aftersale/list',
+    url: '/admin/aftersale/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listAftersale(query) {
 
 export function receptAftersale(data) {
   return request({
-    url: '/aftersale/recept',
+    url: '/admin/aftersale/recept',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function receptAftersale(data) {
 
 export function batchReceptAftersale(data) {
   return request({
-    url: '/aftersale/batch-recept',
+    url: '/admin/aftersale/batch-recept',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function batchReceptAftersale(data) {
 
 export function rejectAftersale(data) {
   return request({
-    url: '/aftersale/reject',
+    url: '/admin/aftersale/reject',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function rejectAftersale(data) {
 
 export function batchRejectAftersale(data) {
   return request({
-    url: '/aftersale/batch-reject',
+    url: '/admin/aftersale/batch-reject',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function batchRejectAftersale(data) {
 
 export function refundAftersale(data) {
   return request({
-    url: '/aftersale/refund',
+    url: '/admin/aftersale/refund',
     method: 'post',
     data
   })

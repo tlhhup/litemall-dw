@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function changePassword(data) {
   return request({
-    url: '/profile/password',
+    url: '/admin/profile/password',
     method: 'post',
     data
   })
@@ -10,14 +10,14 @@ export function changePassword(data) {
 
 export function nNotice() {
   return request({
-    url: '/profile/nnotice',
+    url: '/admin/profile/nnotice',
     method: 'get'
   })
 }
 
 export function listNotice(query) {
   return request({
-    url: '/profile/lsnotice',
+    url: '/admin/profile/lsnotice',
     method: 'get',
     params: query
   })
@@ -25,7 +25,7 @@ export function listNotice(query) {
 
 export function catNotice(data) {
   return request({
-    url: '/profile/catnotice',
+    url: '/admin/profile/catnotice',
     method: 'post',
     data
   })
@@ -33,7 +33,7 @@ export function catNotice(data) {
 
 export function bcatNotice(data) {
   return request({
-    url: '/profile/bcatnotice',
+    url: '/admin/profile/bcatnotice',
     method: 'post',
     data
   })
@@ -41,7 +41,7 @@ export function bcatNotice(data) {
 
 export function rmotice(data) {
   return request({
-    url: '/profile/rmnotice',
+    url: '/admin/profile/rmnotice',
     method: 'post',
     data
   })
@@ -49,7 +49,7 @@ export function rmotice(data) {
 
 export function brmNotice(data) {
   return request({
-    url: '/profile/brmnotice',
+    url: '/admin/profile/brmnotice',
     method: 'post',
     data
   })

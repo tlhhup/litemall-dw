@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listNotice(query) {
   return request({
-    url: '/notice/list',
+    url: '/admin/notice/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listNotice(query) {
 
 export function createNotice(data) {
   return request({
-    url: '/notice/create',
+    url: '/admin/notice/create',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createNotice(data) {
 
 export function readNotice(query) {
   return request({
-    url: '/notice/read',
+    url: '/admin/notice/read',
     method: 'get',
     params: query
   })
@@ -26,7 +26,7 @@ export function readNotice(query) {
 
 export function updateNotice(data) {
   return request({
-    url: '/notice/update',
+    url: '/admin/notice/update',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function updateNotice(data) {
 
 export function deleteNotice(data) {
   return request({
-    url: '/notice/delete',
+    url: '/admin/notice/delete',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function deleteNotice(data) {
 
 export function batchDeleteNotice(data) {
   return request({
-    url: '/notice/batch-delete',
+    url: '/admin/notice/batch-delete',
     method: 'post',
     data
   })

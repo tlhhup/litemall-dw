@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/user/list',
+    url: '/admin/user/list',
     method: 'get',
     params: query
   })
@@ -10,15 +10,15 @@ export function fetchList(query) {
 
 export function userDetail(id) {
   return request({
-    url: '/user/detail',
+    url: '/admin/user/detail',
     method: 'get',
-    params: {id}
+    params: { id }
   })
 }
 
 export function updateUser(data) {
   return request({
-    url: '/user/update',
+    url: '/admin/user/update',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function updateUser(data) {
 
 export function listAddress(query) {
   return request({
-    url: '/address/list',
+    url: '/admin/address/list',
     method: 'get',
     params: query
   })
@@ -34,7 +34,7 @@ export function listAddress(query) {
 
 export function listCollect(query) {
   return request({
-    url: '/collect/list',
+    url: '/admin/collect/list',
     method: 'get',
     params: query
   })
@@ -42,7 +42,7 @@ export function listCollect(query) {
 
 export function listFeedback(query) {
   return request({
-    url: '/feedback/list',
+    url: '/admin/feedback/list',
     method: 'get',
     params: query
   })
@@ -50,7 +50,7 @@ export function listFeedback(query) {
 
 export function listFootprint(query) {
   return request({
-    url: '/footprint/list',
+    url: '/admin/footprint/list',
     method: 'get',
     params: query
   })
@@ -58,7 +58,7 @@ export function listFootprint(query) {
 
 export function listHistory(query) {
   return request({
-    url: '/history/list',
+    url: '/admin/history/list',
     method: 'get',
     params: query
   })

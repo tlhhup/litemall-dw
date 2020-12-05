@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listCoupon(query) {
   return request({
-    url: '/coupon/list',
+    url: '/admin/coupon/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listCoupon(query) {
 
 export function createCoupon(data) {
   return request({
-    url: '/coupon/create',
+    url: '/admin/coupon/create',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createCoupon(data) {
 
 export function readCoupon(id) {
   return request({
-    url: '/coupon/read',
+    url: '/admin/coupon/read',
     method: 'get',
     params: { id }
   })
@@ -26,7 +26,7 @@ export function readCoupon(id) {
 
 export function updateCoupon(data) {
   return request({
-    url: '/coupon/update',
+    url: '/admin/coupon/update',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function updateCoupon(data) {
 
 export function deleteCoupon(data) {
   return request({
-    url: '/coupon/delete',
+    url: '/admin/coupon/delete',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function deleteCoupon(data) {
 
 export function listCouponUser(query) {
   return request({
-    url: '/coupon/listuser',
+    url: '/admin/coupon/listuser',
     method: 'get',
     params: query
   })

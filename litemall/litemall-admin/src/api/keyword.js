@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listKeyword(query) {
   return request({
-    url: '/keyword/list',
+    url: '/admin/keyword/list',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function listKeyword(query) {
 
 export function createKeyword(data) {
   return request({
-    url: '/keyword/create',
+    url: '/admin/keyword/create',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createKeyword(data) {
 
 export function readKeyword(data) {
   return request({
-    url: '/keyword/read',
+    url: '/admin/keyword/read',
     method: 'get',
     data
   })
@@ -26,7 +26,7 @@ export function readKeyword(data) {
 
 export function updateKeyword(data) {
   return request({
-    url: '/keyword/update',
+    url: '/admin/keyword/update',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function updateKeyword(data) {
 
 export function deleteKeyword(data) {
   return request({
-    url: '/keyword/delete',
+    url: '/admin/keyword/delete',
     method: 'post',
     data
   })
