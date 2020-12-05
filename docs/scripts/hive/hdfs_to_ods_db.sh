@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 获取日期
-if [ -n "$1" ];then
-   do_date=$1
+if [ -n "$2" ];then
+   do_date=$2
 else
    do_date=`date -d '-1 day' +%F`
 fi
