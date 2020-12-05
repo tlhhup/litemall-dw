@@ -13,6 +13,7 @@
         <module>litemall</module>
         <module>data-pretreatment</module>
         <module>hive-function</module>
+        <module>litemall-report</module>
     </modules>
     <packaging>pom</packaging>
 
