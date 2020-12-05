@@ -542,6 +542,29 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/dw',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'dwReportManage',
+    meta: {
+      title: '数仓报表',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'appraiseBad',
+        component: () => import('@/views/report/appraiseBad'),
+        name: 'statAppraiseBad',
+        meta: {
+          perms: ['GET /dw/stat/appraise'],
+          title: '差评统计',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: 'external-link',
     component: Layout,
     redirect: 'noredirect',

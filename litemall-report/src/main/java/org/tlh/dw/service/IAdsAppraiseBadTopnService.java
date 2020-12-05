@@ -1,7 +1,9 @@
 package org.tlh.dw.service;
 
-import org.tlh.dw.entity.AdsAppraiseBadTopn;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.tlh.dw.entity.AdsAppraiseBadTopn;
 
 /**
  * <p>
@@ -13,4 +15,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IAdsAppraiseBadTopnService extends IService<AdsAppraiseBadTopn> {
 
+    /**
+     * 查询指定日期的商品差评数据
+     *
+     * @param page
+     * @param date
+     * @return
+     */
+    IPage<AdsAppraiseBadTopn> queryByDate(Page<AdsAppraiseBadTopn> page, String date);
 }
