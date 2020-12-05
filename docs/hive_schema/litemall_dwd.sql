@@ -565,3 +565,7 @@ STORED AS PARQUET
 LOCATION '/warehouse/litemall/dwd/dwd_dim_user_info_his_temp'
 TBLPROPERTIES ('parquet.compression'='lzo');
 
+-- 加购事实表，添加加时间字段
+alter table dwd_fact_cart_info add columns (add_time string comment '加购时间');
+-- 修改 取消收藏时间
+alter table dwd_fact_collect_info change cancel_time update_time string COMMENT '更新时间';

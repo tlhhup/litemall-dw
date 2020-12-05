@@ -215,7 +215,8 @@ select
     product_id,
     price,
     number,
-    checked
+    checked,
+    add_time
 from ods_cart
 where dt='$do_date';
 

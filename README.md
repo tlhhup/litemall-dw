@@ -167,6 +167,11 @@
 			create function litemall.parse_json_object as 'org.tlh.litemall.udf.ParseJsonObject' using jar 'hdfs:///user/hive/jars/hive-function.jar'	
 			# udtf
 			create function litemall.extract_event_type as 'org.tlh.litemall.udtf.ExtractEventType' using jar 'hdfs:///user/hive/jars/hive-function.jar'
+4. 对于**分区表，新增加列**，重新覆盖写已有的分区，新增列为`null`
+	1. 原因：由于分区元数据缺少新添加的字段导致的
+	2. 解决：往出错的分区元数据中添加这个列
+
+			alter table dwd_fact_cart_info partition(dt = '2020-12-04') add columns(add_time string comment '加购时间');	
 
 ## 致谢
 

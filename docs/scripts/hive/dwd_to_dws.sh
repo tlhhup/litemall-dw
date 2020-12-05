@@ -115,7 +115,7 @@ temp_cart as(
         count(1) as cart_count,
         sum(number) as cart_amount
     from dwd_fact_cart_info
-    where dt='$do_date'
+    where dt='$do_date' and date_format(add_time,'yyyy-MM-dd')='$do_date'
     group by user_id
 ),
 temp_comment as(
@@ -341,7 +341,7 @@ temp_cart as
         count(1) as cart_count,
         sum(number) as cart_num
     from dwd_fact_cart_info
-    where dt='$do_date'
+    where dt='$do_date' and date_format(add_time,'yyyy-MM-dd')='$do_date'
     group by product_id
 ),
 temp_order as
