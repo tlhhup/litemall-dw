@@ -18,6 +18,7 @@ simulate:
   cart:
     count: 10 #购物车数量
     sku-max-count-per-cart: 3 # 每个商品最多购物个数
+    delete-rate: 5 # 移除购物车的概率
   order:
     user-rate: 80 #用户下单比例
     sku-rate: 70 #购物中购买商品比例

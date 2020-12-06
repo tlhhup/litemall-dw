@@ -56,6 +56,7 @@ public class SimulateProperty {
     public static class CartProps{
         private int count;
         private int skuMaxCountPerCart;
+        private int deleteRate;
     }
 
     @Data
