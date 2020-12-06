@@ -172,6 +172,9 @@
 	2. 解决：往出错的分区元数据中添加这个列
 
 			alter table dwd_fact_cart_info partition(dt = '2020-12-04') add columns(add_time string comment '加购时间');	
+5. 加载时间维度数据
+
+		LOAD DATA  INPATH '/date_info.txt' OVERWRITE INTO TABLE dwd_dim_date_info;
 
 ## 致谢
 

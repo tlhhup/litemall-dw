@@ -443,7 +443,6 @@ create EXTERNAL table ods_region(
   `type` tinyint COMMENT '行政区域类型，如如1则是省， 如果是2则是市，如果是3则是区县',
   `code` int COMMENT '行政区域编码'
 )comment '行政区域表'
-PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 STORED AS 
 INPUTFORMAT  "com.hadoop.mapred.DeprecatedLzoTextInputFormat"
