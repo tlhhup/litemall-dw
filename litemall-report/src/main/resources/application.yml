@@ -9,3 +9,7 @@ spring:
     driver-class-name:  com.mysql.cj.jdbc.Driver
     username:  litemall
     password:  litemall123456
+report:
+  admin:
+    host: http://localhost:8083
+    auth-info: /admin/auth/info
