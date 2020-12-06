@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tlh.dw.entity.AdsAppraiseBadTopn;
 import org.tlh.dw.service.IAdsAppraiseBadTopnService;
+import org.tlh.dw.support.PageParam;
+import org.tlh.dw.support.annotations.PageRequest;
 import org.tlh.dw.util.ResponseUtil;
 
 /**
@@ -30,16 +32,13 @@ public class AdsAppraiseBadTopnController {
 
     @GetMapping("/list")
     public Object list(@RequestParam(name = "date", required = false) String date,
-                       @RequestParam(name = "page",defaultValue = "1") int page,
-                       @RequestParam(name = "limit",defaultValue = "20") int limit,
-                       @RequestParam("sort") String column,
-                       @RequestParam("order") String order) {
+                       @PageRequest PageParam pageParam) {
         //分页
-        Page<AdsAppraiseBadTopn> p = new Page<>(page, limit);
+        Page<AdsAppraiseBadTopn> p = new Page<>(pageParam.getPage(), pageParam.getLimit());
         //排序
         OrderItem item = new OrderItem();
-        item.setColumn(column);
-        item.setAsc("asc".equals(order));
+        item.setColumn(pageParam.getSort());
+        item.setAsc(pageParam.isAsc());
         p.addOrder(item);
         //查询
         IPage<AdsAppraiseBadTopn> result = this.badTopnService.queryByDate(p, date);
