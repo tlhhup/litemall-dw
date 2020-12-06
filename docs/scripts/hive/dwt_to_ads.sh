@@ -106,6 +106,7 @@ from
 )t;
 
 insert into table ads_user_retention_day_rate
+PARTITION(dt='$do_date')
 select
     -- 一日留存
     '$do_date' as stat_date,
@@ -254,41 +255,46 @@ join
     )t
 )spu on sku.dt=spu.dt;
 
-insert into table ads_product_sale_topN
+insert OVERWRITE table ads_product_sale_topN
+PARTITION(dt='$do_date')
 select
-    '$do_date' as dt,
+    '$do_date' as stat_date,
     sku_id,
     payment_count
 from dwt_sku_topic
 order by payment_count desc limit 10;
 
-insert into table ads_product_favor_topN
+insert OVERWRITE table ads_product_favor_topN
+PARTITION(dt='$do_date')
 select
-    '$do_date' as dt,
+    '$do_date' as stat_date,
     sku_id,
     collect_count
 from dwt_sku_topic
 order by collect_count desc limit 10;
 
-insert into table ads_product_cart_topN
+insert OVERWRITE table ads_product_cart_topN
+PARTITION(dt='$do_date')
 select
-    '$do_date' as dt,
+    '$do_date' as stat_date,
     sku_id,
     cart_num
 from dwt_sku_topic
 order by cart_num desc limit 10;
 
-insert into table ads_product_refund_topN
+insert OVERWRITE table ads_product_refund_topN
+PARTITION(dt='$do_date')
 select
-    '$do_date' as dt,
+    '$do_date' as stat_date,
     sku_id,
     if(order_30_days_count=0,0,(refund_30_days_count/order_30_days_count)) as refund_ratio
 from dwt_sku_topic
 order by refund_ratio desc limit 10;
 
-insert into table ads_appraise_bad_topN
+insert OVERWRITE table ads_appraise_bad_topN
+PARTITION(dt='$do_date')
 select
-    '$do_date' as dt,
+    '$do_date' as stat_date,
     sku_id,
     (comment_bad_count/(comment_bad_count+comment_mid_count+comment_good_count)) as appraise_bad_ratio
 from dwt_sku_topic
@@ -338,7 +344,8 @@ join
     where dt='$do_date'
 )temp_order on temp_order.dt=temp_sku.dt;
 
-insert into table ads_sale_brand_category1_stat_mn
+insert OVERWRITE table ads_sale_brand_category1_stat_mn
+PARTITION(dt='$do_date')
 select
     goods_brand_id,
     goods_category1_id,

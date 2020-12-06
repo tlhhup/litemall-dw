@@ -2,6 +2,13 @@
 
 sqoop=/opt/sqoop-1.4.7/bin/sqoop
 
+# 获取日期
+if [ -n "$2" ];then
+   do_date=$2
+else
+   do_date=`date -d '-1 day' +%F`
+fi
+
 # 通用方法
 export_data(){
 # 导入数据
@@ -18,6 +25,22 @@ $sqoop export \
 --input-null-string '\\N' \
 --input-null-non-string '\\N'
 }
+
+# 分区表
+export_partition_data(){
+# 导入数据
+$sqoop export \
+--connect jdbc:mysql://storage:3306/litemall_report \
+--username root \
+--password 123456 \
+--export-dir /warehouse/litemall/ads/$1/dt=$do_date \
+--num-mappers 1 \
+--table $1 \
+--input-fields-terminated-by '\t' \
+--input-null-string '\\N' \
+--input-null-non-string '\\N'
+}
+
 export_ads_uv_count(){
     export_data 'ads_uv_count' 'dt'
 }
@@ -39,7 +62,7 @@ export_ads_wastage_count(){
 }
 
 export_ads_user_retention_day_rate(){
-    export_data 'ads_user_retention_day_rate' 'stat_date'
+    export_partition_data 'ads_user_retention_day_rate'
 }
 
 export_ads_continuity_wk_count(){
@@ -63,23 +86,23 @@ export_ads_product_info(){
 }
 
 export_ads_product_sale_topN(){
-    export_data 'ads_product_sale_topN' 'dt'
+    export_partition_data 'ads_product_sale_topN'
 }
 
 export_ads_product_favor_topN(){
-    export_data 'ads_product_favor_topN' 'dt'
+    export_partition_data 'ads_product_favor_topN'
 }
 
 export_ads_product_cart_topN(){
-    export_data 'ads_product_cart_topN' 'dt'
+    export_partition_data 'ads_product_cart_topN'
 }
 
 export_ads_product_refund_topN(){
-    export_data 'ads_product_refund_topN' 'dt'
+    export_partition_data 'ads_product_refund_topN'
 }
 
 export_ads_appraise_bad_topN(){
-    export_data 'ads_appraise_bad_topN' 'dt'
+    export_partition_data 'ads_appraise_bad_topN'
 }
 
 export_ads_order_daycount(){
@@ -91,7 +114,7 @@ export_ads_payment_daycount(){
 }
 
 export_ads_sale_brand_category1_stat_mn(){
-    export_data 'ads_sale_brand_category1_stat_mn' 'stat_date'
+    export_partition_data 'ads_sale_brand_category1_stat_mn'
 }
 
 case $1 in

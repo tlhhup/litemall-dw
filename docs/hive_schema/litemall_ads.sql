@@ -60,6 +60,7 @@ create external table ads_user_retention_day_rate(
     `retention_count` bigint comment '留存数量',
     `retention_ratio` decimal(10,2) comment '留存率'
 ) COMMENT '每日用户留存情况'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_user_retention_day_rate';
 
@@ -128,50 +129,55 @@ location '/warehouse/litemall/ads/ads_product_info';
 -- ads_product_sale_topN
 drop table if exists ads_product_sale_topN;
 create external table ads_product_sale_topN(
-    `dt` string COMMENT '统计日期',
+    `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
     `payment_count` bigint COMMENT '销量'
 ) COMMENT '商品个数信息'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_product_sale_topN';
 
 -- ads_product_favor_topN
 drop table if exists ads_product_favor_topN;
 create external table ads_product_favor_topN(
-    `dt` string COMMENT '统计日期',
+    `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
     `favor_count` bigint COMMENT '收藏量'
 ) COMMENT '商品收藏 TopN'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_product_favor_topN';
 
 -- ads_product_cart_topN
 drop table if exists ads_product_cart_topN;
 create external table ads_product_cart_topN(
-    `dt` string COMMENT '统计日期',
+    `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
     `cart_num` bigint COMMENT '加入购物车数量'
 ) COMMENT '商品加入购物车 TopN'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_product_cart_topN';
 
 -- ads_product_refund_topN(最近30天)
 drop table if exists ads_product_refund_topN;
 create external table ads_product_refund_topN(
-    `dt` string COMMENT '统计日期',
+    `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
     `refund_ratio` decimal(10,2) COMMENT '退款率'
 ) COMMENT '商品退款率 TopN'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_product_refund_topN';
 
 -- ads_appraise_bad_topN
 drop table if exists ads_appraise_bad_topN;
 create external table ads_appraise_bad_topN(
-    `dt` string COMMENT '统计日期',
+    `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
     `appraise_bad_ratio` decimal(10,2) COMMENT '差评率'
 ) COMMENT '商品差评率 TopN'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_appraise_bad_topN';
 
@@ -215,5 +221,6 @@ create external table ads_sale_brand_category1_stat_mn (
     `stat_mn` string comment '统计月份',
     `stat_date` string comment '统计日期'
 ) COMMENT'复购率统计'
+PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
 location '/warehouse/litemall/ads/ads_sale_brand_category1_stat_mn';

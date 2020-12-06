@@ -175,6 +175,10 @@
 5. 加载时间维度数据
 
 		LOAD DATA  INPATH '/date_info.txt' OVERWRITE INTO TABLE dwd_dim_date_info;
+6. 将数据导出到mysql数据重复
+	1. 对于以日期为基础的数据
+		1. 如果只有一条，则mysql中日期列设置为主键
+		2. 如果是多条，则hive中需要以日期进行分区
 
 ## 致谢
 
