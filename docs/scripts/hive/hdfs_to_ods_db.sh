@@ -59,6 +59,9 @@ case $1 in
 	$hive -e "$sql"
 	$hive -e "$sql1"
 ;;
+     region)
+    $hive -e "$sql1"
+;;
      all)
 	$hive -e "$sql"
 ;;
