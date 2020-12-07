@@ -17,35 +17,12 @@ use ${APP};
 insert into table ads_uv_count
 select
     '$do_date' as dt,
-    dc.day_count,
-    wc.wk_count,
-    mc.mn_count,
-    if('$do_date'=next_day('$do_date','SU'),'Y','N'),
+    sum(if(last_date_login='$do_date',1,0)) as day_count,
+    sum(if(last_date_login>=date_add(next_day('$do_date','MO'),-7) and last_date_login<=date_add(next_day('$do_date','MO'),-1) ,1,0)) as wk_count,
+    sum(if(date_format(last_date_login,'yyyy-MM')=date_format('$do_date','yyyy-MM'),1,0)) as mn_count,
+    if('$do_date'=date_sub(next_day('$do_date','MO'),1),'Y','N'),
     if('$do_date'=last_day('$do_date'),'Y','N')
-from
-(
-    select
-        '$do_date' as dt,
-        count(1) as day_count
-    from dwt_uv_topic
-    where last_date_login='$do_date'
-)dc
-join
-(
-    select
-        '$do_date' as dt,
-        count(1) as wk_count
-    from dwt_uv_topic
-    where last_date_login>=date_sub(next_day('$do_date','MO'),7)
-)wc on dc.dt=wc.dt
-join
-(
-    select
-        '$do_date' as dt,
-        count(1) as mn_count
-    from dwt_uv_topic
-    where last_date_login>date_sub(last_day('$do_date'),30)
-)mc on dc.dt=mc.dt;
+from dwt_uv_topic;
 
 insert into table ads_new_mid_count
 select
@@ -54,20 +31,14 @@ select
 from dwt_uv_topic
 where first_date_login='$do_date';
 
--- 30天未登陆的用户
+-- 第一天登录后，连续7天未登录
 insert into table ads_silent_count
 select
     '$do_date' as dt,
     count(1) as silent_count
-from
-(
-    select
-        mid,
-        sum(login_count) as login_count
-    from dws_uv_detail_daycount
-    where dt>=date_sub('$do_date',30)
-    group by mid
-)t where t.login_count=0;
+from dwt_uv_topic
+where first_date_login=last_date_login
+and last_date_login<=date_add('$do_date',-7);
 
 insert into table ads_back_count
 select
@@ -287,7 +258,7 @@ PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
     sku_id,
-    if(order_30_days_count=0,0,(refund_30_days_count/order_30_days_count)) as refund_ratio
+    if(order_30_days_count=0,0,(refund_30_days_count/payment_30_days_count)) as refund_ratio
 from dwt_sku_topic
 order by refund_ratio desc limit 10;
 
