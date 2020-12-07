@@ -358,17 +358,24 @@ temp_order as
 temp_collect as
 (
     select
-        sku_id,
-        count(1) as collect_count
-    from dwd_dim_goods_info
-    where dt='$do_date' and spu_id in
+        g.sku_id,
+        c.collect_count
+    from
     (
         select
-            value_id as spu_id
+            value_id as spu_id,
+            count(1) as collect_count
         from dwd_fact_collect_info
         where dt='$do_date' and type=0 and is_cancel=0
-    )
-    group by sku_id
+        group by value_id
+    )c 
+    join
+    (
+        select
+            *
+        from dwd_dim_goods_info
+        where dt='$do_date'
+    )g on g.spu_id=c.spu_id
 ),
 temp_comment as
 (

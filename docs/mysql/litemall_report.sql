@@ -7,7 +7,7 @@
 #
 # Host: storage (MySQL 5.7.31)
 # Database: litemall_report
-# Generation Time: 2020-12-06 07:52:51 +0000
+# Generation Time: 2020-12-07 06:23:05 +0000
 # ************************************************************
 
 
@@ -73,6 +73,38 @@ CREATE TABLE `ads_continuity_wk_count` (
   `continuity_count` bigint(20) DEFAULT NULL COMMENT '活跃次数',
   PRIMARY KEY (`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='最近连续三周活跃用户数';
+
+
+
+# Dump of table ads_date_topic
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ads_date_topic`;
+
+CREATE TABLE `ads_date_topic` (
+  `date` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '统计日期',
+  `week_id` int(11) DEFAULT NULL COMMENT '周',
+  `week_day` int(11) DEFAULT NULL COMMENT '周的第几天',
+  `day` int(11) DEFAULT NULL COMMENT '每月的第几天',
+  `month` int(11) DEFAULT NULL COMMENT '第几月',
+  `quarter` int(11) DEFAULT NULL COMMENT '第几季度',
+  `year` int(11) DEFAULT NULL COMMENT '年',
+  `is_workday` int(11) DEFAULT NULL COMMENT '是否是周末',
+  `holiday_id` int(11) DEFAULT NULL COMMENT '是否是节假日',
+  `uv_count` bigint(20) DEFAULT NULL COMMENT '活跃用户数',
+  `register_count` bigint(20) DEFAULT NULL COMMENT '新增用户数',
+  `cart_count` bigint(20) DEFAULT NULL COMMENT '加购数量',
+  `comment_count` bigint(20) DEFAULT NULL COMMENT '评论次数',
+  `collect_count` bigint(20) DEFAULT NULL COMMENT '收藏次数',
+  `order_count` bigint(20) DEFAULT NULL COMMENT '下单次数',
+  `order_total_amount` decimal(10,2) DEFAULT NULL COMMENT '下单总金额',
+  `payment_count` bigint(20) DEFAULT NULL COMMENT '支付次数',
+  `payment_total_amount` decimal(10,2) DEFAULT NULL COMMENT '支付金额',
+  `refund_count` bigint(20) DEFAULT NULL COMMENT '退单次数',
+  `refund_total_amount` decimal(10,2) DEFAULT NULL COMMENT '退单金额',
+  `coupon_count` bigint(20) DEFAULT NULL COMMENT '领用优惠卷次数',
+  PRIMARY KEY (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='每日数据总汇表';
 
 
 

@@ -341,6 +341,66 @@ from
     group by user_id,goods_brand_id,goods_category1_id,goods_category1_name
 )t
 group by goods_brand_id,goods_category1_id,goods_category1_name;
+
+with
+temp_uv as(
+    select
+        '$do_date' as dt,
+        count(1) as uv_count
+    from dws_uv_detail_daycount
+    where dt='$do_date'
+),
+temp_user as(
+    select
+        '$do_date' as dt,
+        count(1) as register_count
+    from dwd_dim_user_info_his
+    where date_format(add_time,'yyyy-MM-dd')='$do_date' and end_date='9999-99-99'
+),
+temp_goods as(
+    select
+        '$do_date' as dt,
+        sum(cart_count) as cart_count,
+        sum(comment_count) as comment_count,
+        sum(collect_count) as collect_count,
+        sum(order_count) as order_count,
+        sum(order_total_amount) as order_total_amount,
+        sum(payment_count) as payment_count,
+        sum(payment_total_amount) as payment_total_amount,
+        sum(refund_count) as refund_count,
+        sum(refund_total_amount) as refund_total_amount,
+        sum(coupon_count) as coupon_count
+    from dws_user_action_daycount
+    where dt='$do_date'
+)
+
+INSERT INTO TABLE ads_date_topic
+select
+    di.date_id,
+    di.week_id,
+    di.week_day,
+    di.day,
+    di.month,
+    di.quarter,
+    di.year,
+    di.is_workday,
+    di.holiday_id,
+    uv.uv_count,
+    u.register_count,
+    g.cart_count,
+    g.comment_count,
+    g.collect_count,
+    g.order_count,
+    g.order_total_amount,
+    g.payment_count,
+    g.payment_total_amount,
+    g.refund_count,
+    g.refund_total_amount,
+    g.coupon_count
+from temp_uv uv
+join temp_user u on uv.dt=u.dt
+join temp_goods g on g.dt=u.dt
+join dwd_dim_date_info di on di.date_id=g.dt;
 "
 
 # 执行导入

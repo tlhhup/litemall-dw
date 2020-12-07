@@ -117,6 +117,10 @@ export_ads_sale_brand_category1_stat_mn(){
     export_partition_data 'ads_sale_brand_category1_stat_mn'
 }
 
+export_ads_date_topic(){
+    export_data 'ads_date_topic' 'date'
+}
+
 case $1 in
     ads_uv_count)
         export_ads_uv_count
@@ -175,6 +179,9 @@ case $1 in
     ads_sale_brand_category1_stat_mn)
         export_ads_sale_brand_category1_stat_mn
         ;;
+    ads_date_topic)
+        export_ads_date_topic
+        ;;
     all)
         export_ads_uv_count
 
@@ -213,5 +220,7 @@ case $1 in
         export_ads_payment_daycount
 
         export_ads_sale_brand_category1_stat_mn
+
+        export_ads_date_topic
         ;;
 esac
