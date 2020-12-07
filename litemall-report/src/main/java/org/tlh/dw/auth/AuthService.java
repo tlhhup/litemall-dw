@@ -55,7 +55,8 @@ public class AuthService {
                 }
             }
         } catch (Exception e) {
-            log.info("get user info error", e);
+            log.info("get user info error: {}", e.getMessage());
+            throw new AuthenticationException("Query User Info error", e);
         }
         return null;
     }

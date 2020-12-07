@@ -31,7 +31,7 @@ public class AdsAppraiseBadTopnController {
     @Autowired
     private IAdsAppraiseBadTopnService badTopnService;
 
-    @RequiresPermissions("report:appraise:list")
+    @RequiresPermissions("dw:stat:appraise")
     @GetMapping("/list")
     public Object list(@RequestParam(name = "date", required = false) String date,
                        @PageRequest PageParam pageParam) {

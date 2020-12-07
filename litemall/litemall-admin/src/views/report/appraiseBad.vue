@@ -57,7 +57,7 @@ export default {
       downloadLoading: false,
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now()
+          return time.getTime() > (Date.now() - 24 * 60 * 60 * 1000)
         }
       }
     }
