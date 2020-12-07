@@ -66,9 +66,13 @@ public class CartInfoService {
         if (litemallGoods == null || !litemallGoods.getIsOnSale()) {
             return false;
         }
-        //2. 检查该数据是否已经存在于购物车
+        //2. 检查该数据是否已经存在于购物车,并且没有下单，则可以进行删除或修改数量
         LitemallCartExample e = new LitemallCartExample();
-        e.createCriteria().andUserIdEqualTo(userId).andGoodsIdEqualTo(sku.getGoodsId()).andProductIdEqualTo(sku.getId());
+        e.createCriteria()
+                .andUserIdEqualTo(userId)
+                .andGoodsIdEqualTo(sku.getGoodsId())
+                .andProductIdEqualTo(sku.getId())
+                .andDeletedEqualTo(false);//没有下单
         LitemallCart cart = this.cartMapper.selectOneByExample(e);
         if (cart != null) {
             //2.1 随机是否删除
@@ -105,6 +109,8 @@ public class CartInfoService {
             cart.setNumber((short) (random.nextInt(this.simulateProperty.getCart().getSkuMaxCountPerCart()) + 1));
             //设置是否选中
             cart.setChecked(random.nextBoolean());
+            //设置未下单
+            cart.setDeleted(false);
 
             //设置时间
             cart.setAddTime(dateTime);

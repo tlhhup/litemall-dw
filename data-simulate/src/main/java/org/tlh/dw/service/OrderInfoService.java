@@ -231,9 +231,14 @@ public class OrderInfoService {
         }
 
         //6.更新附加数据
-        //6.1移除购物车数据
+        //6.1移除购物车数据,执行软删除，复用deleted作为是否下单标示
         for (Integer cartId : cartIdForRemove) {
-            this.cartMapper.deleteByPrimaryKey(cartId);
+            LitemallCart record=new LitemallCart();
+            record.setId(cartId);
+            //标示为已经下单
+            record.setDeleted(true);
+            record.setUpdateTime(localDateTime);
+            this.cartMapper.updateByPrimaryKeySelective(record);
         }
         //6.2更新参加活动信息
         for (LitemallGrouponRules updateGrouponRule : updateGrouponRules) {
