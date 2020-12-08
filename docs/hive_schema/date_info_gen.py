@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     with open('date_info.txt', mode='w') as f:
         while start_date < end_date:
-            date_info = '{}\t{:<2d}\t{}\t{:<2d}\t{:<2d}\t{}\t{:<4d}\t{}\t{}'.format(start_date,
+            date_info = '{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(start_date,
                                                                                    start_date.isocalendar()[1],
                                                                                    start_date.isoweekday(),
                                                                                    start_date.day,
