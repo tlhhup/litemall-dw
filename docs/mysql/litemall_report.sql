@@ -144,7 +144,7 @@ DROP TABLE IF EXISTS `ads_payment_daycount`;
 CREATE TABLE `ads_payment_daycount` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '统计日期',
   `payment_count` bigint(20) DEFAULT NULL COMMENT '单日支付笔数',
-  `payment_amount` bigint(20) DEFAULT NULL COMMENT '单日支付金额',
+  `payment_amount` decimal(10,2) DEFAULT NULL COMMENT '单日支付金额',
   `payment_user_count` bigint(20) DEFAULT NULL COMMENT '单日支付人数',
   `payment_sku_count` bigint(20) DEFAULT NULL COMMENT '单日支付商品数',
   `payment_avg_time` double DEFAULT NULL COMMENT '下单到支付的平均时长，取分钟数',

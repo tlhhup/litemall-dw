@@ -252,3 +252,6 @@ create external table ads_date_topic(
 )comment '每日数据总汇表'
 row format delimited fields terminated by '\t'
 LOCATION '/warehouse/litemall/ads/ads_date_topic';
+
+-- 修改 ads_payment_daycount的payment_amount的数据类型
+alter table ads_payment_daycount CHANGE `payment_amount` `payment_amount` decimal(10,2) comment '单日支付金额';

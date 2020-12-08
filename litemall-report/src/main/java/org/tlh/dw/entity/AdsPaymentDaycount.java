@@ -1,9 +1,11 @@
 package org.tlh.dw.entity;
 
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -33,7 +35,7 @@ public class AdsPaymentDaycount implements Serializable {
     /**
      * 单日支付金额
      */
-    private Long paymentAmount;
+    private BigDecimal paymentAmount;
 
     /**
      * 单日支付人数

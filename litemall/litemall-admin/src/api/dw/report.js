@@ -8,3 +8,12 @@ export function listAppraiseBadTopn(query) {
     params: query
   })
 }
+
+const AdsDateTopicList = '/dw/dashBoard/list'
+export function listAdsDateTopic(query) {
+  return request({
+    url: AdsDateTopicList,
+    method: 'get',
+    params: query
+  })
+}

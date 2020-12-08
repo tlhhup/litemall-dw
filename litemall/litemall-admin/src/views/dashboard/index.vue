@@ -9,7 +9,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">用户数量</div>
-            <count-to :start-val="0" :end-val="userTotal" :duration="2600" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="userTotal" :duration="2600" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -20,7 +20,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">商品数量</div>
-            <count-to :start-val="0" :end-val="goodsTotal" :duration="3000" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="goodsTotal" :duration="3000" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -31,7 +31,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">货品数量</div>
-            <count-to :start-val="0" :end-val="productTotal" :duration="3200" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="productTotal" :duration="3200" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -42,7 +42,58 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">订单数量</div>
-            <count-to :start-val="0" :end-val="orderTotal" :duration="3600" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="orderTotal" :duration="3600" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- report dashboard -->
+    <el-row class="panel-group-report">
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">访客数</div>
+            <count-to :start-val="0" :end-val="dateInfo.uvCount" :duration="3200" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">订单数量</div>
+            <count-to :start-val="0" :end-val="dateInfo.orderCount" :duration="3200" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">支付金额</div>
+            <count-to :start-val="0" :end-val="dateInfo.paymentAmount" :duration="3200" decimals="2" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">支付转化率</div>
+            <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" decimals="2" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">客单价</div>
+            <count-to :start-val="0" :end-val="dateInfo.prePrice" :duration="3200" decimals="2" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-description">
+            <div class="card-panel-text">成功退款金额</div>
+            <count-to :start-val="0" :end-val="dateInfo.refundAmount" :duration="3200" decimals="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -52,6 +103,7 @@
 
 <script>
 import { info } from '@/api/dashboard'
+import { listAdsDateTopic } from '@/api/dw/report'
 import CountTo from 'vue-count-to'
 
 export default {
@@ -63,7 +115,14 @@ export default {
       userTotal: 0,
       goodsTotal: 0,
       productTotal: 0,
-      orderTotal: 0
+      orderTotal: 0,
+      dateInfo: {
+
+      },
+      listQuery: {
+        date: undefined,
+        type: 0
+      }
     }
   },
   created() {
@@ -72,6 +131,10 @@ export default {
       this.goodsTotal = response.data.data.goodsTotal
       this.productTotal = response.data.data.productTotal
       this.orderTotal = response.data.data.orderTotal
+    })
+    // 加载离线计算数据
+    listAdsDateTopic(this.listQuery).then(response => {
+      this.dateInfo = response.data.data
     })
   },
   methods: {
@@ -154,6 +217,43 @@ export default {
       font-weight: bold;
       margin: 26px;
       margin-left: 0px;
+      .card-panel-text {
+        line-height: 18px;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      .card-panel-num {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.panel-group-report {
+
+  .card-panel-col{
+    /*margin-bottom: 32px;*/
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dcdfe6;
+  }
+  .card-panel {
+    height: 108px;
+    cursor: pointer;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+    color: #666;
+    background: #fff;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
+    border-color: rgba(0, 0, 0, .05);
+    .card-panel-description {
+      float: left;
+      font-weight: bold;
+      margin: 14px 0 0 14px;
+      padding: 16px;
+      transition: all 0.38s ease-out;
       .card-panel-text {
         line-height: 18px;
         color: rgba(0, 0, 0, 0.45);
