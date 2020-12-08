@@ -32,10 +32,13 @@ public class AdsDateTopic {
     private long collectCount;
     private long orderCount;
     private BigDecimal orderTotalAmount;
-    private BigDecimal paymentCount;
+    private long paymentCount;
     private BigDecimal paymentTotalAmount;
-    private BigDecimal refundCount;
+    private long refundCount;
     private BigDecimal refundTotalAmount;
     private long couponCount;
+    private long paymentUserCount;
+    private BigDecimal payoff;
+    private long payoffUserCount;
 
 }

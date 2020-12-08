@@ -255,3 +255,10 @@ LOCATION '/warehouse/litemall/ads/ads_date_topic';
 
 -- 修改 ads_payment_daycount的payment_amount的数据类型
 alter table ads_payment_daycount CHANGE `payment_amount` `payment_amount` decimal(10,2) comment '单日支付金额';
+
+-- ads_date_topic 添加列
+alter table ads_date_topic add columns(
+  `payment_user_count` bigint comment '单日支付人数',
+  `payoff` decimal(10,2) comment '单日销售额',
+  `payoff_user_count` bigint comment '单日成交顾客数'
+);

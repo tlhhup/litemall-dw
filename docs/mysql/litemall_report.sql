@@ -103,6 +103,9 @@ CREATE TABLE `ads_date_topic` (
   `refund_count` bigint(20) DEFAULT NULL COMMENT '退单次数',
   `refund_total_amount` decimal(10,2) DEFAULT NULL COMMENT '退单金额',
   `coupon_count` bigint(20) DEFAULT NULL COMMENT '领用优惠卷次数',
+  `payment_user_count` bigint(20) DEFAULT NULL COMMENT '单日支付人数',
+  `payoff` decimal(10,2) DEFAULT NULL COMMENT '单日销售额',
+  `payoff_user_count` bigint(20) DEFAULT NULL COMMENT '单日成交顾客数',
   PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='每日数据总汇表';
 

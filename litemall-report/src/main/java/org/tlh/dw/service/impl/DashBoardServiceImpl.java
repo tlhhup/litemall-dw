@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tlh.dw.entity.AdsDateTopic;
-import org.tlh.dw.entity.AdsPaymentDaycount;
 import org.tlh.dw.mapper.AdsDateTopicMapper;
-import org.tlh.dw.mapper.AdsPaymentDaycountMapper;
 import org.tlh.dw.service.DashBoardService;
 import org.tlh.dw.vo.DashBoardHeader;
 
@@ -30,9 +28,6 @@ public class DashBoardServiceImpl implements DashBoardService {
 
     @Autowired
     private AdsDateTopicMapper adsDateTopicMapper;
-
-    @Autowired
-    private AdsPaymentDaycountMapper adsPaymentDaycountMapper;
 
     @Override
     public DashBoardHeader queryByDate(String date, int type) {
@@ -54,18 +49,18 @@ public class DashBoardServiceImpl implements DashBoardService {
 
             result.setUvCount(adsDateTopic.getUvCount());
             result.setRegisterCount(adsDateTopic.getUvCount());
-        }
-        //3. todo 计算客单价
-        //4.计算支付转化率
-        wrapper = new QueryWrapper<AdsPaymentDaycount>().eq("dt", date);
-        AdsPaymentDaycount adsPaymentDaycount = this.adsPaymentDaycountMapper.selectOne(wrapper);
-        if (adsPaymentDaycount != null
-                && adsPaymentDaycount.getPaymentUserCount() != 0
-                && adsPaymentDaycount.getPaymentAmount().compareTo(BigDecimal.ZERO) > 0) {
-            result.setPayConvertRate(adsPaymentDaycount.getPaymentAmount().divide(
-                    new BigDecimal(adsPaymentDaycount.getPaymentUserCount()),
-                    2,
-                    BigDecimal.ROUND_HALF_UP));
+
+            //3.计算客单价
+            if (adsDateTopic.getPayoffUserCount() != 0) {
+                result.setPrePrice(adsDateTopic.getPayoff().divide(
+                        new BigDecimal(adsDateTopic.getPayoffUserCount()),
+                        2,
+                        BigDecimal.ROUND_HALF_UP));
+            }
+            //4.计算支付转化率
+            if (adsDateTopic.getPaymentUserCount() != 0) {
+                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount())/ adsDateTopic.getUvCount());
+            }
         }
         return result;
     }

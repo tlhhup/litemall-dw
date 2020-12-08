@@ -18,7 +18,7 @@ public class DashBoardHeader {
     private BigDecimal orderAmount;
     private BigDecimal paymentAmount;
     private BigDecimal refundAmount;
-    private BigDecimal payConvertRate;
-    private double prePrice;
+    private double payConvertRate;
+    private BigDecimal prePrice;
 
 }

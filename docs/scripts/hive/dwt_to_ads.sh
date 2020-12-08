@@ -369,9 +369,18 @@ temp_goods as(
         sum(payment_total_amount) as payment_total_amount,
         sum(refund_count) as refund_count,
         sum(refund_total_amount) as refund_total_amount,
-        sum(coupon_count) as coupon_count
+        sum(coupon_count) as coupon_count,
+        sum(if(payment_count>0,1,0)) as payment_user_count
     from dws_user_action_daycount
     where dt='$do_date'
+),
+temp_payoff as(
+    select
+        '$do_date' as dt,
+        sum(actual_price) as payoff,
+        count(distinct user_id) as payoff_user_count
+    from dwd_fact_order_info
+    where dt='$do_date' and order_status in (401,402)
 )
 
 INSERT INTO TABLE ads_date_topic
@@ -396,11 +405,15 @@ select
     g.payment_total_amount,
     g.refund_count,
     g.refund_total_amount,
-    g.coupon_count
+    g.coupon_count,
+    g.payment_user_count,
+    p.payoff,
+    p.payoff_user_count
 from temp_uv uv
 join temp_user u on uv.dt=u.dt
 join temp_goods g on g.dt=u.dt
-join dwd_dim_date_info di on di.date_id=g.dt;
+join temp_payoff p on p.dt=g.dt
+join dwd_dim_date_info di on di.date_id=p.dt;
 "
 
 # 执行导入
