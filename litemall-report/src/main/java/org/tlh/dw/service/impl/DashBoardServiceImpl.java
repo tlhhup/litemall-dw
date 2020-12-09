@@ -1,10 +1,7 @@
 package org.tlh.dw.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +11,7 @@ import org.tlh.dw.service.DashBoardService;
 import org.tlh.dw.vo.DashBoardHeader;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -32,17 +29,28 @@ public class DashBoardServiceImpl implements DashBoardService {
     private AdsDateTopicMapper adsDateTopicMapper;
 
     @Override
-    public DashBoardHeader queryByDate(String date, int type) {
+    public DashBoardHeader queryByDate(int type) {
         DashBoardHeader result = new DashBoardHeader();
         //1.校验数据
-        if (StringUtils.isEmpty(date)) {
-            //默认查询T+1的数据
-            Date yesterday = DateUtils.addDays(new Date(), -1);
-            date = DateFormatUtils.format(yesterday, "yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        Object value = "";
+        switch (type) {
+            case 1://周
+                value = calendar.get(Calendar.WEEK_OF_YEAR);
+                break;
+            case 2://月
+                value = calendar.get(Calendar.MONTH)+1;
+                break;
+            default:
+                type = 0;
+                //前一天
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+                value = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
+                break;
         }
         //2.查询汇总数据
-        QueryWrapper wrapper = new QueryWrapper<AdsDateTopic>().eq("date", date);
-        AdsDateTopic adsDateTopic = this.adsDateTopicMapper.selectOne(wrapper);
+        AdsDateTopic adsDateTopic = this.adsDateTopicMapper.findSummaryByType(year, type, value);
         if (adsDateTopic != null) {
             result.setOrderCount(adsDateTopic.getOrderCount());
             result.setOrderAmount(adsDateTopic.getOrderTotalAmount());
@@ -50,7 +58,7 @@ public class DashBoardServiceImpl implements DashBoardService {
             result.setRefundAmount(adsDateTopic.getRefundTotalAmount());
 
             result.setUvCount(adsDateTopic.getUvCount());
-            result.setRegisterCount(adsDateTopic.getUvCount());
+            result.setRegisterCount(adsDateTopic.getRegisterCount());
 
             //3.计算客单价
             if (adsDateTopic.getPayoffUserCount() != 0) {

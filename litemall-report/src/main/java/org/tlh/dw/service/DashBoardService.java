@@ -15,11 +15,10 @@ public interface DashBoardService {
     /**
      * 查询数据总汇
      *
-     * @param date
      * @param type
      * @return
      */
-    DashBoardHeader queryByDate(String date, int type);
+    DashBoardHeader queryByDate(int type);
 
     /**
      * 查询指定时间间隔的：新增用户、订单量、支付量、退款量

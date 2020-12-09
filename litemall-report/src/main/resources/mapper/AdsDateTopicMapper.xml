@@ -13,4 +13,30 @@
         where date>=date_format(date_sub(now(),INTERVAL #{value} DAY),'%Y-%m-%d')
     </select>
 
+    <select id="findSummaryByType" resultType="org.tlh.dw.entity.AdsDateTopic">
+        select
+            sum(order_count) as orderCount,
+            sum(uv_count) as uvCount,
+            sum(register_count) as registerCount,
+            sum(order_total_amount) as orderTotalAmount,
+            sum(payment_total_amount) as paymentTotalAmount,
+            sum(refund_total_amount) as refundTotalAmount,
+            sum(payment_user_count) as paymentUserCount,
+            sum(payoff) as payoff,
+            sum(payoff_user_count) as payoffUserCount
+        from ads_date_topic where year=#{year}
+        <choose>
+            <when test="type==0">
+                and date=#{v}
+            </when>
+            <when test="type==1">
+                and week_id=#{v}
+            </when>
+            <when test="type==2">
+                and month=#{v}
+            </when>
+        </choose>
+
+    </select>
+
 </mapper>

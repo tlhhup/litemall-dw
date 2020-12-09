@@ -48,12 +48,37 @@
       </el-col>
     </el-row>
     <!-- report dashboard -->
+    <el-row class="panel-group-report-query">
+      <el-col>
+        <div class="report-dec">
+          <div class="report-title"><i class="el-icon-coin">整体看板</i></div>
+          <div class="report-param">
+            <el-radio-group v-model="listQuery.type" size="mini" @change="handleFilter">
+              <el-radio-button label="0">日</el-radio-button>
+              <el-radio-button label="1">周</el-radio-button>
+              <el-radio-button label="2">月</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
     <el-row class="panel-group-report">
       <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <!-- title -->
           <div class="card-panel-description">
             <div class="card-panel-text">访客数</div>
             <count-to :start-val="0" :end-val="dateInfo.uvCount" :duration="3200" class="card-panel-num" />
+          </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number up-style">
+                <div class="contrast-number-left">87.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              </div>
+            </div>
           </div>
         </div>
       </el-col>
@@ -63,6 +88,16 @@
             <div class="card-panel-text">订单数量</div>
             <count-to :start-val="0" :end-val="dateInfo.orderCount" :duration="3200" class="card-panel-num" />
           </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number down-style">
+                <div class="contrast-number-left">34.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-bottom" /></div>
+              </div>
+            </div>
+          </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
@@ -70,6 +105,16 @@
           <div class="card-panel-description">
             <div class="card-panel-text">支付金额</div>
             <count-to :start-val="0" :end-val="dateInfo.paymentAmount" :duration="3200" :decimals="2" class="card-panel-num" />
+          </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number up-style">
+                <div class="contrast-number-left">87.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              </div>
+            </div>
           </div>
         </div>
       </el-col>
@@ -79,6 +124,16 @@
             <div class="card-panel-text">支付转化率</div>
             <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number up-style">
+                <div class="contrast-number-left">87.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              </div>
+            </div>
+          </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
@@ -87,6 +142,16 @@
             <div class="card-panel-text">客单价</div>
             <count-to :start-val="0" :end-val="dateInfo.prePrice" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number up-style">
+                <div class="contrast-number-left">87.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              </div>
+            </div>
+          </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="5" :lg="4" class="card-panel-col">
@@ -94,6 +159,16 @@
           <div class="card-panel-description">
             <div class="card-panel-text">成功退款金额</div>
             <count-to :start-val="0" :end-val="dateInfo.refundAmount" :duration="3200" :decimals="2" class="card-panel-num" />
+          </div>
+          <!-- contrast -->
+          <div class="card-panel-contrast">
+            <div class="card-panel-text">
+              <div class="contrast-title">较上月</div>
+              <div class="contrast-number up-style">
+                <div class="contrast-number-left">87.00%</div>
+                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              </div>
+            </div>
           </div>
         </div>
       </el-col>
@@ -128,7 +203,6 @@ export default {
 
       },
       listQuery: {
-        date: undefined,
         type: 0
       },
       duration: 7,
@@ -145,9 +219,7 @@ export default {
       this.orderTotal = response.data.data.orderTotal
     })
     // 加载离线计算数据
-    listAdsDateTopic(this.listQuery).then(response => {
-      this.dateInfo = response.data.data
-    })
+    this.getOfflineData()
     // 加载图表数据
     chartDuration(this.duration).then(response => {
       this.chartData = response.data.data
@@ -165,8 +237,16 @@ export default {
     })
   },
   methods: {
+    getOfflineData() {
+      listAdsDateTopic(this.listQuery).then(response => {
+        this.dateInfo = response.data.data
+      })
+    },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+    handleFilter(type) {
+      this.getOfflineData()
     }
   }
 }
@@ -266,7 +346,7 @@ export default {
     border-color: #dcdfe6;
   }
   .card-panel {
-    height: 108px;
+    height: 120px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
@@ -278,8 +358,8 @@ export default {
     .card-panel-description {
       float: left;
       font-weight: bold;
-      margin: 14px 0 0 14px;
-      padding: 16px;
+      // margin: 14px 0 0 14px;
+      padding: 16px 16px 10px 16px;
       transition: all 0.38s ease-out;
       .card-panel-text {
         line-height: 18px;
@@ -291,6 +371,67 @@ export default {
         font-size: 20px;
       }
     }
+    .card-panel-contrast {
+      float: left;
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+      .card-panel-text {
+        padding: 2px;
+        line-height: 10px;
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 10px;
+        .contrast-title{
+          float: left;
+          margin-left: 2%;
+        }
+        .contrast-number{
+          float: right;
+          margin-right: 25%;
+          .contrast-number-left{
+            float: left;
+          }
+          .contrast-number-right{
+            float: left;
+            margin-left: 5px;
+          }
+        }
+        .up-style{
+          color: red;
+        }
+        .down-style{
+          color: green;
+        }
+      }
+    }
   }
+}
+
+.panel-group-report-query{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dcdfe6;
+    .report-dec{
+      height: 40px;
+      font-size: 12px;
+      position: relative;
+      overflow: hidden;
+      line-height: 40px;
+      color: #666;
+      background: #fff;
+      box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
+      border-color: rgba(0, 0, 0, .05);
+      .report-title{
+        float: left;
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 20px;
+      }
+      .report-param{
+        float: right;
+        margin-right: 20px;
+      }
+    }
 }
 </style>

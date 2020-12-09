@@ -26,8 +26,8 @@ public class DashBoardController {
     private DashBoardService dashBoardService;
 
     @GetMapping("/list")
-    public Object list(String date, int type) {
-        DashBoardHeader result = this.dashBoardService.queryByDate(date, type);
+    public Object list(int type) {
+        DashBoardHeader result = this.dashBoardService.queryByDate(type);
         return ResponseUtil.ok(result);
     }
 
