@@ -69,7 +69,7 @@
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-description">
             <div class="card-panel-text">支付金额</div>
-            <count-to :start-val="0" :end-val="dateInfo.paymentAmount" :duration="3200" decimals="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="dateInfo.paymentAmount" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -77,7 +77,7 @@
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-description">
             <div class="card-panel-text">支付转化率</div>
-            <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" decimals="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -85,7 +85,7 @@
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-description">
             <div class="card-panel-text">客单价</div>
-            <count-to :start-val="0" :end-val="dateInfo.prePrice" :duration="3200" decimals="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="dateInfo.prePrice" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -93,22 +93,30 @@
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-description">
             <div class="card-panel-text">成功退款金额</div>
-            <count-to :start-val="0" :end-val="dateInfo.refundAmount" :duration="3200" decimals="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="dateInfo.refundAmount" :duration="3200" :decimals="2" class="card-panel-num" />
           </div>
         </div>
       </el-col>
+    </el-row>
+    <!-- 图表 -->
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <div class="app-container">
+        <ve-line :extend="chartExtend" :data="chartData" :settings="chartSettings" />
+      </div>
     </el-row>
   </div>
 </template>
 
 <script>
 import { info } from '@/api/dashboard'
-import { listAdsDateTopic } from '@/api/dw/report'
+import { listAdsDateTopic, chartDuration } from '@/api/dw/report'
+import VeLine from 'v-charts/lib/line'
 import CountTo from 'vue-count-to'
 
 export default {
   components: {
-    CountTo
+    CountTo,
+    VeLine
   },
   data() {
     return {
@@ -122,7 +130,11 @@ export default {
       listQuery: {
         date: undefined,
         type: 0
-      }
+      },
+      duration: 7,
+      chartData: {},
+      chartSettings: {},
+      chartExtend: {}
     }
   },
   created() {
@@ -135,6 +147,21 @@ export default {
     // 加载离线计算数据
     listAdsDateTopic(this.listQuery).then(response => {
       this.dateInfo = response.data.data
+    })
+    // 加载图表数据
+    chartDuration(this.duration).then(response => {
+      this.chartData = response.data.data
+      this.chartSettings = {
+        labelMap: {
+          'orderCount': '订单量',
+          'paymentCount': '支付量',
+          'refundCount': '退款量',
+          'newUserCount': '新增用户量'
+        }
+      }
+      this.chartExtend = {
+        xAxis: { boundaryGap: true }
+      }
     })
   },
   methods: {

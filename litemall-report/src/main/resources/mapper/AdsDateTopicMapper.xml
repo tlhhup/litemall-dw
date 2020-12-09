@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tlh.dw.mapper.AdsDateTopicMapper">
+
+    <select id="findByDuration" parameterType="int" resultType="map">
+        select
+            date as day,
+            order_count as orderCount,
+            payment_count as paymentCount,
+            refund_count as refundCount,
+            register_count as newUserCount
+        from ads_date_topic
+        where date>=date_format(date_sub(now(),INTERVAL #{value} DAY),'%Y-%m-%d')
+    </select>
+
+</mapper>

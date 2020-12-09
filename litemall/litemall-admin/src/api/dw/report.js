@@ -17,3 +17,12 @@ export function listAdsDateTopic(query) {
     params: query
   })
 }
+
+const AdsDateTopicChart = '/dw/dashBoard/chart'
+export function chartDuration(query) {
+  return request({
+    url: AdsDateTopicChart,
+    method: 'get',
+    params: query
+  })
+}

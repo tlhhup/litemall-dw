@@ -15,6 +15,8 @@ import org.tlh.dw.vo.DashBoardHeader;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 离歌笑
@@ -59,9 +61,15 @@ public class DashBoardServiceImpl implements DashBoardService {
             }
             //4.计算支付转化率
             if (adsDateTopic.getPaymentUserCount() != 0) {
-                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount())/ adsDateTopic.getUvCount());
+                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount()) / adsDateTopic.getUvCount());
             }
         }
+        return result;
+    }
+
+    @Override
+    public List<Map> queryByDuration(int duration) {
+        List<Map> result = this.adsDateTopicMapper.findByDuration(duration);
         return result;
     }
 }
