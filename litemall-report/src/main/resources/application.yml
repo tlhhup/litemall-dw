@@ -10,10 +10,9 @@ spring:
     username:  litemall
     password:  litemall123456
   flyway:
-    check-location: false
     baseline-on-migrate: true
     locations:
-      - classpath:db/migration/mysql
+      - classpath:db/migration/{vendor}
 report:
   admin:
     host: http://localhost:8083
