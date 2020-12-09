@@ -122,7 +122,7 @@
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-description">
             <div class="card-panel-text">支付转化率</div>
-            <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" :decimals="2" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="dateInfo.payConvertRate" :duration="3200" :decimals="2" suffix="%" class="card-panel-num" />
           </div>
           <!-- contrast -->
           <div class="card-panel-contrast">

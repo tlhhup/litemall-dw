@@ -63,7 +63,7 @@ public class DashBoardServiceImpl implements DashBoardService {
                 currentValue = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
 
                 //前两天
-                calendar.add(Calendar.DAY_OF_MONTH, -2);
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
                 lastYear = calendar.get(Calendar.YEAR);
                 lastValue = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
                 break;
@@ -142,7 +142,7 @@ public class DashBoardServiceImpl implements DashBoardService {
             }
             //4.计算支付转化率
             if (adsDateTopic.getPaymentUserCount() != 0) {
-                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount()) / adsDateTopic.getUvCount());
+                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount())*100 / adsDateTopic.getUvCount());
             }
             return result;
         } else {
