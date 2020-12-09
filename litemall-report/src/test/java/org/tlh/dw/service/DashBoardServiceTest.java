@@ -23,7 +23,7 @@ public class DashBoardServiceTest {
 
     @Test
     public void queryByDate() {
-        DashBoardHeader dashBoardHeader = this.dashBoardService.queryByDate(0);
+        DashBoardHeader dashBoardHeader = this.dashBoardService.queryByDate(1);
         System.out.println(dashBoardHeader);
     }
 

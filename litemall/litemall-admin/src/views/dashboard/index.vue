@@ -73,10 +73,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number up-style">
-                <div class="contrast-number-left">87.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.uvRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.uvRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.uvRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -91,10 +91,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number down-style">
-                <div class="contrast-number-left">34.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-bottom" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.orderRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.orderRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.orderRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -109,10 +109,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number up-style">
-                <div class="contrast-number-left">87.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.paymentRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.paymentRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.paymentRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -127,10 +127,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number up-style">
-                <div class="contrast-number-left">87.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.payConvertRateRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.payConvertRateRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.payConvertRateRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -145,10 +145,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number up-style">
-                <div class="contrast-number-left">87.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.prePriceRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.prePriceRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.prePriceRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -163,10 +163,10 @@
           <!-- contrast -->
           <div class="card-panel-contrast">
             <div class="card-panel-text">
-              <div class="contrast-title">较上月</div>
-              <div class="contrast-number up-style">
-                <div class="contrast-number-left">87.00%</div>
-                <div class="contrast-number-right"><i class="el-icon-top" /></div>
+              <div class="contrast-title">{{ contrastTitle }}</div>
+              <div :class="[dateInfo.refundRate>0 ? 'up-style':'down-style','contrast-number']">
+                <count-to :start-val="0" :end-val="dateInfo.refundRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <div class="contrast-number-right"><i :class="dateInfo.refundRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
           </div>
@@ -188,6 +188,8 @@ import { listAdsDateTopic, chartDuration } from '@/api/dw/report'
 import VeLine from 'v-charts/lib/line'
 import CountTo from 'vue-count-to'
 
+const unitOptions = ['日', '周', '月']
+
 export default {
   components: {
     CountTo,
@@ -208,7 +210,8 @@ export default {
       duration: 7,
       chartData: {},
       chartSettings: {},
-      chartExtend: {}
+      chartExtend: {},
+      contrastTitle: '较上日'
     }
   },
   created() {
@@ -247,6 +250,8 @@ export default {
     },
     handleFilter(type) {
       this.getOfflineData()
+      // 更新title
+      this.contrastTitle = '较上' + unitOptions[type]
     }
   }
 }

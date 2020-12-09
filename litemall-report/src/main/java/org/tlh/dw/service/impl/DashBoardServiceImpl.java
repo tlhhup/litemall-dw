@@ -30,28 +30,101 @@ public class DashBoardServiceImpl implements DashBoardService {
 
     @Override
     public DashBoardHeader queryByDate(int type) {
-        DashBoardHeader result = new DashBoardHeader();
         //1.校验数据
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        Object value = "";
+        int currentYear = 0;
+        int lastYear = 0;
+        Object currentValue = "";
+        Object lastValue = "";
         switch (type) {
             case 1://周
-                value = calendar.get(Calendar.WEEK_OF_YEAR);
+                currentYear = calendar.get(Calendar.YEAR);
+                currentValue = calendar.get(Calendar.WEEK_OF_YEAR);
+
+                //对比数据
+                calendar.add(Calendar.WEEK_OF_YEAR, -1);
+                lastYear = calendar.get(Calendar.YEAR);
+                lastValue = calendar.get(Calendar.WEEK_OF_YEAR);
                 break;
             case 2://月
-                value = calendar.get(Calendar.MONTH)+1;
+                currentYear = calendar.get(Calendar.YEAR);
+                currentValue = calendar.get(Calendar.MONTH) + 1;
+
+                //对比数据
+                calendar.add(Calendar.MONTH, -1);
+                lastYear = calendar.get(Calendar.YEAR);
+                lastValue = calendar.get(Calendar.MONTH) + 1;
                 break;
             default:
                 type = 0;
                 //前一天
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
-                value = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
+                currentYear = calendar.get(Calendar.YEAR);
+                currentValue = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
+
+                //前两天
+                calendar.add(Calendar.DAY_OF_MONTH, -2);
+                lastYear = calendar.get(Calendar.YEAR);
+                lastValue = DateFormatUtils.format(calendar.getTime(), "yyyy-MM-dd");
                 break;
         }
         //2.查询汇总数据
-        AdsDateTopic adsDateTopic = this.adsDateTopicMapper.findSummaryByType(year, type, value);
+        //2.1当前数据
+        DashBoardHeader current = queryDateTopic(type, currentYear, currentValue);
+        if (current != null) {
+            //2.2对比数据
+            DashBoardHeader last = this.queryDateTopic(type, lastYear, lastValue);
+            //2.3计算增量
+            if (last != null) {
+                if (last.getUvCount() != 0) {
+                    current.setUvRate((current.getUvCount() - last.getUvCount()) / (double) last.getUvCount());
+                    BigDecimal temp=new BigDecimal(current.getUvRate());
+                    current.setUvRate(temp.setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+                if (last.getOrderCount() != 0) {
+                    current.setOrderRate((current.getOrderCount() - last.getOrderCount()) / (double) last.getOrderCount());
+                    BigDecimal temp=new BigDecimal(current.getOrderRate());
+                    current.setOrderRate(temp.setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+                if (!last.getPaymentAmount().equals(BigDecimal.ZERO)) {
+                    current.setPaymentRate(current.getPaymentAmount().subtract(last.getPaymentAmount()).divide(
+                            last.getPaymentAmount(),
+                            4,
+                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+                if (!last.getRefundAmount().equals(BigDecimal.ZERO)) {
+                    current.setRefundRate(current.getRefundAmount().subtract(last.getRefundAmount()).divide(
+                            last.getRefundAmount(),
+                            4,
+                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+                if (last.getPayConvertRate() != 0) {
+                    current.setPayConvertRateRate((current.getPayConvertRate() - last.getPayConvertRate()) / last.getPayConvertRate());
+                    BigDecimal temp=new BigDecimal(current.getPayConvertRateRate());
+                    current.setPayConvertRateRate(temp.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+                if (!last.getPrePrice().equals(BigDecimal.ZERO)) {
+                    current.setPrePriceRate(current.getPrePrice().subtract(last.getPrePrice()).divide(
+                            last.getPrePrice(),
+                            4,
+                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                }
+            } else {
+                current.setUvRate(100);
+                current.setOrderRate(100);
+                current.setPaymentRate(100);
+                current.setRefundRate(100);
+                current.setPayConvertRateRate(100);
+                current.setPrePriceRate(100);
+            }
+        }
+        return current;
+    }
+
+    private DashBoardHeader queryDateTopic(int type, int year, Object currentValue) {
+        AdsDateTopic adsDateTopic = this.adsDateTopicMapper.findSummaryByType(year, type, currentValue);
         if (adsDateTopic != null) {
+            DashBoardHeader result = new DashBoardHeader();
             result.setOrderCount(adsDateTopic.getOrderCount());
             result.setOrderAmount(adsDateTopic.getOrderTotalAmount());
             result.setPaymentAmount(adsDateTopic.getPaymentTotalAmount());
@@ -71,8 +144,10 @@ public class DashBoardServiceImpl implements DashBoardService {
             if (adsDateTopic.getPaymentUserCount() != 0) {
                 result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount()) / adsDateTopic.getUvCount());
             }
+            return result;
+        } else {
+            return null;
         }
-        return result;
     }
 
     @Override

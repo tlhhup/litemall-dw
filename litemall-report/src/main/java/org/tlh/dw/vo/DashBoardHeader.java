@@ -13,12 +13,25 @@ import java.math.BigDecimal;
 public class DashBoardHeader {
 
     private long uvCount;
+    private double uvRate;
+
     private long registerCount;
+
     private long orderCount;
+    private double orderRate;
+
     private BigDecimal orderAmount;
+
     private BigDecimal paymentAmount;
+    private double paymentRate;
+
     private BigDecimal refundAmount;
+    private double refundRate;
+
     private double payConvertRate;
+    private double payConvertRateRate;
+
     private BigDecimal prePrice;
+    private double prePriceRate;
 
 }
