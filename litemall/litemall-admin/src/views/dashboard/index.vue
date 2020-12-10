@@ -59,6 +59,7 @@
               <el-radio-button label="2">月</el-radio-button>
             </el-radio-group>
           </div>
+          <div class="report-duration"><svg-icon icon-class="info" />{{ durationTitle }}</div>
         </div>
       </el-col>
     </el-row>
@@ -187,6 +188,7 @@ import { info } from '@/api/dashboard'
 import { listAdsDateTopic, chartDuration } from '@/api/dw/report'
 import VeLine from 'v-charts/lib/line'
 import CountTo from 'vue-count-to'
+import dateUtil from '@/utils/dateUtil'
 
 const unitOptions = ['日', '周', '月']
 
@@ -216,7 +218,8 @@ export default {
       chartData: {},
       chartSettings: {},
       chartExtend: {},
-      contrastTitle: '较上日'
+      contrastTitle: '较上日',
+      durationTitle: '统计时间 2020-12-01 ~ 2020-12-09'
     }
   },
   created() {
@@ -257,6 +260,18 @@ export default {
       this.getOfflineData()
       // 更新title
       this.contrastTitle = '较上' + unitOptions[type]
+      // 更新duration
+      switch (type) {
+        case '1':
+          this.durationTitle = '统计时间 ' + dateUtil.getStartDayOfWeek() + '~' + dateUtil.getEndDayOfWeek()
+          break
+        case '2':
+          this.durationTitle = '统计时间 ' + dateUtil.getStartDayOfMonth() + '~' + dateUtil.getEndDayOfMonth()
+          break
+        default:
+          this.durationTitle = '统计时间 ' + dateUtil.getDurationDay(30) + '~' + dateUtil.getNowDay()
+          break
+      }
     }
   }
 }
@@ -437,6 +452,11 @@ export default {
         font-size: 15px;
         font-weight: bold;
         margin-left: 20px;
+      }
+      .report-duration{
+        float: right;
+        position: relative;
+        margin-right: 10px;
       }
       .report-param{
         float: right;
