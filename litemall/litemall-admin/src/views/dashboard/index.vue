@@ -75,7 +75,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.uvRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.uvRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.uvRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.uvRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -93,7 +93,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.orderRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.orderRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.orderRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.orderRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -111,7 +111,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.paymentRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.paymentRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.paymentRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.paymentRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -129,7 +129,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.payConvertRateRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.payConvertRateRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.payConvertRateRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.payConvertRateRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -147,7 +147,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.prePriceRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.prePriceRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.prePriceRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.prePriceRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -165,7 +165,7 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.refundRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.refundRate" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
+                <count-to :start-val="0" :end-val="dateInfo.refundRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
                 <div class="contrast-number-right"><i :class="dateInfo.refundRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
               </div>
             </div>
@@ -195,6 +195,11 @@ export default {
     CountTo,
     VeLine
   },
+  filters: {
+    rateFormatter: function(value) {
+      return Math.abs(value)
+    }
+  },
   data() {
     return {
       userTotal: 0,
@@ -205,9 +210,9 @@ export default {
 
       },
       listQuery: {
+        duration: 7,
         type: 0
       },
-      duration: 7,
       chartData: {},
       chartSettings: {},
       chartExtend: {},
@@ -223,26 +228,26 @@ export default {
     })
     // 加载离线计算数据
     this.getOfflineData()
-    // 加载图表数据
-    chartDuration(this.duration).then(response => {
-      this.chartData = response.data.data
-      this.chartSettings = {
-        labelMap: {
-          'orderCount': '订单量',
-          'paymentCount': '支付量',
-          'refundCount': '退款量',
-          'newUserCount': '新增用户量'
-        }
-      }
-      this.chartExtend = {
-        xAxis: { boundaryGap: true }
-      }
-    })
   },
   methods: {
     getOfflineData() {
       listAdsDateTopic(this.listQuery).then(response => {
         this.dateInfo = response.data.data
+      })
+      // 加载图表数据
+      chartDuration(this.listQuery).then(response => {
+        this.chartData = response.data.data
+        this.chartSettings = {
+          labelMap: {
+            'orderCount': '订单量',
+            'paymentCount': '支付量',
+            'refundCount': '退款量',
+            'newUserCount': '新增用户量'
+          }
+        }
+        this.chartExtend = {
+          xAxis: { boundaryGap: true }
+        }
       })
     },
     handleSetLineChartData(type) {

@@ -78,36 +78,36 @@ public class DashBoardServiceImpl implements DashBoardService {
             if (last != null) {
                 if (last.getUvCount() != 0) {
                     current.setUvRate((current.getUvCount() - last.getUvCount()) / (double) last.getUvCount());
-                    BigDecimal temp=new BigDecimal(current.getUvRate());
-                    current.setUvRate(temp.setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                    BigDecimal temp = new BigDecimal(current.getUvRate());
+                    current.setUvRate(temp.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
                 if (last.getOrderCount() != 0) {
                     current.setOrderRate((current.getOrderCount() - last.getOrderCount()) / (double) last.getOrderCount());
-                    BigDecimal temp=new BigDecimal(current.getOrderRate());
-                    current.setOrderRate(temp.setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                    BigDecimal temp = new BigDecimal(current.getOrderRate());
+                    current.setOrderRate(temp.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
                 if (!last.getPaymentAmount().equals(BigDecimal.ZERO)) {
                     current.setPaymentRate(current.getPaymentAmount().subtract(last.getPaymentAmount()).divide(
                             last.getPaymentAmount(),
                             4,
-                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                            BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
                 if (!last.getRefundAmount().equals(BigDecimal.ZERO)) {
                     current.setRefundRate(current.getRefundAmount().subtract(last.getRefundAmount()).divide(
                             last.getRefundAmount(),
                             4,
-                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                            BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
                 if (last.getPayConvertRate() != 0) {
                     current.setPayConvertRateRate((current.getPayConvertRate() - last.getPayConvertRate()) / last.getPayConvertRate());
-                    BigDecimal temp=new BigDecimal(current.getPayConvertRateRate());
-                    current.setPayConvertRateRate(temp.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                    BigDecimal temp = new BigDecimal(current.getPayConvertRateRate());
+                    current.setPayConvertRateRate(temp.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
                 if (!last.getPrePrice().equals(BigDecimal.ZERO)) {
                     current.setPrePriceRate(current.getPrePrice().subtract(last.getPrePrice()).divide(
                             last.getPrePrice(),
                             4,
-                            BigDecimal.ROUND_HALF_UP).doubleValue()*100);
+                            BigDecimal.ROUND_HALF_UP).doubleValue() * 100);
                 }
             } else {
                 current.setUvRate(100);
@@ -142,7 +142,7 @@ public class DashBoardServiceImpl implements DashBoardService {
             }
             //4.计算支付转化率
             if (adsDateTopic.getPaymentUserCount() != 0) {
-                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount())*100 / adsDateTopic.getUvCount());
+                result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount()) * 100 / adsDateTopic.getUvCount());
             }
             return result;
         } else {
@@ -151,8 +151,25 @@ public class DashBoardServiceImpl implements DashBoardService {
     }
 
     @Override
-    public List<Map> queryByDuration(int duration) {
-        List<Map> result = this.adsDateTopicMapper.findByDuration(duration);
+    public List<Map> queryByDuration(int type, int duration) {
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = 0;
+        Object currentValue = "";
+        switch (type) {
+            case 1://周
+                currentYear = calendar.get(Calendar.YEAR);
+                currentValue = calendar.get(Calendar.WEEK_OF_YEAR);
+                break;
+            case 2://月
+                currentYear = calendar.get(Calendar.YEAR);
+                currentValue = calendar.get(Calendar.MONTH) + 1;
+                break;
+            default:
+                type = 0;
+                currentValue = duration;
+                break;
+        }
+        List<Map> result = this.adsDateTopicMapper.findByDuration(type, currentYear, currentValue);
         return result;
     }
 }

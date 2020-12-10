@@ -32,8 +32,9 @@ public class DashBoardController {
     }
 
     @GetMapping("/chart")
-    public Object chart(@RequestParam(name = "duration", required = false, defaultValue = "7") int duration) {
-        List<Map> rows = this.dashBoardService.queryByDuration(duration);
+    public Object chart(@RequestParam(name = "duration", required = false, defaultValue = "30") int duration,
+                        @RequestParam(name = "type") int type) {
+        List<Map> rows = this.dashBoardService.queryByDuration(type,duration);
         String[] columns = new String[]{"day", "orderCount", "paymentCount", "refundCount", "newUserCount"};
         StatVo statVo = new StatVo();
         statVo.setColumns(columns);

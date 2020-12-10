@@ -17,13 +17,13 @@ public interface AdsDateTopicMapper extends BaseMapper<AdsDateTopic> {
     /**
      * 通过类型汇总
      *
-     * @param year 年份
-     * @param type 0 天 1 周 2 月
+     * @param year  年份
+     * @param type  0 天 1 周 2 月
      * @param value 查询条件值
      * @return
      */
     AdsDateTopic findSummaryByType(@Param("year") int year, @Param("type") int type, @Param("v") Object value);
 
-    List<Map> findByDuration(int duration);
+    List<Map> findByDuration(@Param("type") int type, @Param("year") int year, @Param("v") Object currentValue);
 
 }

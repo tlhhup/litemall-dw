@@ -23,8 +23,10 @@ public interface DashBoardService {
     /**
      * 查询指定时间间隔的：新增用户、订单量、支付量、退款量
      *
+     *
+     * @param type
      * @param duration
      * @return
      */
-    List<Map> queryByDuration(int duration);
+    List<Map> queryByDuration(int type, int duration);
 }

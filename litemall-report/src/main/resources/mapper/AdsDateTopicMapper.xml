@@ -10,7 +10,18 @@
             refund_count as refundCount,
             register_count as newUserCount
         from ads_date_topic
-        where date>=date_format(date_sub(now(),INTERVAL #{value} DAY),'%Y-%m-%d')
+        where
+        <choose>
+            <when test="type==0">
+                date>=date_format(date_sub(now(),INTERVAL #{v} DAY),'%Y-%m-%d')
+            </when>
+            <when test="type==1">
+                year=#{year} and week_id=#{v}
+            </when>
+            <when test="type==2">
+                year=#{year} and month=#{v}
+            </when>
+        </choose>
     </select>
 
     <select id="findSummaryByType" resultType="org.tlh.dw.entity.AdsDateTopic">
