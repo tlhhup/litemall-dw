@@ -21,6 +21,7 @@ hdfs dfs -rm -f /warehouse/litemall/ads/ads_uv_count/000000_*
 hdfs dfs -rm -f /warehouse/litemall/ads/ads_wastage_count/000000_*
 hdfs dfs -rm -f -r /warehouse/litemall/ads/ads_user_retention_day_rate/HIVE_UNION_SUBDIR_*
 hdfs dfs -rm -f /warehouse/litemall/ads/ads_date_topic/000000_*
+hdfs dfs -rm -f -r /warehouse/litemall/ads/ads_region_order_daycount/dt*
 
 hdfs dfs -rm -f /warehouse/litemall/dwt/dwt_coupon_topic/000000_*
 hdfs dfs -rm -f /warehouse/litemall/dwt/dwt_groupon_topic/000000_*

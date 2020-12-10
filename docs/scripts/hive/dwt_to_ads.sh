@@ -414,6 +414,27 @@ join temp_user u on uv.dt=u.dt
 join temp_goods g on g.dt=u.dt
 join temp_payoff p on p.dt=g.dt
 join dwd_dim_date_info di on di.date_id=p.dt;
+
+insert OVERWRITE table ads_region_order_daycount
+PARTITION(dt='$do_date')
+select
+    '$do_date' as dt,
+    p.id as province_id,
+    p.name as province_name,
+    c.id as city_id,
+    c.name as city_name,
+    t.id as country_id,
+    t.name as country_name,
+    r.order_date_first,
+    r.order_date_last,
+    r.order_count,
+    r.order_amount,
+    r.order_day_count,
+    r.order_day_amount
+from dwt_region_topic r
+join dwd_dim_region_info p on r.province=p.id
+join dwd_dim_region_info c on r.city=c.id
+join dwd_dim_region_info t on r.country=t.id;
 "
 
 # 执行导入

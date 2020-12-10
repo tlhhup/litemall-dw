@@ -121,6 +121,10 @@ export_ads_date_topic(){
     export_data 'ads_date_topic' 'date'
 }
 
+export_ads_region_order_daycount(){
+    export_partition_data 'ads_region_order_daycount'
+}
+
 case $1 in
     ads_uv_count)
         export_ads_uv_count
@@ -182,6 +186,9 @@ case $1 in
     ads_date_topic)
         export_ads_date_topic
         ;;
+    ads_region_order_daycount)
+        export_ads_region_order_daycount
+        ;;
     all)
         export_ads_uv_count
 
@@ -222,5 +229,7 @@ case $1 in
         export_ads_sale_brand_category1_stat_mn
 
         export_ads_date_topic
+
+        export_ads_region_order_daycount
         ;;
 esac

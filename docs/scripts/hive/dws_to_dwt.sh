@@ -69,7 +69,7 @@ full outer join
         '$do_date' as order_date_last
     from dws_region_detail_daycount
     where dt='$do_date'
-)new on old.city=new.city;
+)new on old.country=new.country;
 
 INSERT OVERWRITE TABLE dwt_user_topic
 select

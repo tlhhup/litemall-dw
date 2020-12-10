@@ -262,3 +262,27 @@ alter table ads_date_topic add columns(
   `payoff` decimal(10,2) comment '单日销售额',
   `payoff_user_count` bigint comment '单日成交顾客数'
 );
+
+-- ads_region_order_daycount
+drop table if exists ads_region_order_daycount;
+CREATE external TABLE ads_region_order_daycount (
+  `date` string COMMENT '统计日期',
+  `province_id` int COMMENT '省份ID',
+  `province_name` string COMMENT '省份名称',
+  `city_id` int COMMENT '城市ID',
+  `city_name` string COMMENT '城市名称',
+  `country_id` int COMMENT '乡镇ID',
+  `country_name` string COMMENT '乡镇名称',
+  `order_date_first` string COMMENT '首次下单时间',
+  `order_date_last` string COMMENT '最近下单时间',
+  `order_count` bigint COMMENT '累计下单总数',
+  `order_amount` decimal(10,2) COMMENT '累计下单金额',
+  `order_day_count` bigint COMMENT '当日下单总数',
+  `order_day_amount` decimal(10,2)  COMMENT '当日下单金额'
+)comment '每日区域数据汇总表'
+PARTITIONED BY (dt string)
+row format delimited fields terminated by '\t'
+LOCATION '/warehouse/litemall/ads/ads_region_order_daycount';
+
+
+
