@@ -26,3 +26,11 @@ export function chartDuration(query) {
     params: query
   })
 }
+
+const uploadedDataURL = '/dw/adsRegionDayCount/list'
+export function chartRegion() {
+  return request({
+    url: uploadedDataURL,
+    method: 'get'
+  })
+}

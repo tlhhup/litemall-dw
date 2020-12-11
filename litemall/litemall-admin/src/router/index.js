@@ -561,6 +561,16 @@ export const asyncRoutes = [
           title: '差评统计',
           noCache: true
         }
+      },
+      {
+        path: 'regionCount',
+        component: () => import('@/views/report/region'),
+        name: 'statRegionCount',
+        meta: {
+          perms: ['GET /dw/stat/region'],
+          title: '区域统计',
+          noCache: true
+        }
       }
     ]
   },
