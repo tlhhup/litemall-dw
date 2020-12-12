@@ -1,5 +1,6 @@
 package org.tlh.dw.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -11,6 +12,7 @@ import org.tlh.dw.service.IAdsRegionDayCountService;
 import org.tlh.dw.util.ResponseUtil;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 离歌笑
@@ -29,7 +31,8 @@ public class AdsRegionDayCountController {
         if (StringUtils.isEmpty(date)) {
             date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
         }
-        AdsRegionDayCount result = this.adsRegionDayCountService.getById(date);
+        QueryWrapper wrapper = new QueryWrapper<AdsRegionDayCount>().eq("date", date);
+        List<AdsRegionDayCount> result = this.adsRegionDayCountService.list(wrapper);
         return ResponseUtil.ok(result);
     }
 

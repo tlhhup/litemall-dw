@@ -7,315 +7,217 @@ import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { chartRegion } from '@/api/dw/report'
 
 const geoCoordMap = {
-  '杭州': [119.5313, 29.8773],
-  '苏州': [118.8062, 31.9208],
-  '上海': [121.4648, 31.2891],
-  '天津': [117.4219, 39.4189],
-  '深圳': [114.072026, 22.552194],
-  '成都': [103.9526, 30.7617],
-  '郑州': [113.4668, 34.6234],
-  '宁波': [121.640618, 29.86206],
-  '合肥': [117.29, 32.0581],
-  '重庆': [108.384366, 30.439702],
-  '广州': [113.12244, 23.009505],
-  '大连': [123.1238, 42.1216],
-  '青岛': [117.1582, 36.8701],
-  '北京': [116.4551, 40.2539],
-  '义乌': [120.067209, 29.346921],
-  '东莞': [113.764742, 23.02039],
-  '长沙': [113.0823, 28.2568],
-  '贵阳': [106.6992, 26.7682],
-  '珠海': [113.556111, 22.250876],
-  '威海': [122.109148, 37.516889],
-  '泉州': [118.58, 24.93],
-  '赤峰': [118.87, 42.28],
-  '厦门': [118.1, 24.46],
-  '福州': [119.3, 26.08],
-  '抚顺': [123.97, 41.97],
-  '汕头': [116.69, 23.39],
-  '海口': [110.35, 20.02],
-  '岳阳': [113.09, 29.37],
-  '武汉': [114.31, 30.52],
-  '唐山': [118.02, 39.63],
-  '石家庄': [114.48, 38.03],
-  '哈尔滨': [126.63, 45.75],
-  '兰州': [103.73, 36.03],
-  '呼和浩特': [111.65, 40.82],
-  '南昌': [115.89, 28.68],
-  '佛山': [113.11, 23.05],
-  '烟台': [121.39, 37.52]
+  '海门市': [121.15, 31.89],
+  '鄂尔多斯市': [109.781327, 39.608266],
+  '招远市': [120.38, 37.35],
+  '舟山市': [122.207216, 29.985295],
+  '齐齐哈尔市': [123.97, 47.33],
+  '盐城市': [120.13, 33.38],
+  '赤峰市': [118.87, 42.28],
+  '青岛市': [120.33, 36.07],
+  '乳山市': [121.52, 36.89],
+  '金昌市': [102.188043, 38.520089],
+  '泉州市': [118.58, 24.93],
+  '莱西市': [120.53, 36.86],
+  '日照市': [119.46, 35.42],
+  '胶南市': [119.97, 35.88],
+  '南通市': [121.05, 32.08],
+  '拉萨市': [91.11, 29.97],
+  '云浮市': [112.02, 22.93],
+  '梅州市': [116.1, 24.55],
+  '文登市': [122.05, 37.2],
+  '上海市': [121.48, 31.22],
+  '攀枝花市': [101.718637, 26.582347],
+  '威海市': [122.1, 37.5],
+  '承德市': [117.93, 40.97],
+  '厦门市': [118.1, 24.46],
+  '汕尾': [115.375279, 22.786211],
+  '潮州': [116.63, 23.68],
+  '丹东': [124.37, 40.13],
+  '太仓': [121.1, 31.45],
+  '曲靖': [103.79, 25.51],
+  '烟台市': [121.39, 37.52],
+  '福州市': [119.3, 26.08],
+  '瓦房店': [121.979603, 39.627114],
+  '即墨': [120.45, 36.38],
+  '抚顺市': [123.97, 41.97],
+  '玉溪': [102.52, 24.35],
+  '张家口市': [114.87, 40.82],
+  '阳泉市': [113.57, 37.85],
+  '莱州市': [119.942327, 37.177017],
+  '湖州市': [120.1, 30.86],
+  '汕头市': [116.69, 23.39],
+  '昆山市': [120.95, 31.39],
+  '宁波市': [121.56, 29.86],
+  '湛江市': [110.359377, 21.270708],
+  '揭阳市': [116.35, 23.55],
+  '荣成市': [122.41, 37.16],
+  '连云港市': [119.16, 34.59],
+  '葫芦岛市': [120.836932, 40.711052],
+  '常熟市': [120.74, 31.64],
+  '东莞市': [113.75, 23.04],
+  '河源市': [114.68, 23.73],
+  '淮安市': [119.15, 33.5],
+  '泰州市': [119.9, 32.49],
+  '南宁市': [108.33, 22.84],
+  '营口市': [122.18, 40.65],
+  '惠州市': [114.4, 23.09],
+  '江阴市': [120.26, 31.91],
+  '蓬莱市': [120.75, 37.8],
+  '韶关市': [113.62, 24.84],
+  '嘉峪关市': [98.289152, 39.77313],
+  '广州市': [113.23, 23.16],
+  '延安市': [109.47, 36.6],
+  '太原市': [112.53, 37.87],
+  '清远市': [113.01, 23.7],
+  '中山市': [113.38, 22.52],
+  '昆明市': [102.73, 25.04],
+  '寿光市': [118.73, 36.86],
+  '盘锦市': [122.070714, 41.119997],
+  '长治市': [113.08, 36.18],
+  '深圳市': [114.07, 22.62],
+  '珠海市': [113.52, 22.3],
+  '宿迁市': [118.3, 33.96],
+  '咸阳市': [108.72, 34.36],
+  '铜川市': [109.11, 35.09],
+  '平度市': [119.97, 36.77],
+  '佛山市': [113.11, 23.05],
+  '海口市': [110.35, 20.02],
+  '江门市': [113.06, 22.61],
+  '章丘市': [117.53, 36.72],
+  '肇庆市': [112.44, 23.05],
+  '大连市': [121.62, 38.92],
+  '临汾市': [111.5, 36.08],
+  '吴江市': [120.63, 31.16],
+  '石嘴山市': [106.39, 39.04],
+  '沈阳市': [123.38, 41.8],
+  '苏州市': [120.62, 31.32],
+  '茂名市': [110.88, 21.68],
+  '嘉兴市': [120.76, 30.77],
+  '长春市': [125.35, 43.88],
+  '胶州市': [120.03336, 36.264622],
+  '银川市': [106.27, 38.47],
+  '张家港市': [120.555821, 31.875428],
+  '三门峡市': [111.19, 34.76],
+  '锦州市': [121.15, 41.13],
+  '南昌市': [115.89, 28.68],
+  '柳州市': [109.4, 24.33],
+  '三亚市': [109.511909, 18.252847],
+  '自贡市': [104.778442, 29.33903],
+  '吉林市': [126.57, 43.87],
+  '阳江市': [111.95, 21.85],
+  '泸州市': [105.39, 28.91],
+  '西宁市': [101.74, 36.56],
+  '宜宾市': [104.56, 29.77],
+  '呼和浩特市': [111.65, 40.82],
+  '成都市': [104.06, 30.67],
+  '大同市': [113.3, 40.12],
+  '镇江市': [119.44, 32.2],
+  '桂林市': [110.28, 25.29],
+  '张家界市': [110.479191, 29.117096],
+  '宜兴市': [119.82, 31.36],
+  '北海市': [109.12, 21.49],
+  '西安市': [108.95, 34.27],
+  '金坛市': [119.56, 31.74],
+  '东营市': [118.49, 37.46],
+  '牡丹江市': [129.58, 44.6],
+  '遵义市': [106.9, 27.7],
+  '绍兴市': [120.58, 30.01],
+  '扬州市': [119.42, 32.39],
+  '常州市': [119.95, 31.79],
+  '潍坊市': [119.1, 36.62],
+  '重庆市': [106.54, 29.59],
+  '台州市': [121.420757, 28.656386],
+  '南京市': [118.78, 32.04],
+  '滨州市': [118.03, 37.36],
+  '贵阳市': [106.71, 26.57],
+  '无锡市': [120.29, 31.59],
+  '本溪市': [123.73, 41.3],
+  '克拉玛依市': [84.77, 45.59],
+  '渭南市': [109.5, 34.52],
+  '马鞍山市': [118.48, 31.56],
+  '宝鸡市': [107.15, 34.38],
+  '焦作市': [113.21, 35.24],
+  '句容市': [119.16, 31.95],
+  '北京市': [116.46, 39.92],
+  '徐州市': [117.2, 34.26],
+  '衡水市': [115.72, 37.72],
+  '包头市': [110, 40.58],
+  '绵阳市': [104.73, 31.48],
+  '乌鲁木齐市': [87.68, 43.77],
+  '枣庄市': [117.57, 34.86],
+  '杭州市': [120.19, 30.26],
+  '淄博市': [118.05, 36.78],
+  '鞍山市': [122.85, 41.12],
+  '溧阳市': [119.48, 31.43],
+  '库尔勒市': [86.06, 41.68],
+  '安阳市': [114.35, 36.1],
+  '开封市': [114.35, 34.79],
+  '济南市': [117, 36.65],
+  '德阳市': [104.37, 31.13],
+  '温州市': [120.65, 28.01],
+  '九江市': [115.97, 29.71],
+  '邯郸市': [114.47, 36.6],
+  '临安市': [119.72, 30.23],
+  '兰州市': [103.73, 36.03],
+  '沧州市': [116.83, 38.33],
+  '临沂市': [118.35, 35.05],
+  '南充市': [106.110698, 30.837793],
+  '天津市': [117.2, 39.13],
+  '富阳市': [119.95, 30.07],
+  '泰安市': [117.13, 36.18],
+  '诸暨市': [120.23, 29.71],
+  '郑州市': [113.65, 34.76],
+  '哈尔滨市': [126.63, 45.75],
+  '聊城市': [115.97, 36.45],
+  '芜湖市': [118.38, 31.33],
+  '唐山市': [118.02, 39.63],
+  '平顶山市': [113.29, 33.75],
+  '邢台市': [114.48, 37.05],
+  '德州市': [116.29, 37.45],
+  '济宁市': [116.59, 35.38],
+  '荆州市': [112.239741, 30.335165],
+  '宜昌市': [111.3, 30.7],
+  '义乌市': [120.06, 29.32],
+  '丽水市': [119.92, 28.45],
+  '洛阳市': [112.44, 34.7],
+  '秦皇岛市': [119.57, 39.95],
+  '株洲市': [113.16, 27.83],
+  '石家庄市': [114.48, 38.03],
+  '莱芜市': [117.67, 36.19],
+  '常德市': [111.69, 29.05],
+  '保定市': [115.48, 38.85],
+  '湘潭市': [112.91, 27.87],
+  '金华市': [119.64, 29.12],
+  '岳阳市': [113.09, 29.37],
+  '长沙市': [113, 28.21],
+  '衢州市': [118.88, 28.97],
+  '廊坊市': [116.7, 39.53],
+  '菏泽市': [115.480656, 35.23375],
+  '合肥市': [117.27, 31.86],
+  '武汉市': [114.31, 30.52],
+  '大庆市': [125.03, 46.58]
 }
-const colors = [
-  ['#1DE9B6', '#F46E36', '#04B9FF', '#5DBD32', '#FFC809', '#FB95D5', '#BDA29A', '#6E7074', '#546570', '#C4CCD3'],
-  ['#37A2DA', '#67E0E3', '#32C5E9', '#9FE6B8', '#FFDB5C', '#FF9F7F', '#FB7293', '#E062AE', '#E690D1', '#E7BCF3', '#9D96F5', '#8378EA', '#8378EA'],
-  ['#DD6B66', '#759AA0', '#E69D87', '#8DC1A9', '#EA7E53', '#EEDD78', '#73A373', '#73B9BC', '#7289AB', '#91CA8C', '#F49F42']
-]
-const colorIndex = 0
+
 export default {
   mixins: [resize],
   data() {
     return {
       chart: null,
-      regions: {
-        dates: ['2013', '2014', '2015', '2016'],
-        orders: [
-          {
-            '杭州': 10,
-            '苏州': 2,
-            '上海': 21,
-            '天津': 4,
-            '深圳': 7,
-            '郑州': 7,
-            '成都': 5,
-            '宁波': 2,
-            '合肥': 1,
-            '重庆': 3,
-            '广州': 19,
-            '大连': 1,
-            '青岛': 2,
-            '北京': 16,
-            '义乌': 2,
-            '东莞': 1,
-            '长沙': 3,
-            '贵阳': 0,
-            '珠海': 0,
-            '威海': 0,
-            '南昌': 1,
-            '西安': 2,
-            '南京': 6,
-            '海口': 0,
-            '厦门': 3,
-            '沈阳': 3,
-            '无锡': 0,
-            '呼和浩特': 0,
-            '长春': 0,
-            '哈尔滨': 1,
-            '武汉': 5,
-            '南宁': 1,
-            '昆明': 1,
-            '兰州': 0,
-            '唐山': 0,
-            '石家庄': 2,
-            '太原': 1,
-            '赤峰': 0,
-            '抚顺': 0,
-            '珲春': 0,
-            '绥芬河': 0,
-            '徐州': 0,
-            '南通': 1,
-            '温州': 2,
-            '绍兴': 0,
-            '芜湖': 0,
-            '福州': 5,
-            '泉州': 2,
-            '赣州': 2,
-            '济南': 3,
-            '烟台': 0,
-            '洛阳': 1,
-            '黄石': 0,
-            '岳阳': 0,
-            '汕头': 0,
-            '佛山': 0,
-            '泸州': 0,
-            '海东': 0,
-            '银川': 0
-          },
-          {
-            '杭州': 131,
-            '苏州': 51,
-            '上海': 114,
-            '天津': 58,
-            '深圳': 104,
-            '郑州': 66,
-            '成都': 35,
-            '宁波': 59,
-            '合肥': 28,
-            '重庆': 68,
-            '广州': 120,
-            '大连': 24,
-            '青岛': 58,
-            '北京': 118,
-            '义乌': 36,
-            '东莞': 46,
-            '长沙': 34,
-            '贵阳': 8,
-            '珠海': 11,
-            '威海': 7,
-            '南昌': 24,
-            '西安': 35,
-            '南京': 42,
-            '海口': 6,
-            '厦门': 59,
-            '沈阳': 18,
-            '无锡': 21,
-            '呼和浩特': 7,
-            '长春': 13,
-            '哈尔滨': 16,
-            '武汉': 52,
-            '南宁': 14,
-            '昆明': 10,
-            '兰州': 5,
-            '唐山': 3,
-            '石家庄': 24,
-            '太原': 13,
-            '赤峰': 0,
-            '抚顺': 0,
-            '珲春': 1,
-            '绥芬河': 3,
-            '徐州': 5,
-            '南通': 12,
-            '温州': 32,
-            '绍兴': 11,
-            '芜湖': 3,
-            '福州': 72,
-            '泉州': 47,
-            '赣州': 3,
-            '济南': 40,
-            '烟台': 14,
-            '洛阳': 7,
-            '黄石': 1,
-            '岳阳': 1,
-            '汕头': 8,
-            '佛山': 31,
-            '泸州': 0,
-            '海东': 0,
-            '银川': 37
-          },
-          {
-            '杭州': 311,
-            '苏州': 174,
-            '上海': 308,
-            '天津': 192,
-            '深圳': 304,
-            '郑州': 194,
-            '成都': 179,
-            '宁波': 191,
-            '合肥': 130,
-            '重庆': 189,
-            '广州': 345,
-            '大连': 139,
-            '青岛': 182,
-            '北京': 336,
-            '义乌': 136,
-            '东莞': 159,
-            '长沙': 151,
-            '贵阳': 81,
-            '珠海': 96,
-            '威海': 80,
-            '南昌': 112,
-            '西安': 163,
-            '南京': 155,
-            '海口': 59,
-            '厦门': 170,
-            '沈阳': 102,
-            '无锡': 110,
-            '呼和浩特': 54,
-            '长春': 76,
-            '哈尔滨': 113,
-            '武汉': 187,
-            '南宁': 104,
-            '昆明': 100,
-            '兰州': 48,
-            '唐山': 48,
-            '石家庄': 110,
-            '太原': 80,
-            '赤峰': 8,
-            '抚顺': 7,
-            '珲春': 19,
-            '绥芬河': 16,
-            '徐州': 63,
-            '南通': 78,
-            '温州': 111,
-            '绍兴': 88,
-            '芜湖': 29,
-            '福州': 189,
-            '泉州': 148,
-            '赣州': 31,
-            '济南': 161,
-            '烟台': 85,
-            '洛阳': 49,
-            '黄石': 10,
-            '岳阳': 15,
-            '汕头': 74,
-            '佛山': 153,
-            '泸州': 10,
-            '海东': 0,
-            '银川': 34
-          },
-          {
-            '杭州': 296,
-            '苏州': 184,
-            '上海': 332,
-            '天津': 136,
-            '深圳': 327,
-            '郑州': 208,
-            '成都': 235,
-            '宁波': 200,
-            '合肥': 142,
-            '重庆': 191,
-            '广州': 327,
-            '大连': 154,
-            '青岛': 168,
-            '北京': 358,
-            '义乌': 133,
-            '东莞': 166,
-            '长沙': 159,
-            '贵阳': 81,
-            '珠海': 86,
-            '威海': 58,
-            '南昌': 118,
-            '西安': 180,
-            '南京': 170,
-            '海口': 78,
-            '厦门': 160,
-            '沈阳': 114,
-            '无锡': 119,
-            '呼和浩特': 80,
-            '长春': 92,
-            '哈尔滨': 123,
-            '武汉': 190,
-            '南宁': 122,
-            '昆明': 128,
-            '兰州': 69,
-            '唐山': 60,
-            '石家庄': 118,
-            '太原': 93,
-            '赤峰': 16,
-            '抚顺': 9,
-            '珲春': 21,
-            '绥芬河': 16,
-            '徐州': 78,
-            '南通': 93,
-            '温州': 122,
-            '绍兴': 95,
-            '芜湖': 36,
-            '福州': 187,
-            '泉州': 148,
-            '赣州': 47,
-            '济南': 161,
-            '烟台': 87,
-            '洛阳': 55,
-            '黄石': 11,
-            '岳阳': 26,
-            '汕头': 78,
-            '佛山': 150,
-            '泸州': 10,
-            '海东': 0,
-            '银川': 45
-          }
-        ]
+      listQuery: {
+        date: '2020-12-09'
       },
+      regions: null,
       categoryData: [],
-      barData: [],
-      mapData: []
+      barData: []
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.initData()
-      this.initChart()
+      this.getList()
     })
   },
   beforeDestroy() {
@@ -326,304 +228,247 @@ export default {
     this.chart = null
   },
   methods: {
+    getList() {
+      chartRegion(this.listQuery).then(reponse => {
+        this.regions = reponse.data.data
+        // 初始化地图
+        this.initChart()
+      })
+    },
     convertData(data) {
       var res = []
       for (var i = 0; i < data.length; i++) {
-        var geoCoord = geoCoordMap[data[i].name]
+        var geoCoord = geoCoordMap[data[i].cityName]
         if (geoCoord) {
           res.push({
-            name: data[i].name,
-            value: geoCoord.concat(data[i].value)
+            name: data[i].cityName,
+            value: geoCoord.concat(data[i].orderCount)
           })
         }
       }
       return res
     },
-    initData() {
-      for (var i = 0; i < this.regions.dates.length; i++) {
-        this.mapData.push([])
-        for (var key in geoCoordMap) {
-          this.mapData[i].push({
-            'year': this.regions.dates[i],
-            'name': key,
-            'value': this.regions.orders[i][key]
-          })
-        }
-      }
-
-      for (var index = 0; index < this.mapData.length; index++) {
-        this.mapData[index].sort(function sortNumber(a, b) {
-          return a.value - b.value
-        })
-        this.barData.push([])
-        this.categoryData.push([])
-        for (var j = 0; j < this.mapData[index].length; j++) {
-          this.barData[index].push(this.mapData[index][j].value)
-          this.categoryData[index].push(this.mapData[index][j].name)
-        }
-      }
-    },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
-      var optionMaps = {
-        timeline: {
-          data: this.regions.dates,
-          axisType: 'category',
-          autoPlay: true,
-          playInterval: 3000,
-          left: '10%',
-          right: '10%',
-          bottom: '3%',
-          width: '80%',
-          label: {
-            normal: {
-              textStyle: {
-                color: '#ddd'
-              }
-            },
-            emphasis: {
-              textStyle: {
-                color: '#fff'
-              }
-            }
-          },
-          symbolSize: 10,
-          lineStyle: {
-            color: '#555'
-          },
-          checkpointStyle: {
-            borderColor: '#777',
-            borderWidth: 2
-          },
-          controlStyle: {
-            showNextBtn: true,
-            showPrevBtn: true,
-            normal: {
-              color: '#666',
-              borderColor: '#666'
-            },
-            emphasis: {
-              color: '#aaa',
-              borderColor: '#aaa'
+      // 设置柱状图
+      this.regions.sort(function sortNumber(a, b) {
+        return b.orderCount - a.orderCount
+      })
+      for (var j = 0; j < 20; j++) {
+        this.barData.push(this.regions[j].orderCount)
+        this.categoryData.push(this.regions[j].cityName)
+      }
+
+      // 地图
+      var option = {
+        animation: true,
+        animationDuration: 1000,
+        animationEasing: 'cubicInOut',
+        animationDurationUpdate: 1000,
+        animationEasingUpdate: 'cubicInOut',
+        grid: {
+          right: '1%',
+          top: '15%',
+          bottom: '10%',
+          width: '20%'
+        },
+        tooltip: {
+          trigger: 'axis', // hover触发器
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+            shadowStyle: {
+              color: 'rgba(150,150,150,0.1)' // hover颜色
             }
           }
         },
-        baseOption: {
-          animation: true,
-          animationDuration: 1000,
-          animationEasing: 'cubicInOut',
-          animationDurationUpdate: 1000,
-          animationEasingUpdate: 'cubicInOut',
-          grid: {
-            right: '1%',
-            top: '15%',
-            bottom: '10%',
-            width: '20%'
-          },
-          tooltip: {
-            trigger: 'axis', // hover触发器
-            axisPointer: { // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-              shadowStyle: {
-                color: 'rgba(150,150,150,0.1)' // hover颜色
-              }
+        geo: {
+          show: true,
+          map: 'china',
+          roam: false, // 禁止缩放
+          zoom: 1,
+          center: [113.83531246, 34.0267395887],
+          label: {
+            emphasis: {
+              show: false
             }
           },
-          geo: {
+          itemStyle: {
+            normal: {
+              borderColor: 'rgba(147, 235, 248, 1)',
+              borderWidth: 1,
+              areaColor: {
+                type: 'radial',
+                x: 0.5,
+                y: 0.5,
+                r: 0.8,
+                colorStops: [{
+                  offset: 0,
+                  color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
+                }, {
+                  offset: 1,
+                  color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
+                }],
+                globalCoord: false // 缺省为 false
+              },
+              shadowColor: 'rgba(128, 217, 248, 1)',
+              shadowOffsetX: -2,
+              shadowOffsetY: 2,
+              shadowBlur: 10
+            },
+            emphasis: {
+              areaColor: '#389BB7',
+              borderWidth: 0
+            }
+          }
+        },
+        backgroundColor: '#013954',
+        title: [
+          {
+            text: '全国订单大数据',
+            left: '25%',
+            top: '7%',
+            textStyle: {
+              color: '#fff',
+              fontSize: 25
+            }
+          },
+          {
+            id: 'statistic',
+            text: this.listQuery.date + '数据统计情况',
+            left: '75%',
+            top: '8%',
+            textStyle: {
+              color: '#fff',
+              fontSize: 25
+            }
+          }
+        ],
+        xAxis: {
+          type: 'value',
+          scale: true,
+          position: 'top',
+          min: 0,
+          boundaryGap: false,
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            margin: 2,
+            textStyle: {
+              color: '#aaa'
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          nameGap: 16,
+          axisLine: {
             show: true,
+            lineStyle: {
+              color: '#ddd'
+            }
+          },
+          axisTick: {
+            show: false,
+            lineStyle: {
+              color: '#ddd'
+            }
+          },
+          axisLabel: {
+            interval: 0,
+            textStyle: {
+              color: '#ddd'
+            }
+          },
+          data: this.categoryData
+        },
+        series: [
+          // 地图
+          {
+            type: 'map',
             map: 'china',
-            roam: false, // 禁止缩放
-            zoom: 1,
-            center: [113.83531246, 34.0267395887],
+            geoIndex: 0,
+            aspectScale: 0.75, // 长宽比
+            showLegendSymbol: false, // 存在legend时显示
             label: {
-              emphasis: {
+              normal: {
                 show: false
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+            roam: true,
+            itemStyle: {
+              normal: {
+                areaColor: '#031525',
+                borderColor: '#FFFFFF'
+              },
+              emphasis: {
+                areaColor: '#2B91B7'
+              }
+            },
+            animation: false,
+            data: this.convertData(this.regions)
+          },
+          // 地图中闪烁的点
+          {
+            //  name: 'Top 5',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: this.convertData(this.regions.sort(function(a, b) {
+              return b.orderCount - a.orderCount
+            }).slice(0, 20)),
+            symbolSize: function(val) {
+              return val[2] // / 10
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: true
               }
             },
             itemStyle: {
               normal: {
-                borderColor: 'rgba(147, 235, 248, 1)',
-                borderWidth: 1,
-                areaColor: {
-                  type: 'radial',
-                  x: 0.5,
-                  y: 0.5,
-                  r: 0.8,
-                  colorStops: [{
-                    offset: 0,
-                    color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
-                  }, {
-                    offset: 1,
-                    color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
-                  }],
-                  globalCoord: false // 缺省为 false
-                },
-                shadowColor: 'rgba(128, 217, 248, 1)',
-                shadowOffsetX: -2,
-                shadowOffsetY: 2,
-                shadowBlur: 10
-              },
-              emphasis: {
-                areaColor: '#389BB7',
-                borderWidth: 0
+                color: '#1DE9B6',
+                shadowBlur: 10,
+                shadowColor: '#1DE9B6'
               }
-            }
+            },
+            zlevel: 1
+          },
+          // 柱状图
+          {
+            zlevel: 1.5,
+            type: 'bar',
+            symbol: 'none',
+            itemStyle: {
+              normal: {
+                color: '#04B9FF'
+              }
+            },
+            data: this.barData
           }
-        },
-        options: []
-      }
-      // 处理每个日期的数据
-      for (var n = 0; n < this.regions.dates.length; n++) {
-        optionMaps.options.push({
-          backgroundColor: '#013954',
-          title: [
-            {
-              text: '全国订单大数据',
-              left: '25%',
-              top: '7%',
-              textStyle: {
-                color: '#fff',
-                fontSize: 25
-              }
-            },
-            {
-              id: 'statistic',
-              text: this.regions.dates[n] + '数据统计情况',
-              left: '75%',
-              top: '8%',
-              textStyle: {
-                color: '#fff',
-                fontSize: 25
-              }
-            }
-          ],
-          xAxis: {
-            type: 'value',
-            scale: true,
-            position: 'top',
-            min: 0,
-            boundaryGap: false,
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              margin: 2,
-              textStyle: {
-                color: '#aaa'
-              }
-            }
-          },
-          yAxis: {
-            type: 'category',
-            nameGap: 16,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#ddd'
-              }
-            },
-            axisTick: {
-              show: false,
-              lineStyle: {
-                color: '#ddd'
-              }
-            },
-            axisLabel: {
-              interval: 0,
-              textStyle: {
-                color: '#ddd'
-              }
-            },
-            data: this.categoryData[n]
-          },
-          series: [
-            // 地图
-            {
-              type: 'map',
-              map: 'china',
-              geoIndex: 0,
-              aspectScale: 0.75, // 长宽比
-              showLegendSymbol: false, // 存在legend时显示
-              label: {
-                normal: {
-                  show: false
-                },
-                emphasis: {
-                  show: false,
-                  textStyle: {
-                    color: '#fff'
-                  }
-                }
-              },
-              roam: true,
-              itemStyle: {
-                normal: {
-                  areaColor: '#031525',
-                  borderColor: '#FFFFFF'
-                },
-                emphasis: {
-                  areaColor: '#2B91B7'
-                }
-              },
-              animation: false,
-              data: this.mapData
-            },
-            // 地图中闪烁的点
-            {
-              //  name: 'Top 5',
-              type: 'effectScatter',
-              coordinateSystem: 'geo',
-              data: this.convertData(this.mapData[n].sort(function(a, b) {
-                return b.value - a.value
-              }).slice(0, 20)),
-              symbolSize: function(val) {
-                return val[2] / 10
-              },
-              showEffectOn: 'render',
-              rippleEffect: {
-                brushType: 'stroke'
-              },
-              hoverAnimation: true,
-              label: {
-                normal: {
-                  formatter: '{b}',
-                  position: 'right',
-                  show: true
-                }
-              },
-              itemStyle: {
-                normal: {
-                  color: colors[colorIndex][n],
-                  shadowBlur: 10,
-                  shadowColor: colors[colorIndex][n]
-                }
-              },
-              zlevel: 1
-            },
-            // 柱状图
-            {
-              zlevel: 1.5,
-              type: 'bar',
-              symbol: 'none',
-              itemStyle: {
-                normal: {
-                  color: colors[colorIndex][n]
-                }
-              },
-              data: this.barData[n]
-            }
-          ]
-        })
+        ]
       }
       // 设置属性
-      this.chart.setOption(optionMaps)
+      this.chart.setOption(option)
     }
   }
 }

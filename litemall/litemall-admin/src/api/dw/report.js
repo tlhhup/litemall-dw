@@ -27,10 +27,11 @@ export function chartDuration(query) {
   })
 }
 
-const uploadedDataURL = '/dw/adsRegionDayCount/list'
-export function chartRegion() {
+const RegionOrderList = '/dw/adsRegionDayCount/list'
+export function chartRegion(query) {
   return request({
-    url: uploadedDataURL,
-    method: 'get'
+    url: RegionOrderList,
+    method: 'get',
+    params: query
   })
 }
