@@ -190,15 +190,23 @@ from dwt_user_topic;
 insert into table ads_user_action_convert_day
 select
     '$do_date' as dt,
-    sum(if(login_count>0,1,0)) as total_visitor_m_count,
-    sum(if(cart_count>0,1,0)) as  cart_u_count,
-    sum(if(cart_count>0,1,0))/sum(if(login_count>0,1,0)),
-    sum(if(order_count>0,1,0)) as order_u_count,
-    sum(if(order_count>0,1,0))/sum(if(cart_count>0,1,0)),
-    sum(if(payment_count>0,1,0)) as payment_u_count,
-    sum(if(payment_count>0,1,0))/sum(if(order_count>0,1,0))
-from dws_user_action_daycount
-where dt='$do_date';
+    t.total_visitor_m_count,
+    t.cart_u_count,
+    t.cart_u_count/t.total_visitor_m_count,
+    t.order_u_count,
+    t.order_u_count/t.cart_u_count,
+    t.payment_u_count,
+    t.payment_u_count/t.order_u_count
+from
+(
+	select
+	    sum(if(login_count>0,1,0)) as total_visitor_m_count,
+	    sum(if(cart_count>0,1,0)) as  cart_u_count,
+	    sum(if(cart_count>0 and order_count>0,1,0)) as order_u_count,
+	    sum(if(cart_count>0 and order_count>0 and payment_count>0,1,0)) as payment_u_count
+	from dws_user_action_daycount
+	where dt='$do_date'
+)t;
 
 insert into table ads_product_info
 select
