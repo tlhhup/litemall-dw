@@ -32,6 +32,7 @@ public class DashBoardServiceImpl implements DashBoardService {
     public DashBoardHeader queryByDate(int type) {
         //1.校验数据
         Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         int currentYear = 0;
         int lastYear = 0;
         Object currentValue = "";
@@ -153,6 +154,7 @@ public class DashBoardServiceImpl implements DashBoardService {
     @Override
     public List<Map> queryByDuration(int type, int duration) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         int currentYear = 0;
         Object currentValue = "";
         switch (type) {
