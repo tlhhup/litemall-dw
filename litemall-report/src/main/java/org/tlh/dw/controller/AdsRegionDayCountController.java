@@ -31,6 +31,7 @@ public class AdsRegionDayCountController {
         if (StringUtils.isEmpty(date)) {
             date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
         }
+        // todo 三级下取
         QueryWrapper wrapper = new QueryWrapper<AdsRegionDayCount>().eq("date", date);
         List<AdsRegionDayCount> result = this.adsRegionDayCountService.list(wrapper);
         return ResponseUtil.ok(result);

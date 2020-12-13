@@ -562,13 +562,33 @@ export const asyncRoutes = [
           noCache: true
         }
       },
+      // {
+      //   path: 'regionCount',
+      //   component: () => import('@/views/report/region'),
+      //   name: 'statRegionCount',
+      //   meta: {
+      //     perms: ['GET /dw/stat/region'],
+      //     title: '区域统计',
+      //     noCache: true
+      //   }
+      // },
+      // {
+      //   path: 'uaConvert',
+      //   component: () => import('@/views/report/userActionConvert'),
+      //   name: 'statUaConvert',
+      //   meta: {
+      //     perms: ['GET /dw/stat/uaConvert'],
+      //     title: '用户行为',
+      //     noCache: true
+      //   }
+      // },
       {
-        path: 'regionCount',
-        component: () => import('@/views/report/region'),
-        name: 'statRegionCount',
+        path: 'reportIndex',
+        component: () => import('@/views/report/index'),
+        name: 'statIndex',
         meta: {
-          perms: ['GET /dw/stat/region'],
-          title: '区域统计',
+          perms: ['GET /dw/stat/index'],
+          title: '统计大屏',
           noCache: true
         }
       }

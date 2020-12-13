@@ -35,3 +35,12 @@ export function chartRegion(query) {
     params: query
   })
 }
+
+const UAConvertList = '/dw/adsUserActionConvertDay/list'
+export function uaConvertList(query) {
+  return request({
+    url: UAConvertList,
+    method: 'get',
+    params: query
+  })
+}
