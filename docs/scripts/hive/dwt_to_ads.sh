@@ -430,7 +430,7 @@ select
     p.id as province_id,
     p.name as province_name,
     c.id as city_id,
-    c.name as city_name,
+    if(p.pid=0 and substr(p.name,-1)='市',p.name,c.name) as city_name,
     t.id as country_id,
     t.name as country_name,
     r.order_date_first,
