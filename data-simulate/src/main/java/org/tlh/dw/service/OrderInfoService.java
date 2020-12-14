@@ -129,7 +129,7 @@ public class OrderInfoService {
         if (joinActivity) {
             //获取活动的商品
             List<LitemallGrouponRules> grouponRules = this.grouponRulesMapper.selectByExample(null);
-            if (ObjectUtils.isEmpty(grouponRules)) {
+            if (!ObjectUtils.isEmpty(grouponRules)) {
                 for (LitemallGrouponRules item : grouponRules) {
                     litemallGrouponRules.put(item.getGoodsId(), item);
                 }

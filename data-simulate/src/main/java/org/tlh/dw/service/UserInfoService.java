@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tlh.dw.bean.RegionInfo;
 import org.tlh.dw.config.SimulateProperty;
 import org.tlh.dw.util.*;
+import org.tlh.dw.util.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,6 +27,8 @@ import java.util.*;
 @Slf4j
 @Service
 public class UserInfoService extends Observable {
+
+    public static final String PASSWORD = "123456";
 
     @Autowired
     private LitemallUserMapper userMapper;
@@ -76,7 +79,9 @@ public class UserInfoService extends Observable {
 
         LitemallUser user = new LitemallUser();
         user.setUsername(username);
-        user.setPassword("asdfaw3esdfasdf");
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(PASSWORD);
+        user.setPassword(encodedPassword);
         user.setMobile("13" + RandomNumString.getRandNumString(1, 9, 9, ""));
         user.setWeixinOpenid(UUID.randomUUID().toString());
         user.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
