@@ -450,4 +450,13 @@ export function getList(api, query) {
   })
 }
 
+const SimulatePay = 'wx/order/simulatePay'; // 模拟支付
+export function simulatePay(data) {
+  return request({
+    url: SimulatePay,
+    method: 'post',
+    data
+  });
+}
+
 export const REFUND_LIST = '';

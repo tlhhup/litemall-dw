@@ -39,7 +39,7 @@
 
 <script>
 import { Radio, RadioGroup, Dialog } from 'vant';
-import { orderDetail, orderPrepay, orderH5pay } from '@/api/api';
+import { orderDetail, orderPrepay, orderH5pay, simulatePay } from '@/api/api';
 import _ from 'lodash';
 import { getLocalStorage, setLocalStorage } from '@/utils/local-storage';
 
@@ -121,6 +121,7 @@ export default {
                 });
               });
           } else {
+            /**
             orderH5pay({ orderId: this.orderId })
               .then(res => {
                 let data = res.data.data;
@@ -137,6 +138,23 @@ export default {
               })
               .catch(err => {
                 Dialog.alert({ message: err.data.errmsg });
+              });
+            */
+            simulatePay({ orderId: this.orderId })
+              .then(res => {
+                console.info(res.data)
+                if (res.data.errno==0) {
+                  // 跳转到订单详情页面
+                  console.info('跳转到订单详情页面')
+                  this.$router.push({
+                    path: '/order/order-detail',
+                    query: { orderId: this.orderId }
+                  });
+                }
+              })
+              .catch(err => {
+                console.info(err.data)
+                //Dialog.alert({ message: err.data.errmsg });
               });
           }
         } else {

@@ -182,4 +182,15 @@ public class WxOrderController {
         return wxOrderService.comment(userId, body);
     }
 
+    /**
+     * 模拟支付完成(仅用于测试)
+     * @param userId
+     * @param body
+     * @return
+     */
+    @PostMapping("simulatePay")
+    public Object simulatePay(@LoginUser Integer userId, @RequestBody String body){
+        return this.wxOrderService.simulatePay(userId,body);
+    }
+
 }

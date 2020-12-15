@@ -2,9 +2,11 @@ simulate:
   baseUrl: http://log-center
   date: 2020-11-20 #业务日期
   use-date: false # 是否使用指定日期
+  offline-enable: true # 离线数据
   schedule:
     action: 0/10 * * * * ?
     business: 0/50 * * * * ?
+    frond: 0/50 * * * * ?
     reload:
       enable: false
       cron: 0 0 0 * * ?
@@ -22,7 +24,7 @@ simulate:
   order:
     user-rate: 80 #用户下单比例
     sku-rate: 70 #购物中购买商品比例
-    join-activity: true #是否参加活动
+    join-activity: false #是否参加活动
     join-activity-rate: 70 #参加活动比率
     use-coupon: true #是否使用购物券
     use-coupon-rate: 70 #是否使用购物券比率
@@ -68,3 +70,6 @@ simulate:
       - 15
       - 5
       - 5
+  front-app: # 前端app请求模拟
+    enable: true
+    base-url: http://localhost:8082
