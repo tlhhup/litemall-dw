@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.wx.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -23,6 +24,7 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.GOODS_UNSHELVE;
 /**
  * 用户购物车服务
  */
+@Slf4j
 @RestController
 @RequestMapping("/wx/cart")
 @Validated
@@ -157,6 +159,9 @@ public class WxCartController {
             cart.setUserId(userId);
             cart.setChecked(true);
             cartService.add(cart);
+
+            // todo 加购
+            log.warn("2|{}|{}|{}|{}", userId, goodsId, productId, number);
         } else {
             //取得规格的信息,判断规格库存
             int num = existCart.getNumber() + number;

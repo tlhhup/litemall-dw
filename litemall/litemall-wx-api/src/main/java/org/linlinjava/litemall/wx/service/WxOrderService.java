@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,6 +21,7 @@ import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.core.task.TaskService;
 import org.linlinjava.litemall.core.util.DateTimeUtil;
+import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.*;
@@ -28,7 +30,6 @@ import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.GrouponConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
-import org.linlinjava.litemall.core.util.IpUtil;
 import org.linlinjava.litemall.wx.task.OrderUnpaidTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
  * 当401用户确认收货以后，此时用户可以进行的操作是删除订单，评价商品，申请售后，或者再次购买
  * 当402系统自动确认收货以后，此时用户可以删除订单，评价商品，申请售后，或者再次购买
  */
+@Slf4j
 @Service
 public class WxOrderService {
     private final Log logger = LogFactory.getLog(WxOrderService.class);
@@ -394,6 +396,11 @@ public class WxOrderService {
         orderService.add(order);
         orderId = order.getId();
 
+        // 订单日志附加数据
+        Map<String, Object> ext = new HashMap<>();
+        Map<Integer, List> goodsIds = new HashMap<>();
+        ext.put("goodsIds",goodsIds);
+
         // 添加订单商品表项
         for (LitemallCart cartGoods : checkedGoodsList) {
             // 订单商品
@@ -410,6 +417,12 @@ public class WxOrderService {
             orderGoods.setAddTime(LocalDateTime.now());
 
             orderGoodsService.add(orderGoods);
+
+            //存储
+            if (!goodsIds.containsKey(cartGoods.getGoodsId())) {
+                goodsIds.put(cartGoods.getGoodsId(), new ArrayList());
+            }
+            goodsIds.get(cartGoods.getGoodsId()).add(cartGoods.getProductId());
         }
 
         // 删除购物车里面的商品信息
@@ -440,6 +453,9 @@ public class WxOrderService {
             couponUser.setUsedTime(LocalDateTime.now());
             couponUser.setOrderId(orderId);
             couponUserService.update(couponUser);
+
+            ext.put("couponId",couponId);
+            ext.put("couponUserId",userCouponId);
         }
 
         //如果是团购项目，添加团购信息
@@ -478,6 +494,10 @@ public class WxOrderService {
         else {
             data.put("grouponLinkId", 0);
         }
+
+        // todo 下单日志采集
+        ext.put("grouponId", grouponLinkId);
+        log.warn("3|{}|{}|{}|{}", userId, orderId, order.getActualPrice(), JacksonUtil.toJson(ext));
         return ResponseUtil.ok(data);
     }
 
@@ -822,6 +842,9 @@ public class WxOrderService {
         // 有用户申请退款，邮件通知运营人员
         notifyService.notifyMail("退款申请", order.toString());
 
+        // todo 申请退款日志采集
+        log.warn("6|{}|{}|{}", userId, orderId, order.getActualPrice());
+
         return ResponseUtil.ok();
     }
 
@@ -865,6 +888,10 @@ public class WxOrderService {
         if (orderService.updateWithOptimisticLocker(order) == 0) {
             return ResponseUtil.updatedDateExpired();
         }
+
+        // todo 确认收货日志采集
+        log.warn("5|{}|{}|{}", userId, orderId, order.getActualPrice());
+
         return ResponseUtil.ok();
     }
 
@@ -1015,6 +1042,9 @@ public class WxOrderService {
         order.setComments(commentCount);
         orderService.updateWithOptimisticLocker(order);
 
+        // todo 评论日志采集
+        log.warn("7|{}|{}|{}|{}|{}", userId, orderId, comment.getType(), comment.getValueId(), comment.getStar());
+
         return ResponseUtil.ok();
     }
 
@@ -1103,6 +1133,9 @@ public class WxOrderService {
 
         // 取消订单超时未支付任务
         taskService.removeTask(new OrderUnpaidTask(order.getId()));
+
+        // todo 支付日志
+        log.warn("4|{}|{}|{}|{}", userId, orderId, order.getActualPrice(), order.getPayId());
 
         return ResponseUtil.ok();
     }

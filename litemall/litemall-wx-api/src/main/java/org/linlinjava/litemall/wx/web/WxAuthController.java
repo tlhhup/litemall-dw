@@ -3,8 +3,7 @@ package org.linlinjava.litemall.wx.web;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
 import org.linlinjava.litemall.core.util.*;
@@ -33,11 +32,11 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 /**
  * 鉴权服务
  */
+@Slf4j
 @RestController
 @RequestMapping("/wx/auth")
 @Validated
 public class WxAuthController {
-    private final Log logger = LogFactory.getLog(WxAuthController.class);
 
     @Autowired
     private LitemallUserService userService;
@@ -100,6 +99,10 @@ public class WxAuthController {
         Map<Object, Object> result = new HashMap<Object, Object>();
         result.put("token", token);
         result.put("userInfo", userInfo);
+
+        // todo 登录日志采集
+        log.warn("1|{}|{}",userInfo.getUserId(),userInfo.getNickName());
+
         return ResponseUtil.ok(result);
     }
 

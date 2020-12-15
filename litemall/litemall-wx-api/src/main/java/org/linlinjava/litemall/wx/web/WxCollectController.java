@@ -1,8 +1,7 @@
 package org.linlinjava.litemall.wx.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.validator.Order;
@@ -25,11 +24,11 @@ import java.util.Map;
 /**
  * 用户收藏服务
  */
+@Slf4j
 @RestController
 @RequestMapping("/wx/collect")
 @Validated
 public class WxCollectController {
-    private final Log logger = LogFactory.getLog(WxCollectController.class);
 
     @Autowired
     private LitemallCollectService collectService;
@@ -42,7 +41,7 @@ public class WxCollectController {
      * @param userId 用户ID
      * @param type   类型，如果是0则是商品收藏，如果是1则是专题收藏
      * @param page   分页页数
-     * @param limit   分页大小
+     * @param limit  分页大小
      * @return 用户收藏列表
      */
     @GetMapping("list")
@@ -102,14 +101,18 @@ public class WxCollectController {
 
         if (collect != null) {
             collectService.deleteById(collect.getId());
+            // todo 收藏日志采集
+            log.warn("8|{}|{}|{}|{}", userId, type, valueId, 0);
         } else {
             collect = new LitemallCollect();
             collect.setUserId(userId);
             collect.setValueId(valueId);
             collect.setType(type);
             collectService.add(collect);
-        }
 
+            // todo 收藏日志采集
+            log.warn("8|{}|{}|{}|{}", userId, type, valueId, 1);
+        }
         return ResponseUtil.ok();
     }
 }
