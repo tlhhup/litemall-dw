@@ -14,6 +14,8 @@
         <module>data-pretreatment</module>
         <module>hive-function</module>
         <module>litemall-report</module>
+        <module>litemall-real-time</module>
+        <module>spark-commons</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -25,6 +27,9 @@
         <lang3.version>3.9</lang3.version>
         <flume.version>1.9.0</flume.version>
         <hive.version>3.1.2</hive.version>
+        <scala.version>2.12.8</scala.version>
+        <scala.maven.version>4.3.1</scala.maven.version>
+        <spark.version>2.4.7</spark.version>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +54,28 @@
                 <artifactId>hive-exec</artifactId>
                 <version>${hive.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming_2.12</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tlh</groupId>
+                <artifactId>spark-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -65,6 +92,27 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>${scala.maven.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <scalaVersion>${scala.version}</scalaVersion>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
