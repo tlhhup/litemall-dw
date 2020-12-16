@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.tlh.dw.entity.OriginalData
-import org.tlh.dw.process.OrderSubmitProcess
+import org.tlh.dw.process._
 
 /**
   * 实时数仓计算
@@ -47,11 +47,16 @@ object DwRealTimeDriver {
 
     //登录
     val loginDs = oDs.filter(item => item.eventType == 1)
-    loginDs.print()
+    oDs.foreachRDD(rdd => {
+      LoginProcess.process(rdd)
+    })
 
     //加购
     val cartDs = oDs.filter(item => item.eventType == 2)
-    cartDs.print()
+    cartDs.foreachRDD(rdd => {
+      AddCartProcess.process(rdd)
+    })
+
     //下单
     val orderDs = oDs.filter(item => item.eventType == 3)
     orderDs.foreachRDD(rdd => {
@@ -60,19 +65,33 @@ object DwRealTimeDriver {
 
     //支付
     val paymentDs = oDs.filter(item => item.eventType == 4)
+    paymentDs.foreachRDD(rdd => {
+      PaymentProcess.process(rdd)
+    })
 
     //确认收货
     val confirmDs = oDs.filter(item => item.eventType == 5)
+    confirmDs.foreachRDD(rdd => {
+      OrderConfirmProcess.process(rdd)
+    })
 
     //退款
     val refundDs = oDs.filter(item => item.eventType == 6)
+    refundDs.foreachRDD(rdd => {
+      RefundProcess.process(rdd)
+    })
 
     //评论
     val commentDs = oDs.filter(item => item.eventType == 7)
+    commentDs.foreachRDD(rdd => {
+      CommentProcess.process(rdd)
+    })
 
     //收藏
     val collectDs = oDs.filter(item => item.eventType == 8)
-    collectDs.print()
+    collectDs.foreachRDD(rdd => {
+      CollectProcess.process(rdd)
+    })
 
     //6. 启动
     ssc.start()

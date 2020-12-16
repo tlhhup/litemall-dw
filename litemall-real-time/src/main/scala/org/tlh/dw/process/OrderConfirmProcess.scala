@@ -1,6 +1,8 @@
 package org.tlh.dw.process
 
-import org.tlh.dw.entity.OriginalData
+import org.apache.spark.rdd.RDD
+import org.tlh.dw.entity._
+import org.tlh.spark.util.JedisUtil
 
 /**
   * @author 离歌笑
@@ -8,7 +10,16 @@ import org.tlh.dw.entity.OriginalData
   * @date 2020-12-16
   */
 object OrderConfirmProcess extends AbstractProcess {
-  override def process(item: OriginalData): Unit = {
 
+  override def process(rdd: RDD[OriginalData]): Unit = {
+    //1. 计算收货金额
+    rdd.foreach(item => {
+      // 5|userId|orderId|actualPrice
+      val attrs = item.ext.split("\\|")
+      val amount = attrs(3).toDouble
+      JedisUtil.inc(CONFIRM_COUNT, 1)
+      JedisUtil.incrByFloat(CONFIRM_AMOUNT, amount)
+    })
   }
+
 }

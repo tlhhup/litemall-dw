@@ -1,7 +1,12 @@
 package org.tlh.dw.entity
 
+import java.util
+
 import org.tlh.spark.util.JsonScalaUtil
-import java.util.{Map, List}
+import java.util.{List, Map}
+
+import collection.JavaConverters._
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * @author 离歌笑
@@ -33,8 +38,21 @@ object OrderDetail {
 
   def main(args: Array[String]): Unit = {
     val message = "3|630|4947|894.00|{\"couponUserId\":4744,\"couponId\":1,\"grouponId\":0,\"goodsIds\":{\"1030005\":[44]}}";
-    val data = OrderDetail(message)
-    println(data)
+    val orderDetail = OrderDetail(message)
+    val goodsIds = orderDetail.goodsIds.asScala
+    val buffer = new ArrayBuffer[(String, Int)]()
+
+    for (goodsId <- goodsIds.keys) {
+      for (productId <- goodsIds.get(goodsId)) {
+        productId match {
+          case x:List[Int] => {
+            for (t <- x.asScala)
+              buffer.append((goodsId + "_" + t, 1))
+          }
+        }
+      }
+    }
+    println(buffer)
   }
 
 }

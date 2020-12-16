@@ -1,5 +1,6 @@
 package org.tlh.dw.process
 
+import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity.OriginalData
 
 /**
@@ -9,7 +10,7 @@ import org.tlh.dw.entity.OriginalData
   */
 object LoginProcess extends AbstractProcess {
 
-  override def process(item: OriginalData): Unit = {
+  override def process(rdd: RDD[OriginalData]): Unit = {
 
   }
 

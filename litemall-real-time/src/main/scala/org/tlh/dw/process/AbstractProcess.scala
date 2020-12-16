@@ -1,5 +1,6 @@
 package org.tlh.dw.process
 
+import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity.OriginalData
 
 /**
@@ -9,6 +10,6 @@ import org.tlh.dw.entity.OriginalData
   */
 trait AbstractProcess {
 
-  def process(item: OriginalData): Unit
+  def process(rdd: RDD[OriginalData]): Unit
 
 }
