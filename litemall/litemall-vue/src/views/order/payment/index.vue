@@ -142,19 +142,16 @@ export default {
             */
             simulatePay({ orderId: this.orderId })
               .then(res => {
-                console.info(res.data)
                 if (res.data.errno==0) {
                   // 跳转到订单详情页面
-                  console.info('跳转到订单详情页面')
-                  this.$router.push({
+                  this.$router.replace({
                     path: '/order/order-detail',
                     query: { orderId: this.orderId }
                   });
                 }
               })
               .catch(err => {
-                console.info(err.data)
-                //Dialog.alert({ message: err.data.errmsg });
+                Dialog.alert({ message: err.data.errmsg });
               });
           }
         } else {
