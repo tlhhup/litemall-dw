@@ -48,7 +48,7 @@ object OrderSubmitProcess extends AbstractProcess {
       for (goodsId <- goodsIds.keys) {
         for (productId <- goodsIds.get(goodsId)) {
           productId match {
-            case x:List[Int] => {
+            case x: List[Int] => {
               for (t <- x.asScala)
                 buffer.append((goodsId + "_" + t, 1))
             }
@@ -61,6 +61,18 @@ object OrderSubmitProcess extends AbstractProcess {
       .foreach(item => {
         JedisUtil.zSetIncBy(GOODS_ORDER, item._1, item._2)
       })
+  }
+
+  /**
+    * 每秒处理的订单数
+    *
+    * @param total
+    * @param duration
+    */
+  def speedProcess(total: Long, duration: Int): Unit = {
+    val speed = total / duration
+    val key = ORDER_SPEED + System.currentTimeMillis()
+    JedisUtil.setex(key, 10 * 60, speed + "")
   }
 
 }

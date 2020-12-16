@@ -17,7 +17,7 @@ package object entity {
   val USER_REFUND_AMOUNT = "user:refund:amount:"
 
   //订单
-  val ORDER_SPEED = "order:speed"
+  val ORDER_SPEED = "order:speed:"
   val ORDER_COUNT = "order:count"
   val ORDER_AMOUNT = "order:amount"
   val PAY_COUNT = "pay:count"

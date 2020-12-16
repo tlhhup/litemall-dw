@@ -21,6 +21,8 @@ object DwRealTimeDriver {
   def main(args: Array[String]): Unit = {
     //1. 获取duration
     val duration = if (args.length > 0) args(0).toInt else 5
+    val widowDuration = duration * 3
+    val slideDuration = duration * 2
     //2. kafka参数
     val kafkaParams = Map[String, Object](
       "bootstrap.servers" -> "kafka-master:9092",
@@ -62,6 +64,12 @@ object DwRealTimeDriver {
     orderDs.foreachRDD(rdd => {
       OrderSubmitProcess.process(rdd)
     })
+
+    // 订单处理速度
+    orderDs.window(Seconds(widowDuration), Seconds(slideDuration))
+      .foreachRDD(rdd => {
+        OrderSubmitProcess.speedProcess(rdd.count(),widowDuration)
+      })
 
     //支付
     val paymentDs = oDs.filter(item => item.eventType == 4)
