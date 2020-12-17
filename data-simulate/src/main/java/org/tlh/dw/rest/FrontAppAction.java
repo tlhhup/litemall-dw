@@ -28,7 +28,7 @@ public interface FrontAppAction {
      * @param userRegister
      */
     @POST("/wx/auth/register")
-    Response<Void> register(@Body UserRegister userRegister);
+    Response<Map<String, Object>> register(@Body UserRegister userRegister);
 
     /**
      * 用户登录
@@ -45,7 +45,7 @@ public interface FrontAppAction {
      * @param cart
      */
     @POST("/wx/cart/add")
-    Response<Void> addCart(@Body LitemallCart cart);
+    Response<Map<String, Object>> addCart(@Body LitemallCart cart);
 
     /**
      * 下单
@@ -53,7 +53,7 @@ public interface FrontAppAction {
      * @param orderSubmit
      */
     @POST("/wx/order/submit")
-    Response<Void> order(@Body OrderSubmit orderSubmit);
+    Response<Map<String, Object>> order(@Body OrderSubmit orderSubmit);
 
     /**
      * 支付
@@ -61,7 +61,7 @@ public interface FrontAppAction {
      * @param orderConfirm
      */
     @POST("/wx/order/simulatePay")
-    Response<Void> payment(@Body OrderConfirm orderConfirm);
+    Response<Map<String, Object>> payment(@Body OrderConfirm orderConfirm);
 
     /**
      * 确认收货
@@ -69,7 +69,7 @@ public interface FrontAppAction {
      * @param orderConfirm
      */
     @POST("/wx/order/confirm")
-    Response<Void> confirm(@Body OrderConfirm orderConfirm);
+    Response<Map<String, Object>> confirm(@Body OrderConfirm orderConfirm);
 
     /**
      * 退货
@@ -77,7 +77,7 @@ public interface FrontAppAction {
      * @param orderConfirm
      */
     @POST("/wx/order/refund")
-    Response<Void> refund(@Body OrderConfirm orderConfirm);
+    Response<Map<String, Object>> refund(@Body OrderConfirm orderConfirm);
 
     /**
      * 订单评论
@@ -85,7 +85,7 @@ public interface FrontAppAction {
      * @param comment
      */
     @POST("/wx/order/comment")
-    Response<Void> comment(@Body OrderComment comment);
+    Response<Map<String, Object>> comment(@Body OrderComment comment);
 
     /**
      * 收藏
@@ -93,6 +93,6 @@ public interface FrontAppAction {
      * @param collect
      */
     @POST("/wx/collect/addordelete")
-    Response<Void> collect(@Body CollectDto collect);
+    Response<Map<String, Object>> collect(@Body CollectDto collect);
 
 }

@@ -2,7 +2,7 @@ simulate:
   baseUrl: http://log-center
   date: 2020-11-20 #业务日期
   use-date: false # 是否使用指定日期
-  offline-enable: true # 离线数据
+  offline-enable: false # 离线数据
   schedule:
     action: 0/10 * * * * ?
     business: 0/50 * * * * ?
@@ -72,4 +72,8 @@ simulate:
       - 5
   front-app: # 前端app请求模拟
     enable: true
-    base-url: http://localhost:8082
+    base-url: http://log-center:8082
+    requests: 50 # 每个周期请求数
+    core-pool-size: 20 # 并发请求核心线程数
+    maximum-pool-size: 100 # 最大线程数
+    keep-alive-time: 5000 # 空闲时间

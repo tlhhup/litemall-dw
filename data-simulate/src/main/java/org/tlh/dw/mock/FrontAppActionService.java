@@ -6,6 +6,7 @@ import org.linlinjava.litemall.db.dao.*;
 import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -24,8 +25,7 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.DelayQueue;
+import java.util.concurrent.*;
 
 /**
  * @author 离歌笑
@@ -66,13 +66,32 @@ public class FrontAppActionService {
     @Autowired
     private SimulateProperty simulateProperty;
 
+    @Value("${simulate.front-app.core-pool-size:20}")
+    private int corePoolSize;
+
+    @Value("${simulate.front-app.maximum-pool-size:100}")
+    private int maximumPoolSize;
+
+    @Value("${simulate.front-app.keep-alive-time:5000}")
+    private long keepAliveTime;
+
+    @Value("${simulate.front-app.requests:50}")
+    private int requests;
+
     private Map<Integer, String> tokens;
     private DelayQueue<UserTokenCache> tokenCaches;
+    private ThreadPoolExecutor threadPool;
 
     @PostConstruct
     public void init() {
         this.tokens = new ConcurrentHashMap<>();
         this.tokenCaches = new DelayQueue<>();
+        //线程池
+        this.threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy());
     }
 
     /**
@@ -134,8 +153,13 @@ public class FrontAppActionService {
                 cart.setProductId(product.getId());
                 int number = RandomUtils.nextInt(0, this.simulateProperty.getCart().getSkuMaxCountPerCart()) + 1;
                 cart.setNumber((short) number);
-                this.frontAppAction.addCart(cart);
-                log.info("add cart success");
+                Response<Map<String, Object>> response = this.frontAppAction.addCart(cart);
+                if (response.isSuccessful()){
+                    Map<String, Object> body = response.body();
+                    if (body!=null&&body.get("errno").equals(0)){
+                        log.info("add cart success userId:[{}]", userId);
+                    }
+                }
             }
         }
     }
@@ -209,8 +233,13 @@ public class FrontAppActionService {
                     }
 
                     //7. 下单
-                    this.frontAppAction.order(orderSubmit);
-                    log.info("order success");
+                    Response<Map<String, Object>> response = this.frontAppAction.order(orderSubmit);
+                    if (response.isSuccessful()){
+                        Map<String, Object> body = response.body();
+                        if (body!=null&&body.get("errno").equals(0)){
+                            log.info("order success userId:[{}]", userId);
+                        }
+                    }
                 }
             }
         }
@@ -240,9 +269,13 @@ public class FrontAppActionService {
                     //4. 确认支付
                     OrderConfirm confirm = new OrderConfirm();
                     confirm.setOrderId(orderId);
-                    this.frontAppAction.payment(confirm);
-
-                    log.info("payment success");
+                    Response<Map<String, Object>> response = this.frontAppAction.payment(confirm);
+                    if (response.isSuccessful()){
+                        Map<String, Object> body = response.body();
+                        if (body!=null&&body.get("errno").equals(0)){
+                            log.info("payment success userId:[{}]", userId);
+                        }
+                    }
                 }
             }
         }
@@ -272,9 +305,13 @@ public class FrontAppActionService {
                     //4. 确认收货
                     OrderConfirm confirm = new OrderConfirm();
                     confirm.setOrderId(orderId);
-                    this.frontAppAction.confirm(confirm);
-
-                    log.info("confirm success");
+                    Response<Map<String, Object>> response = this.frontAppAction.confirm(confirm);
+                    if (response.isSuccessful()){
+                        Map<String, Object> body = response.body();
+                        if (body!=null&&body.get("errno").equals(0)){
+                            log.info("confirm success userId:[{}]", userId);
+                        }
+                    }
                 }
             }
         }
@@ -304,9 +341,13 @@ public class FrontAppActionService {
                     //4. 申请退款
                     OrderConfirm refund = new OrderConfirm();
                     refund.setOrderId(orderId);
-                    this.frontAppAction.refund(refund);
-
-                    log.info("refund success");
+                    Response<Map<String, Object>> response = this.frontAppAction.refund(refund);
+                    if (response.isSuccessful()){
+                        Map<String, Object> body = response.body();
+                        if (body!=null&&body.get("errno").equals(0)){
+                            log.info("refund success userId:[{}]", userId);
+                        }
+                    }
                 }
             }
         }
@@ -346,9 +387,13 @@ public class FrontAppActionService {
                         comment.setStar(RandomUtils.nextInt(1, 6));
                         comment.setContent("评论内容" + RandomNumString.getRandNumString(1, 9, 50, ""));
 
-                        this.frontAppAction.comment(comment);
-
-                        log.info("comment success");
+                        Response<Map<String, Object>> response = this.frontAppAction.comment(comment);
+                        if (response.isSuccessful()){
+                            Map<String, Object> body = response.body();
+                            if (body!=null&&body.get("errno").equals(0)){
+                                log.info("comment success userId:[{}]", userId);
+                            }
+                        }
                     }
                 }
             }
@@ -369,9 +414,13 @@ public class FrontAppActionService {
             CollectDto collectDto = new CollectDto();
             collectDto.setType(type);
             collectDto.setValueId(valueId);
-            this.frontAppAction.collect(collectDto);
-
-            log.info("collect success");
+            Response<Map<String, Object>> response = this.frontAppAction.collect(collectDto);
+            if (response.isSuccessful()){
+                Map<String, Object> body = response.body();
+                if (body!=null&&body.get("errno").equals(0)){
+                    log.info("collect success userId:[{}]", userId);
+                }
+            }
         }
     }
 
@@ -387,15 +436,20 @@ public class FrontAppActionService {
 
     public void process() {
         log.info("Frond Action Simulate start");
-        int userId = commonDataService.randomUserId();
-        this.login(userId);
-        this.addCart(userId);
-        this.order(userId);
-        this.payment(userId);
-        this.confirm(userId);
-        this.refund(userId);
-        this.comment(userId);
-        this.collect(userId);
+        for (int i = 0; i < this.requests; i++) {
+            this.threadPool.submit(() -> {
+                int userId = commonDataService.randomUserId();
+                log.info("current userId:[{}]", userId);
+                this.login(userId);
+                this.addCart(userId);
+                this.order(userId);
+                this.payment(userId);
+                this.confirm(userId);
+                this.refund(userId);
+                this.comment(userId);
+                this.collect(userId);
+            });
+        }
         log.info("Frond Action Simulate end");
     }
 
