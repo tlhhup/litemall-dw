@@ -41,6 +41,10 @@ public class DashBoardServiceImpl implements DashBoardService {
             case 1://周
                 currentYear = calendar.get(Calendar.YEAR);
                 currentValue = calendar.get(Calendar.WEEK_OF_YEAR);
+                // 处理最后一周也是第二年的第一周的问题
+                if (currentYear < calendar.getWeekYear()) {
+                    currentValue = 1 + calendar.getWeeksInWeekYear();
+                }
 
                 //对比数据
                 calendar.add(Calendar.WEEK_OF_YEAR, -1);
@@ -161,6 +165,10 @@ public class DashBoardServiceImpl implements DashBoardService {
             case 1://周
                 currentYear = calendar.get(Calendar.YEAR);
                 currentValue = calendar.get(Calendar.WEEK_OF_YEAR);
+                // 处理最后一周也是第二年的第一周的问题
+                if (currentYear < calendar.getWeekYear()) {
+                    currentValue = 1 + calendar.getWeeksInWeekYear();
+                }
                 break;
             case 2://月
                 currentYear = calendar.get(Calendar.YEAR);
