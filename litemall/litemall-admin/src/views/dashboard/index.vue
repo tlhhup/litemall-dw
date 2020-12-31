@@ -76,8 +76,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.uvRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.uvRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.uvRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.uvRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.uvRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -94,8 +94,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.orderRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.orderRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.orderRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.orderRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.orderRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -112,8 +112,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.paymentRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.paymentRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.paymentRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.paymentRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.paymentRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -130,8 +130,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.payConvertRateRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.payConvertRateRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.payConvertRateRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.payConvertRateRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.payConvertRateRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -148,8 +148,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.prePriceRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.prePriceRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.prePriceRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.prePriceRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.prePriceRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -166,8 +166,8 @@
             <div class="card-panel-text">
               <div class="contrast-title">{{ contrastTitle }}</div>
               <div :class="[dateInfo.refundRate>0 ? 'up-style':'down-style','contrast-number']">
-                <count-to :start-val="0" :end-val="dateInfo.refundRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" class="contrast-number-left" />
-                <div class="contrast-number-right"><i :class="dateInfo.refundRate>0 ? 'el-icon-top':'el-icon-bottom'" /></div>
+                <count-to :start-val="0" :end-val="dateInfo.refundRate | rateFormatter" :duration="3200" :decimals="2" suffix="%" />
+                <i :class="dateInfo.refundRate>0 ? 'el-icon-top':'el-icon-bottom'" />
               </div>
             </div>
           </div>
@@ -208,9 +208,7 @@ export default {
       goodsTotal: 0,
       productTotal: 0,
       orderTotal: 0,
-      dateInfo: {
-
-      },
+      dateInfo: {},
       listQuery: {
         duration: 7,
         type: 0
@@ -242,10 +240,10 @@ export default {
         this.chartData = response.data.data
         this.chartSettings = {
           labelMap: {
-            'orderCount': '订单量',
-            'paymentCount': '支付量',
-            'refundCount': '退款量',
-            'newUserCount': '新增用户量'
+            orderCount: '订单量',
+            paymentCount: '支付量',
+            refundCount: '退款量',
+            newUserCount: '新增用户量'
           }
         }
         this.chartExtend = {
@@ -263,13 +261,25 @@ export default {
       // 更新duration
       switch (type) {
         case '1':
-          this.durationTitle = '统计时间 ' + dateUtil.getStartDayOfWeek() + '~' + dateUtil.getEndDayOfWeek()
+          this.durationTitle =
+            '统计时间 ' +
+            dateUtil.getStartDayOfWeek() +
+            '~' +
+            dateUtil.getEndDayOfWeek()
           break
         case '2':
-          this.durationTitle = '统计时间 ' + dateUtil.getStartDayOfMonth() + '~' + dateUtil.getEndDayOfMonth()
+          this.durationTitle =
+            '统计时间 ' +
+            dateUtil.getStartDayOfMonth() +
+            '~' +
+            dateUtil.getEndDayOfMonth()
           break
         default:
-          this.durationTitle = '统计时间 ' + dateUtil.getDurationDay(30) + '~' + dateUtil.getNowDay()
+          this.durationTitle =
+            '统计时间 ' +
+            dateUtil.getDurationDay(30) +
+            '~' +
+            dateUtil.getNowDay()
           break
       }
     }
@@ -291,7 +301,7 @@ export default {
 .panel-group {
   margin-top: 18px;
 
-  .card-panel-col{
+  .card-panel-col {
     margin-bottom: 32px;
   }
   .card-panel {
@@ -302,14 +312,14 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;
       }
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
       .icon-message {
         background: #36a3f7;
@@ -318,7 +328,7 @@ export default {
         background: #f4516c;
       }
       .icon-shoppingCard {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
     .icon-people {
@@ -331,7 +341,7 @@ export default {
       color: #f4516c;
     }
     .icon-shoppingCard {
-      color: #34bfa3
+      color: #34bfa3;
     }
     .card-panel-icon-wrapper {
       float: left;
@@ -363,8 +373,7 @@ export default {
 }
 
 .panel-group-report {
-
-  .card-panel-col{
+  .card-panel-col {
     /*margin-bottom: 32px;*/
     border-style: solid;
     border-width: 1px;
@@ -378,8 +387,8 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
     .card-panel-description {
       float: left;
       font-weight: bold;
@@ -400,6 +409,7 @@ export default {
       float: left;
       width: 100%;
       padding: 10px;
+      padding-left: 16px;
       font-weight: bold;
       .card-panel-text {
         padding: 2px;
@@ -407,25 +417,18 @@ export default {
         font-size: 10px;
         color: rgba(0, 0, 0, 0.45);
         font-size: 10px;
-        .contrast-title{
-          float: left;
-          margin-left: 2%;
+        display: flex;
+        .contrast-title {
+          flex-grow: 0;
         }
-        .contrast-number{
-          float: right;
-          margin-right: 25%;
-          .contrast-number-left{
-            float: left;
-          }
-          .contrast-number-right{
-            float: left;
-            margin-left: 5px;
-          }
+        .contrast-number {
+          flex-grow: 1;
+          text-align: right;
         }
-        .up-style{
+        .up-style {
           color: red;
         }
-        .down-style{
+        .down-style {
           color: green;
         }
       }
@@ -433,35 +436,35 @@ export default {
   }
 }
 
-.panel-group-report-query{
-    border-style: solid;
-    border-width: 1px;
-    border-color: #dcdfe6;
-    .report-dec{
-      height: 40px;
-      font-size: 12px;
-      position: relative;
-      overflow: hidden;
-      line-height: 40px;
-      color: #666;
-      background: #fff;
-      box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-      border-color: rgba(0, 0, 0, .05);
-      .report-title{
-        float: left;
-        font-size: 15px;
-        font-weight: bold;
-        margin-left: 20px;
-      }
-      .report-duration{
-        float: right;
-        position: relative;
-        margin-right: 10px;
-      }
-      .report-param{
-        float: right;
-        margin-right: 20px;
-      }
+.panel-group-report-query {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dcdfe6;
+  .report-dec {
+    height: 40px;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+    line-height: 40px;
+    color: #666;
+    background: #fff;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
+    .report-title {
+      float: left;
+      font-size: 15px;
+      font-weight: bold;
+      margin-left: 20px;
     }
+    .report-duration {
+      float: right;
+      position: relative;
+      margin-right: 10px;
+    }
+    .report-param {
+      float: right;
+      margin-right: 20px;
+    }
+  }
 }
 </style>
