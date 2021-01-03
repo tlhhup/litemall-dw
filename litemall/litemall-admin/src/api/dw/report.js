@@ -44,3 +44,11 @@ export function uaConvertList(query) {
     params: query
   })
 }
+
+const MapJsonData = '/dw/map/json/'
+export function mapJson(id) {
+  return request({
+    url: MapJsonData + id,
+    method: 'get'
+  })
+}

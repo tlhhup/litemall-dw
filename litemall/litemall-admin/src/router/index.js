@@ -171,7 +171,13 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/brand'),
         name: 'brand',
         meta: {
-          perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
+          perms: [
+            'GET /admin/brand/list',
+            'POST /admin/brand/create',
+            'GET /admin/brand/read',
+            'POST /admin/brand/update',
+            'POST /admin/brand/delete'
+          ],
           title: '品牌制造商',
           noCache: true
         }
@@ -181,7 +187,13 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/category'),
         name: 'category',
         meta: {
-          perms: ['GET /admin/category/list', 'POST /admin/category/create', 'GET /admin/category/read', 'POST /admin/category/update', 'POST /admin/category/delete'],
+          perms: [
+            'GET /admin/category/list',
+            'POST /admin/category/create',
+            'GET /admin/category/read',
+            'POST /admin/category/update',
+            'POST /admin/category/delete'
+          ],
           title: '商品类目',
           noCache: true
         }
@@ -191,7 +203,14 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/order'),
         name: 'order',
         meta: {
-          perms: ['GET /admin/order/list', 'GET /admin/order/detail', 'POST /admin/order/ship', 'POST /admin/order/refund', 'POST /admin/order/delete', 'POST /admin/order/reply'],
+          perms: [
+            'GET /admin/order/list',
+            'GET /admin/order/detail',
+            'POST /admin/order/ship',
+            'POST /admin/order/refund',
+            'POST /admin/order/delete',
+            'POST /admin/order/reply'
+          ],
           title: '订单管理',
           noCache: true
         }
@@ -201,7 +220,13 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/aftersale'),
         name: 'aftersale',
         meta: {
-          perms: ['GET /admin/aftersale/list', 'GET /admin/aftersale/detail', 'POST /admin/order/receive', 'POST /admin/aftersale/complete', 'POST /admin/aftersale/reject'],
+          perms: [
+            'GET /admin/aftersale/list',
+            'GET /admin/aftersale/detail',
+            'POST /admin/order/receive',
+            'POST /admin/aftersale/complete',
+            'POST /admin/aftersale/reject'
+          ],
           title: '售后管理',
           noCache: true
         }
@@ -211,7 +236,13 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/issue'),
         name: 'issue',
         meta: {
-          perms: ['GET /admin/issue/list', 'POST /admin/issue/create', 'GET /admin/issue/read', 'POST /admin/issue/update', 'POST /admin/issue/delete'],
+          perms: [
+            'GET /admin/issue/list',
+            'POST /admin/issue/create',
+            'GET /admin/issue/read',
+            'POST /admin/issue/update',
+            'POST /admin/issue/delete'
+          ],
           title: '通用问题',
           noCache: true
         }
@@ -221,7 +252,13 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/keyword'),
         name: 'keyword',
         meta: {
-          perms: ['GET /admin/keyword/list', 'POST /admin/keyword/create', 'GET /admin/keyword/read', 'POST /admin/keyword/update', 'POST /admin/keyword/delete'],
+          perms: [
+            'GET /admin/keyword/list',
+            'POST /admin/keyword/create',
+            'GET /admin/keyword/read',
+            'POST /admin/keyword/update',
+            'POST /admin/keyword/delete'
+          ],
           title: '关键词',
           noCache: true
         }
@@ -265,7 +302,11 @@ export const asyncRoutes = [
         component: () => import('@/views/goods/edit'),
         name: 'goodsEdit',
         meta: {
-          perms: ['GET /admin/goods/detail', 'POST /admin/goods/update', 'POST /admin/goods/catAndBrand'],
+          perms: [
+            'GET /admin/goods/detail',
+            'POST /admin/goods/update',
+            'POST /admin/goods/catAndBrand'
+          ],
           title: '商品编辑',
           noCache: true
         },
@@ -299,7 +340,13 @@ export const asyncRoutes = [
         component: () => import('@/views/promotion/ad'),
         name: 'ad',
         meta: {
-          perms: ['GET /admin/ad/list', 'POST /admin/ad/create', 'GET /admin/ad/read', 'POST /admin/ad/update', 'POST /admin/ad/delete'],
+          perms: [
+            'GET /admin/ad/list',
+            'POST /admin/ad/create',
+            'GET /admin/ad/read',
+            'POST /admin/ad/update',
+            'POST /admin/ad/delete'
+          ],
           title: '广告管理',
           noCache: true
         }
@@ -309,7 +356,12 @@ export const asyncRoutes = [
         component: () => import('@/views/promotion/coupon'),
         name: 'coupon',
         meta: {
-          perms: ['GET /admin/coupon/list', 'POST /admin/coupon/create', 'POST /admin/coupon/update', 'POST /admin/coupon/delete'],
+          perms: [
+            'GET /admin/coupon/list',
+            'POST /admin/coupon/create',
+            'POST /admin/coupon/update',
+            'POST /admin/coupon/delete'
+          ],
           title: '优惠券管理',
           noCache: true
         }
@@ -330,7 +382,13 @@ export const asyncRoutes = [
         component: () => import('@/views/promotion/topic'),
         name: 'topic',
         meta: {
-          perms: ['GET /admin/topic/list', 'POST /admin/topic/create', 'GET /admin/topic/read', 'POST /admin/topic/update', 'POST /admin/topic/delete'],
+          perms: [
+            'GET /admin/topic/list',
+            'POST /admin/topic/create',
+            'GET /admin/topic/read',
+            'POST /admin/topic/update',
+            'POST /admin/topic/delete'
+          ],
           title: '专题管理',
           noCache: true
         }
@@ -362,7 +420,12 @@ export const asyncRoutes = [
         component: () => import('@/views/promotion/grouponRule'),
         name: 'grouponRule',
         meta: {
-          perms: ['GET /admin/groupon/list', 'POST /admin/groupon/create', 'POST /admin/groupon/update', 'POST /admin/groupon/delete'],
+          perms: [
+            'GET /admin/groupon/list',
+            'POST /admin/groupon/create',
+            'POST /admin/groupon/update',
+            'POST /admin/groupon/delete'
+          ],
           title: '团购规则',
           noCache: true
         }
@@ -396,7 +459,12 @@ export const asyncRoutes = [
         component: () => import('@/views/sys/admin'),
         name: 'admin',
         meta: {
-          perms: ['GET /admin/admin/list', 'POST /admin/admin/create', 'POST /admin/admin/update', 'POST /admin/admin/delete'],
+          perms: [
+            'GET /admin/admin/list',
+            'POST /admin/admin/create',
+            'POST /admin/admin/update',
+            'POST /admin/admin/delete'
+          ],
           title: '管理员',
           noCache: true
         }
@@ -406,7 +474,12 @@ export const asyncRoutes = [
         component: () => import('@/views/sys/notice'),
         name: 'sysNotice',
         meta: {
-          perms: ['GET /admin/notice/list', 'POST /admin/notice/create', 'POST /admin/notice/update', 'POST /admin/notice/delete'],
+          perms: [
+            'GET /admin/notice/list',
+            'POST /admin/notice/create',
+            'POST /admin/notice/update',
+            'POST /admin/notice/delete'
+          ],
           title: '通知管理',
           noCache: true
         }
@@ -426,7 +499,14 @@ export const asyncRoutes = [
         component: () => import('@/views/sys/role'),
         name: 'role',
         meta: {
-          perms: ['GET /admin/role/list', 'POST /admin/role/create', 'POST /admin/role/update', 'POST /admin/role/delete', 'GET /admin/role/permissions', 'POST /admin/role/permissions'],
+          perms: [
+            'GET /admin/role/list',
+            'POST /admin/role/create',
+            'POST /admin/role/update',
+            'POST /admin/role/delete',
+            'GET /admin/role/permissions',
+            'POST /admin/role/permissions'
+          ],
           title: '角色管理',
           noCache: true
         }
@@ -436,7 +516,12 @@ export const asyncRoutes = [
         component: () => import('@/views/sys/os'),
         name: 'os',
         meta: {
-          perms: ['GET /admin/storage/list', 'POST /admin/storage/create', 'POST /admin/storage/update', 'POST /admin/storage/delete'],
+          perms: [
+            'GET /admin/storage/list',
+            'POST /admin/storage/create',
+            'POST /admin/storage/update',
+            'POST /admin/storage/delete'
+          ],
           title: '对象存储',
           noCache: true
         }
@@ -660,11 +745,12 @@ export const asyncRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 

@@ -1,0 +1,126 @@
+<template>
+  <div class="com-container" @dblclick="reserveMap">
+    <div ref="map_ref" class="com-chart" />
+  </div>
+</template>
+
+<script>
+import echarts from 'echarts'
+require('echarts/theme/macarons') // echarts theme
+import { getProvinceMapInfo } from '@/utils/mapUtil'
+import { mapJson } from '@/api/dw/report'
+
+export default {
+  data() {
+    return {
+      chartInstance: undefined,
+      allData: undefined,
+      loadedMap: {},
+      mapStack: [],
+      currentMap: 'china',
+      currentMapId: '100000'
+    }
+  },
+  mounted() {
+    this.initChart()
+    this.loadData()
+    window.addEventListener('resize', this.screenAdapter)
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.screenAdapter)
+  },
+  methods: {
+    async initChart() {
+      this.chartInstance = echarts.init(this.$refs.map_ref, 'macarons')
+      const ret = await mapJson(this.currentMapId)
+      const mapJsonData = ret.data.data
+
+      echarts.registerMap('china', mapJsonData)
+      const option = {
+        title: {
+          text: '▎ 订单分布',
+          left: 20,
+          top: 20
+        },
+        geo: {
+          type: 'map',
+          map: 'china',
+          top: '5%',
+          bottom: '5%',
+          itemStyle: {
+            areaColor: '#2E72BF',
+            borderColor: '#333'
+          }
+        },
+        legend: {
+          left: '5%',
+          bottom: '5%',
+          orient: 'vertical'
+        }
+      }
+      this.chartInstance.setOption(option)
+      // 添加点击事件
+      this.chartInstance.on('click', async arg => {
+        const provinceInfo = getProvinceMapInfo(arg.name)
+        if (provinceInfo) {
+          // 如果没有加载过
+          if (!this.loadedMap[provinceInfo.key]) {
+            const ret = await mapJson(provinceInfo.key)
+            const mapJsonData = ret.data.data
+            // 记录历史和注册地图
+            this.loadedMap[provinceInfo.key] = mapJsonData
+            echarts.registerMap(arg.name, mapJsonData)
+          }
+          const option = {
+            geo: {
+              map: arg.name
+            }
+          }
+          this.chartInstance.setOption(option)
+          // 记录
+          this.mapStack.push(this.currentMap)
+          this.currentMap = arg.name
+        }
+      })
+    },
+    loadData() {},
+    updateChart() {},
+    screenAdapter() {
+      const titleFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
+      const option = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize
+          }
+        },
+        legend: {
+          itemWidth: titleFontSize / 2,
+          itemHeight: titleFontSize / 2,
+          itemGap: titleFontSize / 2,
+          textStyle: {
+            fontSize: titleFontSize / 2
+          }
+        }
+      }
+      this.chartInstance.setOption(option)
+      this.chartInstance.resize()
+    },
+    reserveMap() {
+      const mapName = this.mapStack.pop()
+      if (mapName) {
+        const option = {
+          geo: {
+            map: mapName
+          }
+        }
+        this.chartInstance.setOption(option)
+        // 更新current
+        this.currentMap = mapName
+      }
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+</style>
