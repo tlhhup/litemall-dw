@@ -1,26 +1,35 @@
 <template>
-  <div class="region-map" />
+  <div class="com-container">
+    <div ref="ua_ref" class="com-chart" />
+  </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
+import '@/assets/theme/chalk'
+require('echarts/theme/macarons')
 import { uaConvertList } from '@/api/dw/report'
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
       chart: null,
       listQuery: {
-        date: '2020-12-09'
+        date: undefined
       },
       convert: null
     }
   },
+  computed: {
+    ...mapState(['theme'])
+  },
   mounted() {
-    this.$nextTick(() => {
-      this.getList()
-    })
+    this.initChart()
+    this.loadData()
+    // 注册监听
+    window.addEventListener('resize', this.screenAdapter)
+    this.screenAdapter()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -29,51 +38,35 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
+  destroyed() {
+    window.removeEventListener('resize', this.screenAdapter)
+  },
   methods: {
-    getList() {
-      uaConvertList(this.listQuery).then(reponse => {
-        this.convert = reponse.data.data
-        // 初始化地图
-        this.initChart()
-      })
-    },
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+      this.chart = echarts.init(this.$refs.ua_ref, this.theme)
 
-      // 地图
       var option = {
         title: {
-          text: '漏斗图',
-          subtext: '纯属虚构'
+          text: '▎ 漏斗图'
         },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c}%'
-        },
-        toolbox: {
-          feature: {
-            dataView: { readOnly: false },
-            restore: {},
-            saveAsImage: {}
-          }
         },
         legend: {
           data: ['访问', '加购', '订单', '支付']
         },
         series: [
           {
-            name: '漏斗图',
             type: 'funnel',
             left: '10%',
             top: 60,
             bottom: 60,
-            width: '80%',
             min: 0,
             max: 100,
             minSize: '0%',
             maxSize: '100%',
             sort: 'none',
-            gap: 2,
             label: {
               show: true,
               position: 'inside'
@@ -93,22 +86,51 @@ export default {
               label: {
                 fontSize: 20
               }
-            },
-            data: this.convert
+            }
           }
         ]
       }
       // 设置属性
       this.chart.setOption(option)
+    },
+    loadData() {
+      uaConvertList(this.listQuery).then(reponse => {
+        this.convert = reponse.data.data
+        this.updateChart()
+      })
+    },
+    updateChart() {
+      const option = {
+        series: [
+          {
+            data: this.convert
+          }
+        ]
+      }
+      this.chart.setOption(option)
+    },
+    screenAdapter() {
+      const titleFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
+      const option = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize
+          }
+        },
+        legend: {
+          itemWidth: titleFontSize / 2,
+          itemHeight: titleFontSize / 2,
+          itemGap: titleFontSize / 2,
+          textStyle: {
+            fontSize: titleFontSize / 2
+          }
+        }
+      }
+      this.chart.setOption(option)
+      this.chart.resize()
     }
   }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.region-map {
-  width: 100%;
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-}
 </style>

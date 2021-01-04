@@ -2,7 +2,9 @@
   <div class="page-container">
     <section class="main-left">
       <div class="left-top">左上</div>
-      <div class="left-bottom" />
+      <div class="left-bottom">
+        <Funnel />
+      </div>
     </section>
     <section class="main-center">
       <div class="center-top">
@@ -11,7 +13,9 @@
       <div class="center-bottom">中下</div>
     </section>
     <section class="main-right">
-      <div class="right-top">右上</div>
+      <div class="right-top">
+        <Sale />
+      </div>
       <div class="right-bottom">右下</div>
     </section>
   </div>
@@ -19,10 +23,14 @@
 
 <script>
 import Map from './components/Map'
+import Funnel from './components/Funnel'
+import Sale from './components/Sale'
 
 export default {
   components: {
-    Map
+    Map,
+    Funnel,
+    Sale
   },
   data() {
     return {}

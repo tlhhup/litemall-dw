@@ -6,7 +6,9 @@
 
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
+import '@/assets/theme/chalk'
+require('echarts/theme/macarons')
+import { mapState } from 'vuex'
 import { getProvinceMapInfo } from '@/utils/mapUtil'
 import { mapJson } from '@/api/dw/report'
 
@@ -21,6 +23,9 @@ export default {
       currentMapId: '100000'
     }
   },
+  computed: {
+    ...mapState(['theme'])
+  },
   mounted() {
     this.initChart()
     this.loadData()
@@ -31,7 +36,7 @@ export default {
   },
   methods: {
     async initChart() {
-      this.chartInstance = echarts.init(this.$refs.map_ref, 'macarons')
+      this.chartInstance = echarts.init(this.$refs.map_ref, this.theme)
       const ret = await mapJson(this.currentMapId)
       const mapJsonData = ret.data.data
 

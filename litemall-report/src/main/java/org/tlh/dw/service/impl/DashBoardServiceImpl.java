@@ -50,6 +50,9 @@ public class DashBoardServiceImpl implements DashBoardService {
                 calendar.add(Calendar.WEEK_OF_YEAR, -1);
                 lastYear = calendar.get(Calendar.YEAR);
                 lastValue = calendar.get(Calendar.WEEK_OF_YEAR);
+                if (lastYear<calendar.getWeekYear()){
+                    lastValue=1 + calendar.getWeeksInWeekYear();
+                }
                 break;
             case 2://月
                 currentYear = calendar.get(Calendar.YEAR);

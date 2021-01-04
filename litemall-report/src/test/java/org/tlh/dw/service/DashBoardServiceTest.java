@@ -7,8 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tlh.dw.vo.DashBoardHeader;
 
-import static org.junit.Assert.*;
-
 /**
  * @author 离歌笑
  * @desc
@@ -23,7 +21,7 @@ public class DashBoardServiceTest {
 
     @Test
     public void queryByDate() {
-        DashBoardHeader dashBoardHeader = this.dashBoardService.queryByDate(0);
+        DashBoardHeader dashBoardHeader = this.dashBoardService.queryByDate(1);
         System.out.println(dashBoardHeader);
     }
 
