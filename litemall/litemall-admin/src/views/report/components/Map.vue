@@ -90,10 +90,6 @@ export default {
             // 记录历史和注册地图
             this.loadedMap[provinceInfo.key] = mapJsonData
             echarts.registerMap(arg.name, mapJsonData)
-            // 重新加载数据
-            this.listQuery.name = arg.name
-            this.listQuery.type++
-            this.loadData()
           }
           const option = {
             geo: {
@@ -104,6 +100,10 @@ export default {
           // 记录
           this.mapStack.push(this.currentMap)
           this.currentMap = arg.name
+          // 重新加载数据
+          this.listQuery.name = arg.name
+          this.listQuery.type++
+          this.loadData()
         }
       })
     },

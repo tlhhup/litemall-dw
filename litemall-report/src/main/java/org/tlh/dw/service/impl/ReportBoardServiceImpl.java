@@ -115,6 +115,9 @@ public class ReportBoardServiceImpl implements ReportBoardService {
                 temp=this.regionDayCountMapper.countrySummary(date,name);
                 break;
         }
+        if (temp==null){
+            return null;
+        }
         List<RegionOrderVo> result = temp.stream()
                 .map(item -> new RegionOrderVo(
                         item.getProvinceName(),
