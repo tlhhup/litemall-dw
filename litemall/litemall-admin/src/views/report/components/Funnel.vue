@@ -58,6 +58,7 @@ export default {
         },
         series: [
           {
+            name: '用户行为',
             type: 'funnel',
             left: '10%',
             top: 60,
@@ -67,25 +68,10 @@ export default {
             minSize: '0%',
             maxSize: '100%',
             sort: 'none',
+            width: '80%',
             label: {
               show: true,
               position: 'inside'
-            },
-            labelLine: {
-              length: 10,
-              lineStyle: {
-                width: 1,
-                type: 'solid'
-              }
-            },
-            itemStyle: {
-              borderColor: '#fff',
-              borderWidth: 1
-            },
-            emphasis: {
-              label: {
-                fontSize: 20
-              }
             }
           }
         ]
@@ -110,7 +96,7 @@ export default {
       this.chart.setOption(option)
     },
     screenAdapter() {
-      const titleFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
+      const titleFontSize = (this.$refs.ua_ref.offsetWidth / 100) * 3.6
       const option = {
         title: {
           textStyle: {
@@ -118,11 +104,11 @@ export default {
           }
         },
         legend: {
-          itemWidth: titleFontSize / 2,
-          itemHeight: titleFontSize / 2,
+          itemWidth: titleFontSize,
+          itemHeight: titleFontSize,
           itemGap: titleFontSize / 2,
           textStyle: {
-            fontSize: titleFontSize / 2
+            fontSize: titleFontSize
           }
         }
       }

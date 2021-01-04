@@ -11,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.tlh.dw.entity.AdsProductSaleTopn;
+import org.tlh.dw.entity.AdsRegionDayCount;
 import org.tlh.dw.entity.AdsUserActionConvertDay;
+import org.tlh.dw.mapper.AdsRegionDayCountMapper;
 import org.tlh.dw.service.IAdsProductSaleTopnService;
 import org.tlh.dw.service.IAdsUserActionConvertDayService;
 import org.tlh.dw.service.ReportBoardService;
 import org.tlh.dw.vo.EchartBarVo;
+import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,6 +38,9 @@ public class ReportBoardServiceImpl implements ReportBoardService {
 
     @Autowired
     private IAdsProductSaleTopnService productSaleTopnService;
+
+    @Autowired
+    private AdsRegionDayCountMapper regionDayCountMapper;
 
     @Override
     public List<Map<String, Object>> uaConvert(String date) {
@@ -82,5 +88,39 @@ public class ReportBoardServiceImpl implements ReportBoardService {
             return result;
         }
         return null;
+    }
+
+    private static final List<String> SPECIAL_REGIONS=Arrays.asList(
+            "内蒙古","广西","西藏","宁夏","新疆",
+            "北京","天津","天津","重庆");
+
+    @Override
+    public List<RegionOrderVo> regionOrder(String date, int type,String name) {
+        if (StringUtils.isEmpty(date)) {
+            date = DateFormatUtils.format(DateUtils.addDays(new Date(),-1), "yyyy-MM-dd");
+        }
+        List<AdsRegionDayCount> temp=null;
+        switch (type){
+            case 0:
+                temp=this.regionDayCountMapper.provinceSummary(date);
+                break;
+            case 1:
+                if (SPECIAL_REGIONS.contains(name)){
+                    temp=this.regionDayCountMapper.countrySummary(date,name);
+                }else {
+                    temp = this.regionDayCountMapper.citySummary(date, name);
+                }
+                break;
+            case 2:
+                temp=this.regionDayCountMapper.countrySummary(date,name);
+                break;
+        }
+        List<RegionOrderVo> result = temp.stream()
+                .map(item -> new RegionOrderVo(
+                        item.getProvinceName(),
+                        item.getOrderDayCount(),
+                        item.getOrderDayAmount().doubleValue())
+                ).collect(Collectors.toList());
+        return result;
     }
 }

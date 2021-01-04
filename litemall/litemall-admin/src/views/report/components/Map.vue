@@ -10,7 +10,7 @@ import '@/assets/theme/chalk'
 require('echarts/theme/macarons')
 import { mapState } from 'vuex'
 import { getProvinceMapInfo } from '@/utils/mapUtil'
-import { mapJson } from '@/api/dw/report'
+import { mapJson, chartRegion } from '@/api/dw/report'
 
 export default {
   data() {
@@ -20,7 +20,12 @@ export default {
       loadedMap: {},
       mapStack: [],
       currentMap: 'china',
-      currentMapId: '100000'
+      currentMapId: '100000',
+      listQuery: {
+        date: undefined,
+        type: 0,
+        name: undefined
+      }
     }
   },
   computed: {
@@ -47,13 +52,23 @@ export default {
           left: 20,
           top: 20
         },
+        tooltip: {
+          formatter: function(arg) {
+            if (arg.data) {
+              return `${arg.data.name} 昨日<br>
+              订单:${arg.data.value}<br>
+              金额:${arg.data.amount}`
+            } else {
+              return `${arg.name}`
+            }
+          }
+        },
         geo: {
           type: 'map',
           map: 'china',
           top: '5%',
           bottom: '5%',
           itemStyle: {
-            areaColor: '#2E72BF',
             borderColor: '#333'
           }
         },
@@ -75,6 +90,10 @@ export default {
             // 记录历史和注册地图
             this.loadedMap[provinceInfo.key] = mapJsonData
             echarts.registerMap(arg.name, mapJsonData)
+            // 重新加载数据
+            this.listQuery.name = arg.name
+            this.listQuery.type++
+            this.loadData()
           }
           const option = {
             geo: {
@@ -88,8 +107,52 @@ export default {
         }
       })
     },
-    loadData() {},
-    updateChart() {},
+    loadData() {
+      chartRegion(this.listQuery).then(response => {
+        const { data: ret } = response.data
+        this.allData = ret
+        this.updateChart()
+      })
+    },
+    updateChart() {
+      let minOrder = 0
+      let maxOrder = 0
+      const showData = this.allData.map(item => {
+        if (item.orderCount > maxOrder) {
+          maxOrder = item.orderCount
+        }
+        if (item.orderCount < minOrder) {
+          minOrder = item.orderCount
+        }
+        return {
+          name: item.name,
+          value: item.orderCount,
+          amount: item.orderAmount
+        }
+      })
+
+      const option = {
+        series: [
+          {
+            type: 'map',
+            geoIndex: 0,
+            data: showData
+          }
+        ],
+        visualMap: [
+          {
+            type: 'continuous',
+            min: minOrder,
+            max: maxOrder,
+            calculable: true,
+            inRange: {
+              color: ['white', 'red']
+            }
+          }
+        ]
+      }
+      this.chartInstance.setOption(option)
+    },
     screenAdapter() {
       const titleFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6
       const option = {
@@ -121,6 +184,10 @@ export default {
         this.chartInstance.setOption(option)
         // 更新current
         this.currentMap = mapName
+        // 重新加载
+        this.listQuery.name = mapName
+        this.listQuery.type--
+        this.loadData()
       }
     }
   }

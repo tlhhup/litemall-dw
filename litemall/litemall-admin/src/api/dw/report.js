@@ -27,7 +27,7 @@ export function chartDuration(query) {
   })
 }
 
-const RegionOrderList = '/dw/adsRegionDayCount/list'
+const RegionOrderList = '/dw/report/region'
 export function chartRegion(query) {
   return request({
     url: RegionOrderList,

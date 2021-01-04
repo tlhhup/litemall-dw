@@ -53,11 +53,11 @@ export default {
     height: 100%;
     width: 27.6%;
     .left-top {
-      height: 53%;
+      height: 46%;
       position: relative;
     }
     .left-bottom {
-      height: 31%;
+      height: 38%;
       margin-top: 25px;
       position: relative;
     }

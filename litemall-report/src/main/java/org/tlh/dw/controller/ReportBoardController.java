@@ -1,12 +1,14 @@
 package org.tlh.dw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tlh.dw.service.ReportBoardService;
 import org.tlh.dw.util.ResponseUtil;
 import org.tlh.dw.vo.EchartBarVo;
+import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,15 @@ public class ReportBoardController {
     public Object saleTopN(String date){
         List<EchartBarVo> result = this.reportBoardService.saleTopN(date);
         if (result==null){
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok(result);
+    }
+
+    @GetMapping("/region")
+    public Object regionOrder(String date,int type,String name){
+        List<RegionOrderVo> result=this.reportBoardService.regionOrder(date,type,name);
+        if (ObjectUtils.isEmpty(result)){
             return ResponseUtil.fail();
         }
         return ResponseUtil.ok(result);

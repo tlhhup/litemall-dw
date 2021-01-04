@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tlh.dw.mapper.AdsRegionDayCountMapper">
+
+    <select id="provinceSummary" resultType="org.tlh.dw.entity.AdsRegionDayCount" parameterType="string">
+        select
+            case province_name
+            when '内蒙古自治区' then '内蒙古'
+            when '宁夏回族自治区' then '宁夏'
+            when '广西壮族自治区' then '广西'
+            when '新疆维吾尔自治区' then '新疆'
+            when '西藏自治区' then '西藏'
+            else left(province_name,CHAR_LENGTH(province_name)-1)
+            end as province_name,
+            sum(order_day_count) as orderDayCount,
+            sum(order_day_amount) as orderDayAmount
+        from ads_region_order_daycount
+        where date=#{value}
+        group by province_name
+    </select>
+
+    <select id="citySummary" resultType="org.tlh.dw.entity.AdsRegionDayCount">
+        select
+            city_name as province_name,
+            sum(order_day_count) as orderDayCount,
+            sum(order_day_amount) as orderDayAmount
+        from ads_region_order_daycount
+        where date=#{date} and province_name like '${name}%'
+        group by city_name
+    </select>
+
+    <select id="countrySummary" resultType="org.tlh.dw.entity.AdsRegionDayCount">
+        select
+            country_name as province_name,
+            sum(order_day_count) as orderDayCount,
+            sum(order_day_amount) as orderDayAmount
+        from ads_region_order_daycount
+        where date=#{date} and (city_name like '${name}%' or province_name like '${name}%')
+        group by country_name
+    </select>
+
+</mapper>
