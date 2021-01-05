@@ -52,10 +52,13 @@ export default {
   height: 100vh; // 和屏幕高度一致
   display: flex;
   padding: 6px;
+  padding-top: 10px;
+  background-color: #161522;
 
   & div {
-    border: 1px solid black;
     text-align: center;
+    background-color: #222733;
+    border-radius: 20px;
   }
   .main-left {
     height: 100%;

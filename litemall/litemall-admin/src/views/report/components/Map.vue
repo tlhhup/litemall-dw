@@ -29,7 +29,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['theme'])
+    ...mapState({
+      theme: state => state.theme.theme
+    })
   },
   mounted() {
     this.initChart()

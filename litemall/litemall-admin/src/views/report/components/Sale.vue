@@ -18,7 +18,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['theme'])
+    ...mapState({
+      theme: state => state.theme.theme
+    })
   },
   mounted() {
     this.initChart()
@@ -34,7 +36,9 @@ export default {
       this.chartInstance = echarts.init(this.$refs.sale_ref, this.theme)
       const option = {
         title: {
-          text: '▎ 销量排行'
+          text: '▎ 销量排行',
+          left: 20,
+          top: 20
         },
         grid: {
           top: '20%',

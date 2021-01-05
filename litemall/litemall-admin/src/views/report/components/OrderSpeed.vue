@@ -20,7 +20,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['theme'])
+    ...mapState({
+      // 模块名.状态名
+      theme: state => state.theme.theme
+    })
   },
   mounted() {
     this.initChart()
@@ -39,7 +42,9 @@ export default {
       this.chartInstance = echarts.init(this.$refs.speed_ref, this.theme)
       const option = {
         title: {
-          text: '▎ 实时订单'
+          text: '▎ 实时订单',
+          left: 20,
+          top: 20
         },
         tooltip: {
           trigger: 'axis',

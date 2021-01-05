@@ -58,18 +58,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.item {
-  font-weight: bold;
-  margin: 26px;
-  margin-left: 0px;
-  .card-panel-text {
-    line-height: 18px;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  .card-panel-num {
-    font-size: 20px;
+.com-chart {
+  background-color: #222733;
+
+  .item {
+    font-weight: bold;
+    margin: 26px;
+    margin-left: 0px;
+    color: white;
+    .card-panel-text {
+      line-height: 18px;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .card-panel-num {
+      font-size: 20px;
+    }
   }
 }
 </style>

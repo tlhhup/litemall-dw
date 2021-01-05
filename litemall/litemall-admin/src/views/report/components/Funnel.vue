@@ -22,7 +22,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['theme'])
+    ...mapState({
+      theme: state => state.theme.theme
+    })
   },
   mounted() {
     this.initChart()
@@ -47,14 +49,17 @@ export default {
 
       var option = {
         title: {
-          text: '▎ 漏斗图'
+          text: '▎ 漏斗图',
+          left: 20,
+          top: 20
         },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c}%'
         },
         legend: {
-          data: ['访问', '加购', '订单', '支付']
+          data: ['访问', '加购', '订单', '支付'],
+          top: 20
         },
         series: [
           {
