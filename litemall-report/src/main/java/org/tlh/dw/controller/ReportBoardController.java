@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tlh.dw.service.ReportBoardService;
 import org.tlh.dw.util.ResponseUtil;
 import org.tlh.dw.vo.EchartBarVo;
+import org.tlh.dw.vo.OrderSpeedVo;
+import org.tlh.dw.vo.RealTimeVo;
 import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.List;
@@ -32,21 +34,39 @@ public class ReportBoardController {
     }
 
     @GetMapping("/sale")
-    public Object saleTopN(String date){
+    public Object saleTopN(String date) {
         List<EchartBarVo> result = this.reportBoardService.saleTopN(date);
-        if (result==null){
+        if (result == null) {
             return ResponseUtil.fail();
         }
         return ResponseUtil.ok(result);
     }
 
     @GetMapping("/region")
-    public Object regionOrder(String date,int type,String name){
-        List<RegionOrderVo> result=this.reportBoardService.regionOrder(date,type,name);
-        if (ObjectUtils.isEmpty(result)){
+    public Object regionOrder(String date, int type, String name) {
+        List<RegionOrderVo> result = this.reportBoardService.regionOrder(date, type, name);
+        if (ObjectUtils.isEmpty(result)) {
             return ResponseUtil.fail();
         }
         return ResponseUtil.ok(result);
+    }
+
+    @GetMapping("/realTime")
+    public Object realTime() {
+        RealTimeVo result = this.reportBoardService.realTime();
+        if (result != null) {
+            return ResponseUtil.ok(result);
+        }
+        return ResponseUtil.fail();
+    }
+
+    @GetMapping("/orderSpeed")
+    public Object orderSpeed() {
+        List<OrderSpeedVo> speed = this.reportBoardService.orderSpeed();
+        if (ObjectUtils.isEmpty(speed)) {
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok(speed);
     }
 
 }

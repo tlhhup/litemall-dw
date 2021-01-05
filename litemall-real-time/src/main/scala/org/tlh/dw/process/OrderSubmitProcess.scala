@@ -71,9 +71,9 @@ object OrderSubmitProcess extends AbstractProcess {
     * @param duration
     */
   def speedProcess(total: Long, duration: Int): Unit = {
-    val speed = total / duration
+    val speed = total / 1//*duration
     val key = ORDER_SPEED + System.currentTimeMillis()
-    JedisUtil.setex(key, 10 * 60, speed + "")
+    JedisUtil.setex(key, 4 * 60, speed + "")
   }
 
 }

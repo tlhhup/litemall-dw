@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tlh.dw.service.ReportBoardService;
+import org.tlh.dw.vo.OrderSpeedVo;
+import org.tlh.dw.vo.RealTimeVo;
 import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.List;
@@ -29,4 +31,17 @@ public class ReportBoardServiceImplTest {
         List<RegionOrderVo> regionOrderVos = this.reportBoardService.regionOrder(null, 1,"重庆");
         System.out.println(regionOrderVos.size());
     }
+
+    @Test
+    public void realTime(){
+        RealTimeVo realTimeVo = this.reportBoardService.realTime();
+        System.out.println(realTimeVo);
+    }
+
+    @Test
+    public void orderSpeed(){
+        List<OrderSpeedVo> orderSpeedVos = this.reportBoardService.orderSpeed();
+        System.out.println(orderSpeedVos);
+    }
+
 }

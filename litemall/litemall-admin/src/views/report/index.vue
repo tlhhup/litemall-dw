@@ -1,7 +1,9 @@
 <template>
   <div class="page-container">
     <section class="main-left">
-      <div class="left-top">左上</div>
+      <div class="left-top">
+        <RealOrder />
+      </div>
       <div class="left-bottom">
         <Funnel />
       </div>
@@ -10,7 +12,9 @@
       <div class="center-top">
         <Map />
       </div>
-      <div class="center-bottom">中下</div>
+      <div class="center-bottom">
+        <OrderSpeed />
+      </div>
     </section>
     <section class="main-right">
       <div class="right-top">
@@ -25,12 +29,16 @@
 import Map from './components/Map'
 import Funnel from './components/Funnel'
 import Sale from './components/Sale'
+import OrderSpeed from './components/OrderSpeed'
+import RealOrder from './components/RealOrder'
 
 export default {
   components: {
     Map,
     Funnel,
-    Sale
+    Sale,
+    OrderSpeed,
+    RealOrder
   },
   data() {
     return {}

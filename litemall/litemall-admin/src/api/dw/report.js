@@ -61,3 +61,19 @@ export function saleTopN(query) {
     params: query
   })
 }
+
+const RealTime = '/dw/report/realTime'
+export function realTime() {
+  return request({
+    url: RealTime,
+    method: 'get'
+  })
+}
+
+const OrderSpeed = '/dw/report/orderSpeed'
+export function orderSpeed() {
+  return request({
+    url: OrderSpeed,
+    method: 'get'
+  })
+}

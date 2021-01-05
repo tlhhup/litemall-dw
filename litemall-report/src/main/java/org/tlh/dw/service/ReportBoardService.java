@@ -1,6 +1,8 @@
 package org.tlh.dw.service;
 
 import org.tlh.dw.vo.EchartBarVo;
+import org.tlh.dw.vo.OrderSpeedVo;
+import org.tlh.dw.vo.RealTimeVo;
 import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public interface ReportBoardService {
 
     /**
      * 用户行为转换
+     *
      * @param date
      * @return
      */
@@ -23,6 +26,7 @@ public interface ReportBoardService {
 
     /**
      * 销量排行
+     *
      * @param date
      * @return
      */
@@ -30,10 +34,25 @@ public interface ReportBoardService {
 
     /**
      * 区域订单分布情况
+     *
      * @param date
      * @param type 0 省 1 市 2 县/区
      * @param name 地图点击名称
      * @return
      */
-    List<RegionOrderVo> regionOrder(String date, int type,String name);
+    List<RegionOrderVo> regionOrder(String date, int type, String name);
+
+    /**
+     * 实时订单、支付
+     *
+     * @return
+     */
+    RealTimeVo realTime();
+
+    /**
+     * 订单处理速度
+     *
+     * @return
+     */
+    List<OrderSpeedVo> orderSpeed();
 }

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -17,7 +19,10 @@ import org.tlh.dw.mapper.AdsRegionDayCountMapper;
 import org.tlh.dw.service.IAdsProductSaleTopnService;
 import org.tlh.dw.service.IAdsUserActionConvertDayService;
 import org.tlh.dw.service.ReportBoardService;
+import org.tlh.dw.util.Constants;
 import org.tlh.dw.vo.EchartBarVo;
+import org.tlh.dw.vo.OrderSpeedVo;
+import org.tlh.dw.vo.RealTimeVo;
 import org.tlh.dw.vo.RegionOrderVo;
 
 import java.util.*;
@@ -42,11 +47,14 @@ public class ReportBoardServiceImpl implements ReportBoardService {
     @Autowired
     private AdsRegionDayCountMapper regionDayCountMapper;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @Override
     public List<Map<String, Object>> uaConvert(String date) {
         List<Map<String, Object>> result = new ArrayList<>();
         if (StringUtils.isEmpty(date)) {
-            date = DateFormatUtils.format(DateUtils.addDays(new Date(),-1), "yyyy-MM-dd");
+            date = DateFormatUtils.format(DateUtils.addDays(new Date(), -1), "yyyy-MM-dd");
         }
         QueryWrapper wrapper = new QueryWrapper<AdsUserActionConvertDay>().eq("dt", date);
         AdsUserActionConvertDay convertDay = this.adsUserActionConvertDayService.getOne(wrapper);
@@ -77,11 +85,11 @@ public class ReportBoardServiceImpl implements ReportBoardService {
     @Override
     public List<EchartBarVo> saleTopN(String date) {
         if (StringUtils.isEmpty(date)) {
-            date = DateFormatUtils.format(DateUtils.addDays(new Date(),-1), "yyyy-MM-dd");
+            date = DateFormatUtils.format(DateUtils.addDays(new Date(), -1), "yyyy-MM-dd");
         }
-        Wrapper<AdsProductSaleTopn> wrapper=new QueryWrapper<AdsProductSaleTopn>().eq("dt",date);
+        Wrapper<AdsProductSaleTopn> wrapper = new QueryWrapper<AdsProductSaleTopn>().eq("dt", date);
         List<AdsProductSaleTopn> data = this.productSaleTopnService.list(wrapper);
-        if (!ObjectUtils.isEmpty(data)){
+        if (!ObjectUtils.isEmpty(data)) {
             List<EchartBarVo> result = data.stream()
                     .map(item -> new EchartBarVo(item.getSkuId() + "", item.getPaymentCount()))
                     .collect(Collectors.toList());
@@ -90,32 +98,28 @@ public class ReportBoardServiceImpl implements ReportBoardService {
         return null;
     }
 
-    private static final List<String> SPECIAL_REGIONS=Arrays.asList(
-            "内蒙古","广西","西藏","宁夏","新疆",
-            "北京","天津","天津","重庆");
-
     @Override
-    public List<RegionOrderVo> regionOrder(String date, int type,String name) {
+    public List<RegionOrderVo> regionOrder(String date, int type, String name) {
         if (StringUtils.isEmpty(date)) {
-            date = DateFormatUtils.format(DateUtils.addDays(new Date(),-1), "yyyy-MM-dd");
+            date = DateFormatUtils.format(DateUtils.addDays(new Date(), -1), "yyyy-MM-dd");
         }
-        List<AdsRegionDayCount> temp=null;
-        switch (type){
+        List<AdsRegionDayCount> temp = null;
+        switch (type) {
             case 0:
-                temp=this.regionDayCountMapper.provinceSummary(date);
+                temp = this.regionDayCountMapper.provinceSummary(date);
                 break;
             case 1:
-                if (SPECIAL_REGIONS.contains(name)){
-                    temp=this.regionDayCountMapper.countrySummary(date,name);
-                }else {
+                if (Constants.SPECIAL_REGIONS.contains(name)) {
+                    temp = this.regionDayCountMapper.countrySummary(date, name);
+                } else {
                     temp = this.regionDayCountMapper.citySummary(date, name);
                 }
                 break;
             case 2:
-                temp=this.regionDayCountMapper.countrySummary(date,name);
+                temp = this.regionDayCountMapper.countrySummary(date, name);
                 break;
         }
-        if (temp==null){
+        if (temp == null) {
             return null;
         }
         List<RegionOrderVo> result = temp.stream()
@@ -124,6 +128,56 @@ public class ReportBoardServiceImpl implements ReportBoardService {
                         item.getOrderDayCount(),
                         item.getOrderDayAmount().doubleValue())
                 ).collect(Collectors.toList());
+        return result;
+    }
+
+    @Override
+    public RealTimeVo realTime() {
+        RealTimeVo result = new RealTimeVo();
+        String prefix = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+        ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
+        // 订单
+        String value = ops.get(prefix + Constants.ORDER_COUNT);
+        if (StringUtils.hasText(value)) {
+            result.setOrderCount(Long.parseLong(value));
+        }
+        value = ops.get(prefix + Constants.ORDER_AMOUNT);
+        if (StringUtils.hasText(value)) {
+            result.setOrderAmount(Double.parseDouble(value));
+        }
+
+        // 支付
+        value = ops.get(prefix + Constants.PAY_COUNT);
+        if (StringUtils.hasText(value)) {
+            result.setPayCount(Long.parseLong(value));
+        }
+        value = ops.get(prefix + Constants.PAY_AMOUNT);
+        if (StringUtils.hasText(value)) {
+            result.setPayAmount(Double.parseDouble(value));
+        }
+        return result;
+    }
+
+    @Override
+    public List<OrderSpeedVo> orderSpeed() {
+        Set<String> keys = this.redisTemplate.keys(Constants.ORDER_SPEED + "*");
+        if (ObjectUtils.isEmpty(keys)) {
+            return null;
+        }
+        ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
+        List<OrderSpeedVo> result = new ArrayList<>();
+        Set<String> sortSet = new TreeSet<>();
+        sortSet.addAll(keys);
+        OrderSpeedVo item = null;
+        for (String key : sortSet) {
+            String value = ops.get(key);
+            String time = key.split(":")[2];
+            time = DateFormatUtils.format(Long.parseLong(time), "HH:mm:ss");
+
+            item = new OrderSpeedVo(time, Long.parseLong(value));
+            result.add(item);
+            item = null;
+        }
         return result;
     }
 }
