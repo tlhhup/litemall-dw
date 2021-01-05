@@ -51,8 +51,10 @@ export default {
           formatter: '订单数为:{c}'
         },
         grid: {
-          left: 20,
-          bottom: 0,
+          left: '3%',
+          top: '30%',
+          right: '6%',
+          bottom: '2%',
           containLabel: true
         },
         xAxis: {
@@ -93,7 +95,23 @@ export default {
         },
         series: [
           {
-            data: showData
+            data: showData,
+            markPoint: {
+              data: [
+                {
+                  type: 'max',
+                  name: '最大值'
+                }
+              ]
+            },
+            markLine: {
+              data: [
+                {
+                  name: '平均线',
+                  type: 'average'
+                }
+              ]
+            }
           }
         ]
       }

@@ -147,8 +147,9 @@ export default {
             min: minOrder,
             max: maxOrder,
             calculable: true,
+            left: 10,
             inRange: {
-              color: ['white', 'red']
+              color: ['white', '#2E72BF']
             }
           }
         ]
