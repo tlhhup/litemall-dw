@@ -71,4 +71,9 @@ public class BusinessService {
         this.commentInfoService.genComments();
     }
 
+    public void processOnlyShip(){
+        log.info("--------开始生成发货数据--------");
+        this.orderShipService.genShip();
+    }
+
 }

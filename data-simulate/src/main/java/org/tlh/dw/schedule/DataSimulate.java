@@ -44,6 +44,8 @@ public class DataSimulate {
     public void business() {
         if (offLineEnable) {
             businessService.process();
+        }else {
+            businessService.processOnlyShip();
         }
     }
 
