@@ -2,7 +2,7 @@ package org.tlh.dw.process
 
 import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity._
-import org.tlh.spark.util.JedisUtil
+import org.tlh.spark.util.{DateUtil, JedisUtil}
 
 /**
   * @author 离歌笑
@@ -17,8 +17,8 @@ object OrderConfirmProcess extends AbstractProcess {
       // 5|userId|orderId|actualPrice
       val attrs = item.ext.split("\\|")
       val amount = attrs(3).toDouble
-      JedisUtil.inc(CONFIRM_COUNT, 1)
-      JedisUtil.incrByFloat(CONFIRM_AMOUNT, amount)
+      JedisUtil.inc(DateUtil.todayFormat() + CONFIRM_COUNT, 1)
+      JedisUtil.incrByFloat(DateUtil.todayFormat() + CONFIRM_AMOUNT, amount)
     })
   }
 

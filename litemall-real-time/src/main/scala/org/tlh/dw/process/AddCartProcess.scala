@@ -3,7 +3,7 @@ package org.tlh.dw.process
 import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity.OriginalData
 import org.tlh.dw.entity._
-import org.tlh.spark.util.JedisUtil
+import org.tlh.spark.util.{DateUtil, JedisUtil}
 
 /**
   * @author 离歌笑
@@ -24,7 +24,7 @@ object AddCartProcess extends AbstractProcess {
       .groupByKey()
       .mapValues(_.size)
       .foreach(item => {
-        JedisUtil.zSetIncBy(GOODS_CART, item._1, item._2)
+        JedisUtil.zSetIncBy(DateUtil.todayFormat() + GOODS_CART, item._1, item._2)
       })
   }
 

@@ -2,7 +2,7 @@ package org.tlh.dw.process
 
 import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity.{GOODS_COLLECT, OriginalData}
-import org.tlh.spark.util.JedisUtil
+import org.tlh.spark.util.{DateUtil, JedisUtil}
 
 /**
   * @author 离歌笑
@@ -26,7 +26,7 @@ object CollectProcess extends AbstractProcess {
       .groupByKey()
       .mapValues(_.size)
       .foreach(item => {
-        JedisUtil.zSetIncBy(GOODS_COLLECT, item._1.toString, item._2)
+        JedisUtil.zSetIncBy(DateUtil.todayFormat() + GOODS_COLLECT, item._1.toString, item._2)
       })
   }
 

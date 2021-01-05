@@ -2,7 +2,7 @@ package org.tlh.dw.process
 
 import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity._
-import org.tlh.spark.util.JedisUtil
+import org.tlh.spark.util.{DateUtil, JedisUtil}
 
 /**
   * @author 离歌笑
@@ -27,16 +27,16 @@ object PaymentProcess extends AbstractProcess {
         (count, amount)
       })
     //2. 存储
-    payRdd.foreach(item=>{
+    payRdd.foreach(item => {
       val userId = item._1
       val count = item._2._1
       val amount = item._2._2
       //2.1 记录用户
-//      JedisUtil.inc(USER_PAY_COUNT + userId, count)
-//      JedisUtil.incrByFloat(USER_PAY_AMOUNT + userId, amount)
+      //      JedisUtil.inc(USER_PAY_COUNT + userId, count)
+      //      JedisUtil.incrByFloat(USER_PAY_AMOUNT + userId, amount)
       //2.2 记录支付汇总
-      JedisUtil.inc(PAY_COUNT, count)
-      JedisUtil.incrByFloat(PAY_AMOUNT, amount)
+      JedisUtil.inc(DateUtil.todayFormat() + PAY_COUNT, count)
+      JedisUtil.incrByFloat(DateUtil.todayFormat() + PAY_AMOUNT, amount)
     })
   }
 

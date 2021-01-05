@@ -2,9 +2,10 @@ package org.tlh.dw.process
 
 import java.util.List
 
+import org.apache.commons.lang3.time.DateFormatUtils
 import org.apache.spark.rdd.RDD
 import org.tlh.dw.entity.{OrderDetail, OriginalData}
-import org.tlh.spark.util.JedisUtil
+import org.tlh.spark.util.{DateUtil, JedisUtil}
 import org.tlh.dw.entity._
 
 import collection.JavaConverters._
@@ -33,11 +34,11 @@ object OrderSubmitProcess extends AbstractProcess {
       val count = item._2._1
       val amount = item._2._2
       //2.1 记录用户
-//      JedisUtil.inc(USER_ORDER_COUNT + userId, count)
-//      JedisUtil.incrByFloat(USER_ORDER_AMOUNT + userId, amount)
+      //      JedisUtil.inc(USER_ORDER_COUNT + userId, count)
+      //      JedisUtil.incrByFloat(USER_ORDER_AMOUNT + userId, amount)
       //2.2 记录订单汇总
-      JedisUtil.inc(ORDER_COUNT, count)
-      JedisUtil.incrByFloat(ORDER_AMOUNT, amount)
+      JedisUtil.inc(DateUtil.todayFormat() + ORDER_COUNT, count)
+      JedisUtil.incrByFloat(DateUtil.todayFormat() + ORDER_AMOUNT, amount)
     })
     //3. 商品订单
     temp.flatMap(item => {
@@ -59,7 +60,7 @@ object OrderSubmitProcess extends AbstractProcess {
     }).groupByKey()
       .mapValues(_.size)
       .foreach(item => {
-        JedisUtil.zSetIncBy(GOODS_ORDER, item._1, item._2)
+        JedisUtil.zSetIncBy(DateUtil.todayFormat() + GOODS_ORDER, item._1, item._2)
       })
   }
 

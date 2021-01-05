@@ -18,20 +18,20 @@ package object entity {
 
   //订单
   val ORDER_SPEED = "order:speed:"
-  val ORDER_COUNT = "order:count"
-  val ORDER_AMOUNT = "order:amount"
-  val PAY_COUNT = "pay:count"
-  val PAY_AMOUNT = "pay:amount"
-  val REFUND_COUNT = "refund:count"
-  val REFUND_AMOUNT = "refund:amount"
-  val CONFIRM_COUNT = "confirm:count"
-  val CONFIRM_AMOUNT = "confirm:amount"
+  val ORDER_COUNT = ":order:count"
+  val ORDER_AMOUNT = ":order:amount"
+  val PAY_COUNT = ":pay:count"
+  val PAY_AMOUNT = ":pay:amount"
+  val REFUND_COUNT = ":refund:count"
+  val REFUND_AMOUNT = ":refund:amount"
+  val CONFIRM_COUNT = ":confirm:count"
+  val CONFIRM_AMOUNT = ":confirm:amount"
 
   //商品
-  val GOODS_CART = "goods:cart"
-  val GOODS_COLLECT = "goods:collect"
-  val GOODS_ORDER = "goods:order"
-  val GOODS_COMMENT_GOOD = "goods:comment:good"
-  val GOODS_COMMENT_BAD = "goods:comment:bad"
+  val GOODS_CART = ":goods:cart"
+  val GOODS_COLLECT = ":goods:collect"
+  val GOODS_ORDER = ":goods:order"
+  val GOODS_COMMENT_GOOD = ":goods:comment:good"
+  val GOODS_COMMENT_BAD = ":goods:comment:bad"
 
 }
