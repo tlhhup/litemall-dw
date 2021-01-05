@@ -32,8 +32,8 @@ object RefundProcess extends AbstractProcess {
       val count = item._2._1
       val amount = item._2._2
       //2.1 记录用户
-      JedisUtil.inc(USER_REFUND_COUNT + userId, count)
-      JedisUtil.incrByFloat(USER_REFUND_AMOUNT + userId, amount)
+//      JedisUtil.inc(USER_REFUND_COUNT + userId, count)
+//      JedisUtil.incrByFloat(USER_REFUND_AMOUNT + userId, amount)
       //2.2 记录退款汇总
       JedisUtil.inc(REFUND_COUNT, count)
       JedisUtil.incrByFloat(REFUND_AMOUNT, amount)

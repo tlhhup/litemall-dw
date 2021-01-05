@@ -32,8 +32,8 @@ object PaymentProcess extends AbstractProcess {
       val count = item._2._1
       val amount = item._2._2
       //2.1 记录用户
-      JedisUtil.inc(USER_PAY_COUNT + userId, count)
-      JedisUtil.incrByFloat(USER_PAY_AMOUNT + userId, amount)
+//      JedisUtil.inc(USER_PAY_COUNT + userId, count)
+//      JedisUtil.incrByFloat(USER_PAY_AMOUNT + userId, amount)
       //2.2 记录支付汇总
       JedisUtil.inc(PAY_COUNT, count)
       JedisUtil.incrByFloat(PAY_AMOUNT, amount)

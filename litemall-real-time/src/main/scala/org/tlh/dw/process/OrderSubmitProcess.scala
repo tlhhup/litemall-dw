@@ -33,8 +33,8 @@ object OrderSubmitProcess extends AbstractProcess {
       val count = item._2._1
       val amount = item._2._2
       //2.1 记录用户
-      JedisUtil.inc(USER_ORDER_COUNT + userId, count)
-      JedisUtil.incrByFloat(USER_ORDER_AMOUNT + userId, amount)
+//      JedisUtil.inc(USER_ORDER_COUNT + userId, count)
+//      JedisUtil.incrByFloat(USER_ORDER_AMOUNT + userId, amount)
       //2.2 记录订单汇总
       JedisUtil.inc(ORDER_COUNT, count)
       JedisUtil.incrByFloat(ORDER_AMOUNT, amount)

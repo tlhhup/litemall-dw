@@ -19,6 +19,10 @@ import org.tlh.dw.process._
 object DwRealTimeDriver {
 
   def main(args: Array[String]): Unit = {
+
+    //当应用被停止的时候，进行如下设置可以保证当前批次执行完之后再停止应用
+    System.setProperty("spark.streaming.stopGracefullyOnShutdown", "true")
+
     //1. 获取duration
     val duration = if (args.length > 0) args(0).toInt else 5
     val widowDuration = duration * 3
