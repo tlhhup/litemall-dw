@@ -1,13 +1,16 @@
 <template>
   <div class="com-container">
     <div class="com-chart">
+      <div class="chart-title">
+        <span>▎ 实时数据</span>
+      </div>
       <div class="item">
         <span class="card-panel-text">订单数</span>
         <count-to :start-val="0" :end-val="real.orderCount" class="card-panel-num" />
       </div>
       <div class="item">
         <span class="card-panel-text">订单金额</span>
-        <count-to :start-val="0" :end-val="real.orderAmount" :decimals="2" class="card-panel-num" />
+        <count-to :start-val="0" :end-val="real.orderAmount" :decimals="2" suffix="¥" class="card-panel-num" />
       </div>
       <div class="item">
         <span class="card-panel-text">支付数</span>
@@ -15,7 +18,7 @@
       </div>
       <div class="item">
         <span class="card-panel-text">支付金额</span>
-        <count-to :start-val="0" :end-val="real.payAmount" :decimals="2" class="card-panel-num" />
+        <count-to :start-val="0" :end-val="real.payAmount" :decimals="2" suffix="¥" class="card-panel-num" />
       </div>
     </div>
   </div>
@@ -60,12 +63,18 @@ export default {
 <style lang="scss" scoped>
 .com-chart {
   background-color: #222733;
+  color: white;
+  font-weight: bold;
+
+  .chart-title {
+    text-align: left;
+    margin: 26px;
+  }
 
   .item {
-    font-weight: bold;
     margin: 26px;
-    margin-left: 0px;
-    color: white;
+    display: flex;
+    justify-content: space-between;
     .card-panel-text {
       line-height: 18px;
       font-size: 16px;

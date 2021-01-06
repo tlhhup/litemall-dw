@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.tlh.dw.entity.AdsProductFavorTopn;
 import org.tlh.dw.entity.AdsProductSaleTopn;
 import org.tlh.dw.entity.AdsRegionDayCount;
 import org.tlh.dw.entity.AdsUserActionConvertDay;
 import org.tlh.dw.mapper.AdsRegionDayCountMapper;
+import org.tlh.dw.service.IAdsProductFavorTopnService;
 import org.tlh.dw.service.IAdsProductSaleTopnService;
 import org.tlh.dw.service.IAdsUserActionConvertDayService;
 import org.tlh.dw.service.ReportBoardService;
@@ -49,6 +51,9 @@ public class ReportBoardServiceImpl implements ReportBoardService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private IAdsProductFavorTopnService favorTopnService;
 
     @Override
     public List<Map<String, Object>> uaConvert(String date) {
@@ -179,5 +184,21 @@ public class ReportBoardServiceImpl implements ReportBoardService {
             item = null;
         }
         return result;
+    }
+
+    @Override
+    public List<EchartBarVo> favorTopN(String date) {
+        if (StringUtils.isEmpty(date)) {
+            date = DateFormatUtils.format(DateUtils.addDays(new Date(), -1), "yyyy-MM-dd");
+        }
+        Wrapper<AdsProductFavorTopn> wrapper = new QueryWrapper<AdsProductFavorTopn>().eq("dt", date);
+        List<AdsProductFavorTopn> data = this.favorTopnService.list(wrapper);
+        if (!ObjectUtils.isEmpty(data)) {
+            List<EchartBarVo> result = data.stream()
+                    .map(item -> new EchartBarVo(item.getSkuId() + "", item.getFavorCount()))
+                    .collect(Collectors.toList());
+            return result;
+        }
+        return null;
     }
 }

@@ -55,4 +55,12 @@ public interface ReportBoardService {
      * @return
      */
     List<OrderSpeedVo> orderSpeed();
+
+    /**
+     * 收藏topN
+     *
+     * @param date
+     * @return
+     */
+    List<EchartBarVo> favorTopN(String date);
 }

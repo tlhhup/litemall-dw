@@ -69,4 +69,13 @@ public class ReportBoardController {
         return ResponseUtil.ok(speed);
     }
 
+    @GetMapping("/favor")
+    public Object favorTopN(String date) {
+        List<EchartBarVo> result = this.reportBoardService.favorTopN(date);
+        if (result == null) {
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok(result);
+    }
+
 }

@@ -20,7 +20,9 @@
       <div class="right-top">
         <Sale />
       </div>
-      <div class="right-bottom">右下</div>
+      <div class="right-bottom">
+        <Favor />
+      </div>
     </section>
   </div>
 </template>
@@ -31,6 +33,7 @@ import Funnel from './components/Funnel'
 import Sale from './components/Sale'
 import OrderSpeed from './components/OrderSpeed'
 import RealOrder from './components/RealOrder'
+import Favor from './components/Favor'
 
 export default {
   components: {
@@ -38,7 +41,8 @@ export default {
     Funnel,
     Sale,
     OrderSpeed,
-    RealOrder
+    RealOrder,
+    Favor
   },
   data() {
     return {}

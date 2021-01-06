@@ -37,7 +37,8 @@ object DwRealTimeDriver {
       "enable.auto.commit" -> (false: java.lang.Boolean)
     )
     //3. 创建spark context
-    val conf = new SparkConf().setMaster("local[*]").setAppName("DwRealTimeDriver")
+    // val conf = new SparkConf().setMaster("local[*]").setAppName("DwRealTimeDriver")
+    val conf = new SparkConf().setAppName("DwRealTimeDriver")
     val ssc = new StreamingContext(conf, Seconds(duration))
     //4. 订阅Kafka主题
     val topics = Array("litemall-wx")

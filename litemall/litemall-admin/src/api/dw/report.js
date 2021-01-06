@@ -77,3 +77,12 @@ export function orderSpeed() {
     method: 'get'
   })
 }
+
+const FavorTopN = '/dw/report/favor'
+export function favor(query) {
+  return request({
+    url: FavorTopN,
+    method: 'get',
+    query
+  })
+}
