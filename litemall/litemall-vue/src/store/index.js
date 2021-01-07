@@ -6,7 +6,8 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-  showHeader:true,
+  showHeader: true,
+  title: ''
 }
 
 export default new Vuex.Store({

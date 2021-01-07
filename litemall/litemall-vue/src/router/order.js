@@ -40,6 +40,7 @@ export default [
     name: 'comment',
     component: () => import('@/views/order/comment'),
     meta: {
+      showHeader: true,
       title: '发表评论'
     }
   }

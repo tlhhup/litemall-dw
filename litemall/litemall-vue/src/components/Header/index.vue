@@ -1,34 +1,32 @@
 <template>
-<div>
-    <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="goBack" v-show="showHeader"/>   
-</div>
-     
+  <div>
+    <van-nav-bar v-show="showHeader" :title="title" left-text="返回" left-arrow @click-left="goBack"/>
+  </div>
+
 </template>
 <script>
-import { NavBar } from 'vant';
-import { mapState } from 'vuex';
+import { NavBar } from 'vant'
+import { mapState } from 'vuex'
 
 export default {
-    name:"v-header",
-    data(){
-        return {
-            title:"",
-        };
-    },
-    computed: {
-        showHeader:function(){
-            let header=this.$store.getters.showHeader;
-            this.title=this.$store.getters.titleHeader;
-            return header
-        }
-    },
-    methods: {
-        goBack() {
-            this.$router.back(-1);
-        }
-   },
-   components: {
-    [NavBar.name]:NavBar,
+  name: 'VHeader',
+  components: {
+    [NavBar.name]: NavBar
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapState({
+      showHeader: state => state.showHeader,
+      title: state => state.title
+    })
+  },
+  methods: {
+    goBack() {
+      this.$router.back(-1)
+    }
   }
 }
 </script>
+
