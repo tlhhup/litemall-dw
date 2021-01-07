@@ -17,17 +17,29 @@ export default [
   {
     path: '/order/checkout',
     name: 'orderCheckout',
-    component: () => import('@/views/order/checkout')
+    component: () => import('@/views/order/checkout'),
+    meta: {
+      showHeader: true,
+      title: '提交订单'
+    }
   },
   {
     path: '/order/order-detail',
     name: 'orderDetail',
-    component: () => import('@/views/order/order-detail')
+    component: () => import('@/views/order/order-detail'),
+    meta: {
+      showHeader: true,
+      title: '订单详情'
+    }
   },
   {
     path: '/order/payment',
     name: 'payment',
-    component: () => import('@/views/order/payment')
+    component: () => import('@/views/order/payment'),
+    meta: {
+      showHeader: true,
+      title: '支付订单'
+    }
   },
   {
     path: '/order/payment/:status',

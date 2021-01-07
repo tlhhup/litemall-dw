@@ -36,7 +36,9 @@ export default [
     path: '/user/collect',
     name: 'collect',
     meta: {
-      login: true
+      login: true,
+      showHeader: true,
+      title: '我的收藏'
     },
     component: UserCollect
   },
@@ -44,7 +46,9 @@ export default [
     path: '/user/address',
     name: 'address',
     meta: {
-      login: true
+      login: true,
+      showHeader: true,
+      title: '地址管理'
     },
     component: UserAddress
   },
@@ -53,13 +57,19 @@ export default [
     name: 'address-edit',
     props: true,
     meta: {
-      login: true
+      login: true,
+      showHeader: true,
+      title: '地址管理'
     },
     component: UserAddressEdit
   },
   {
     path: '/user/server',
     name: 'user-server',
+    meta: {
+      showHeader: true,
+      title: '服务中心'
+    },
     component: UserServer
   },
   {
@@ -109,7 +119,11 @@ export default [
     path: '/user/coupon/list/:active',
     name: 'user-coupon-list',
     props: true,
-    component: UserCouponList
+    component: UserCouponList,
+    meta: {
+      showHeader: true,
+      title: '我的优惠卷'
+    }
   },
   {
     path: '/user/refund/list',

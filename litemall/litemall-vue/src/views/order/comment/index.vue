@@ -202,7 +202,7 @@ export default {
 
     .ship-title {
       span {
-        margin-left: 3px;
+        margin-left: 5px;
       }
     }
 
