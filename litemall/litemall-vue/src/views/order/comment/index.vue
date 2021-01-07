@@ -2,7 +2,7 @@
   <div class="comment-container">
     <!-- 商品列表 -->
     <div class="order-goods">
-      <div v-for="item in order.orderGoods" :key="item.id" class="item">
+      <div v-for="item in orderGoods" :key="item.id" class="item">
         <div class="goods-title">
           <!-- image -->
           <a href="#" class="pic">
@@ -13,7 +13,7 @@
             <span class="star-title">{{ item.goodsName }}</span>
             <!-- star -->
             <div class="star-number">
-              <van-rate v-model="star" class="star-rate" @change="changeItemStardec"/>
+              <van-rate v-model="item.star" class="star-rate" @change="changeItemStardec"/>
               <span class="star-dec">{{ starDesc }}</span>
             </div>
           </div>
@@ -23,13 +23,13 @@
           <!-- 评论内容 -->
           <div class="comment-content">
             <van-field
-              v-model="message"
+              v-model="item.message"
               rows="3"
-              autosize
               type="textarea"
-              maxlength="500"
+              maxlength="200"
               placeholder="请写出您的感受，可以帮助更过小伙伴哦~"
               show-word-limit
+              clearable
             />
           </div>
           <!-- 图片 -->
@@ -48,15 +48,15 @@
       </div>
       <div class="ship-item">
         <span class="item-type">快递包装</span>
-        <van-rate v-model="star" class="item-star"/>
+        <van-rate v-model="shipStar" class="item-star"/>
       </div>
       <div class="ship-item">
         <span class="item-type">送货速度</span>
-        <van-rate v-model="star" class="item-star"/>
+        <van-rate v-model="shipSpeedStar" class="item-star"/>
       </div>
       <div class="ship-item">
         <span class="item-type">配送员服务</span>
-        <van-rate v-model="star" class="item-star"/>
+        <van-rate v-model="shiperStar" class="item-star"/>
       </div>
     </div>
 
@@ -70,7 +70,7 @@
 import _ from 'lodash'
 
 import { Image, Rate, Icon, Uploader, Field, Button } from 'vant'
-import { orderDetail } from '@/api/api'
+import { orderGoods, orderComment } from '@/api/api'
 
 export default {
   components: {
@@ -83,27 +83,24 @@ export default {
   },
   data() {
     return {
-      order: {
-        orderInfo: {},
-        orderGoods: []
-      },
+      orderGoods: [],
       orderId: undefined,
-      star: 2.5,
       starDesc: '非常好',
-      message: ''
+      shipStar: 0,
+      shipSpeedStar: 0,
+      shiperStar: 0
     }
   },
   created() {
     if (_.has(this.$route.params, 'orderId')) {
       this.orderId = this.$route.params.orderId
-      this.getOrder(this.orderId)
+      this.getOrderGoods(this.orderId)
     }
   },
   methods: {
-    getOrder(orderId) {
-      orderDetail({ orderId: orderId }).then(res => {
-        this.order = res.data.data
-        console.info(this.order)
+    getOrderGoods(orderId) {
+      orderGoods({ orderId: orderId }).then(res => {
+        this.orderGoods = res.data.data
       })
     },
     afterRead(file) {

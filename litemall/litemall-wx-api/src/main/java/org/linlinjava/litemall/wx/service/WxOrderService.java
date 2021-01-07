@@ -31,10 +31,12 @@ import org.linlinjava.litemall.db.util.GrouponConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.linlinjava.litemall.wx.task.OrderUnpaidTask;
+import org.linlinjava.litemall.wx.vo.OrderCommentVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 
@@ -941,10 +944,9 @@ public class WxOrderService {
      *
      * @param userId  用户ID
      * @param orderId 订单ID
-     * @param goodsId 商品ID
      * @return 待评价订单商品信息
      */
-    public Object goods(Integer userId, Integer orderId, Integer goodsId) {
+    public Object goods(Integer userId, Integer orderId) {
         if (userId == null) {
             return ResponseUtil.unlogin();
         }
@@ -953,17 +955,17 @@ public class WxOrderService {
             return ResponseUtil.badArgument();
         }
 
-        List<LitemallOrderGoods> orderGoodsList = orderGoodsService.findByOidAndGid(orderId, goodsId);
-        int size = orderGoodsList.size();
+        List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(orderId);
 
-        Assert.state(size < 2, "存在多个符合条件的订单商品");
-
-        if (size == 0) {
+        if (ObjectUtils.isEmpty(orderGoodsList)) {
             return ResponseUtil.badArgumentValue();
         }
-
-        LitemallOrderGoods orderGoods = orderGoodsList.get(0);
-        return ResponseUtil.ok(orderGoods);
+        List<OrderCommentVo> result = orderGoodsList.stream().map(item -> {
+            OrderCommentVo orderCommentVo = new OrderCommentVo();
+            BeanUtils.copyProperties(item, orderCommentVo);
+            return orderCommentVo;
+        }).collect(Collectors.toList());
+        return ResponseUtil.ok(result);
     }
 
     /**
