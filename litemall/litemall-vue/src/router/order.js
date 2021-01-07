@@ -1,4 +1,4 @@
-const Tabbar = () => import('@/components/Tabbar/');
+const Tabbar = () => import('@/components/Tabbar/')
 
 export default [
   {
@@ -6,12 +6,12 @@ export default [
     name: 'cart',
     meta: {
       login: true,
-      showHeader:false,
-      title:"购物车"
+      showHeader: false,
+      title: '购物车'
     },
-    components: { 
-      default: () => import('@/views/order/tabbar-cart'), 
-      tabbar: Tabbar 
+    components: {
+      default: () => import('@/views/order/tabbar-cart'),
+      tabbar: Tabbar
     }
   },
   {
@@ -34,5 +34,13 @@ export default [
     name: 'paymentStatus',
     component: () => import('@/views/order/payment-status'),
     props: true
+  },
+  {
+    path: '/order/comment',
+    name: 'comment',
+    component: () => import('@/views/order/comment'),
+    meta: {
+      title: '发表评论'
+    }
   }
-];
+]
