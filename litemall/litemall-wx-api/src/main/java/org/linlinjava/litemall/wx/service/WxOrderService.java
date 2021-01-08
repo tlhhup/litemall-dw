@@ -1199,6 +1199,9 @@ public class WxOrderService {
             }
         }
         order.setComments(commentCount);
+        if (commentCount==0){
+            order.setOrderStatus(OrderUtil.STATUS_COMPLETE);
+        }
         orderService.updateWithOptimisticLocker(order);
 
         return ResponseUtil.ok();

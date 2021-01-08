@@ -13,8 +13,8 @@
             <span class="star-title">{{ item.goodsName }}</span>
             <!-- star -->
             <div class="star-number">
-              <van-rate v-model="item.star" class="star-rate" @change="changeItemStardec"/>
-              <span class="star-dec">{{ starDesc }}</span>
+              <van-rate v-model="item.star" class="star-rate" @change="changeItemStardec(item,arguments)"/>
+              <span class="star-dec">{{ item.starDesc ? item.starDesc:'非常好' }}</span>
             </div>
           </div>
         </div>
@@ -89,7 +89,6 @@ export default {
     return {
       orderGoods: [],
       orderId: undefined,
-      starDesc: '非常好',
       shipStar: 0,
       shipSpeedStar: 0,
       shiperStar: 0
@@ -107,22 +106,22 @@ export default {
         this.orderGoods = res.data.data
       })
     },
-    changeItemStardec(value) {
-      switch (value) {
+    changeItemStardec(item, arg) {
+      switch (arg[0]) {
         case 2:
-          this.starDesc = '差'
+          item.starDesc = '差'
           break
         case 3:
-          this.starDesc = '一般'
+          item.starDesc = '一般'
           break
         case 4:
-          this.starDesc = '好'
+          item.starDesc = '好'
           break
         case 5:
-          this.starDesc = '非常好'
+          item.starDesc = '非常好'
           break
         default:
-          this.starDesc = '非常差'
+          item.starDesc = '非常差'
           break
       }
     },

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * 订单流程：下单成功－》支付订单－》发货－》收货
+ * 订单流程：下单成功－》支付订单－》发货－》收货 -》评价
  * 订单状态：
  * 101 订单生成，未支付；102，下单未支付用户取消；103，下单未支付超期系统自动取消
  * 201 支付完成，商家未发货；202，订单生产，已付款未发货，用户申请退款；203，管理员执行退款操作，确认退款成功；
@@ -31,6 +31,7 @@ public class OrderUtil {
     public static final Short STATUS_REFUND = 202;
     public static final Short STATUS_REFUND_CONFIRM = 203;
     public static final Short STATUS_AUTO_CONFIRM = 402;
+    public static final Short STATUS_COMPLETE = 403;
 
     public static String orderStatusText(LitemallOrder order) {
         int status = order.getOrderStatus().intValue();
@@ -74,6 +75,9 @@ public class OrderUtil {
         if (status == 402) {
             return "已收货(系统)";
         }
+        if (status==403){
+            return "已完成";
+        }
 
         throw new IllegalStateException("orderStatus不支持");
     }
@@ -106,6 +110,11 @@ public class OrderUtil {
             // 如果订单已经支付，且已经收货，则可删除、去评论、申请售后和再次购买
             handleOption.setDelete(true);
             handleOption.setComment(true);
+            handleOption.setRebuy(true);
+            handleOption.setAftersale(true);
+        } else if(status==403){
+            // 如果订单已经支付，且已经收货，则可删除、申请售后和再次购买
+            handleOption.setDelete(true);
             handleOption.setRebuy(true);
             handleOption.setAftersale(true);
         } else {
