@@ -34,8 +34,12 @@
           </div>
           <!-- 图片 -->
           <div class="comment-pics">
-            <van-uploader :after-read="afterRead" preview-size="40px"/>
-            <span>晒出我的买家秀</span>
+            <van-uploader
+              v-model="item.commentPics"
+              :max-count="3"
+              :after-read="afterRead"
+              upload-text="拍照"
+              multiple/>
           </div>
         </div>
       </div>
@@ -61,7 +65,7 @@
     </div>
 
     <div style="margin: 16px;">
-      <van-button round block type="primary" native-type="submit" color="#ee0a24">提交</van-button>
+      <van-button round block type="primary" native-type="submit" color="#ee0a24" @click="submitComment">提交</van-button>
     </div>
   </div>
 </template>
@@ -69,8 +73,8 @@
 <script>
 import _ from 'lodash'
 
-import { Image, Rate, Icon, Uploader, Field, Button } from 'vant'
-import { orderGoods, orderComment } from '@/api/api'
+import { Image, Rate, Icon, Uploader, Field, Button, Dialog } from 'vant'
+import { orderGoods, orderComment, uploadImage } from '@/api/api'
 
 export default {
   components: {
@@ -103,10 +107,6 @@ export default {
         this.orderGoods = res.data.data
       })
     },
-    afterRead(file) {
-      // 此时可以自行将文件上传至服务器
-      console.log(file)
-    },
     changeItemStardec(value) {
       switch (value) {
         case 2:
@@ -125,6 +125,32 @@ export default {
           this.starDesc = '非常差'
           break
       }
+    },
+    afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      const param = new FormData()
+      param.append('file', file.file)
+      uploadImage(param).then(response => {
+        const { data: ret } = response.data
+        // 更新URL地址
+        file.url = ret.url
+      })
+    },
+    submitComment() {
+      const postData = {
+        orderGoods: this.orderGoods,
+        shipStar: this.shipStar,
+        shipSpeedStar: this.shipSpeedStar,
+        shiperStar: this.shiperStar,
+        orderId: this.orderId
+      }
+      orderComment(postData).then(response => {
+        Dialog.alert({
+          message: '评论发表成功'
+        }).then(() => {
+          this.$router.back(-1)
+        })
+      })
     }
   }
 }
@@ -171,17 +197,12 @@ export default {
         .comment-content {
         }
         .comment-pics {
-          padding: 10px;
-          text-align: center;
+          padding: 8px;
+          padding-bottom: 0;
           border-radius: 5px;
           border: 1px dashed #c7c1c1;
-          width: 120px;
           margin-top: 2px;
           background-color: rgba(66, 65, 65, 0.082);
-          span {
-            display: block;
-            font-size: 6px;
-          }
         }
       }
     }

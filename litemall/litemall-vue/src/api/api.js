@@ -371,7 +371,7 @@ export function orderGoods(query) {
   })
 }
 
-const OrderComment = 'wx/order/comment' // 评价订单商品信息
+const OrderComment = 'wx/order/comments' // 评价订单商品信息
 export function orderComment(data) {
   return request({
     url: OrderComment,
@@ -440,6 +440,14 @@ export function couponReceive(data) {
 const CouponExchange = 'wx/coupon/exchange' // 优惠券兑换
 
 const StorageUpload = 'wx/storage/upload' // 图片上传,
+export function uploadImage(data) {
+  return request({
+    url: StorageUpload,
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data
+  })
+}
 
 const UserIndex = 'wx/user/index' // 个人页面用户相关信息
 export function userIndex() {

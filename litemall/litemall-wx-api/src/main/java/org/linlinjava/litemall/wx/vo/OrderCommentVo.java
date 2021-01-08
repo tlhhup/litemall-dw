@@ -23,7 +23,7 @@ public class OrderCommentVo {
     // 评价信息
     private String message = "";
     private int star = 5;
-    private List<String> commentPics = new ArrayList<>();
+    private List<VantUploaderVo> commentPics = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -105,11 +105,11 @@ public class OrderCommentVo {
         this.star = star;
     }
 
-    public List<String> getCommentPics() {
+    public List<VantUploaderVo> getCommentPics() {
         return commentPics;
     }
 
-    public void setCommentPics(List<String> commentPics) {
+    public void setCommentPics(List<VantUploaderVo> commentPics) {
         this.commentPics = commentPics;
     }
 }

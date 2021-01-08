@@ -30,8 +30,10 @@ import org.linlinjava.litemall.db.util.CouponUserConstant;
 import org.linlinjava.litemall.db.util.GrouponConstant;
 import org.linlinjava.litemall.db.util.OrderHandleOption;
 import org.linlinjava.litemall.db.util.OrderUtil;
+import org.linlinjava.litemall.wx.dto.OrderCommentPost;
 import org.linlinjava.litemall.wx.task.OrderUnpaidTask;
 import org.linlinjava.litemall.wx.vo.OrderCommentVo;
+import org.linlinjava.litemall.wx.vo.VantUploaderVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1138,6 +1140,66 @@ public class WxOrderService {
 
         // todo 支付日志
         log.warn("4|{}|{}|{}|{}", userId, orderId, order.getActualPrice(), order.getPayId());
+
+        return ResponseUtil.ok();
+    }
+
+    public Object comments(Integer userId, OrderCommentPost comments) {
+        // 校验用户是否登录
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+        // 校验评论数据是否合法
+        if (comments==null||comments.getOrderGoods()==null){
+            return ResponseUtil.badArgumentValue();
+        }
+        // 校验订单是否合法
+        LitemallOrder order = orderService.findById(userId, comments.getOrderId());
+        if (order == null) {
+            return ResponseUtil.badArgumentValue();
+        }
+        if (!OrderUtil.isConfirmStatus(order) && !OrderUtil.isAutoConfirmStatus(order)) {
+            return ResponseUtil.fail(ORDER_INVALID_OPERATION, "当前订单不能评价");
+        }
+        if (!order.getUserId().equals(userId)) {
+            return ResponseUtil.fail(ORDER_INVALID, "当前订单不属于该用户");
+        }
+
+        List<OrderCommentVo> orderGoods = comments.getOrderGoods();
+        for (OrderCommentVo orderGood : orderGoods) {
+            // 1. 创建评价
+            LitemallComment comment = new LitemallComment();
+            comment.setUserId(userId);
+            comment.setType((byte) 0);
+            comment.setValueId(orderGood.getGoodsId());
+            comment.setStar((short)orderGood.getStar());
+            comment.setContent(orderGood.getMessage());
+            // 处理图片
+            if (!ObjectUtils.isEmpty(orderGood.getCommentPics())) {
+                comment.setHasPicture(true);
+                List<String> pics = orderGood.getCommentPics().stream().map(VantUploaderVo::getUrl).collect(Collectors.toList());
+                comment.setPicUrls(pics.toArray(new String[]{}));
+            }
+            commentService.save(comment);
+
+            // 2. 更新订单商品的评价列表
+            LitemallOrderGoods orderGoods1=new LitemallOrderGoods();
+            orderGoods1.setId(orderGood.getId());
+            orderGoods1.setComment(comment.getId());
+            orderGoodsService.updateById(orderGoods1);
+        }
+
+
+        // 3. 更新订单中未评价的订单商品可评价数量
+        Short commentCount = order.getComments();
+        if (commentCount > 0) {
+            commentCount=(short)(commentCount-orderGoods.size());
+            if (commentCount<0){
+                commentCount=0;
+            }
+        }
+        order.setComments(commentCount);
+        orderService.updateWithOptimisticLocker(order);
 
         return ResponseUtil.ok();
     }

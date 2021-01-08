@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
+import org.linlinjava.litemall.wx.dto.OrderCommentPost;
 import org.linlinjava.litemall.wx.service.WxOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -178,6 +179,11 @@ public class WxOrderController {
     @PostMapping("comment")
     public Object comment(@LoginUser Integer userId, @RequestBody String body) {
         return wxOrderService.comment(userId, body);
+    }
+
+    @PostMapping("/comments")
+    public Object comments(@LoginUser Integer userId, @RequestBody OrderCommentPost comments){
+        return wxOrderService.comments(userId,comments);
     }
 
     /**
