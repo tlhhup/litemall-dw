@@ -194,6 +194,7 @@ export default {
       }
       .goods-comment {
         .comment-content {
+          box-shadow: 0 0 2px rgba($color: #000000, $alpha: 0.08);
         }
         .comment-pics {
           padding: 8px;

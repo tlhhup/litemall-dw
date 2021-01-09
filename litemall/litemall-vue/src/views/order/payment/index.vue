@@ -7,9 +7,9 @@
     </div>
 
     <van-cell-group class="payment_group">
-      <van-cell title="订单编号" :value="order.orderInfo.orderSn"/>
+      <van-cell :value="order.orderInfo.orderSn" title="订单编号"/>
       <van-cell title="实付金额">
-        <span class="red">{{order.orderInfo.actualPrice *100 | yuan}}</span>
+        <span class="red">{{ order.orderInfo.actualPrice *100 | yuan }}</span>
       </van-cell>
     </van-cell-group>
 
@@ -26,25 +26,31 @@
           <van-cell>
             <template slot="title">
               <img src="../../../assets/images/wx_pay.png" alt="微信支付" width="113" height="23">
-            </template>            
+            </template>
             <van-radio name="wx"/>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
     </div>
 
-    <van-button class="pay_submit" @click="pay" type="primary" bottomAction>去支付</van-button>
+    <van-button class="pay_submit" type="primary" bottom-action @click="pay">去支付</van-button>
   </div>
 </template>
 
 <script>
-import { Radio, RadioGroup, Dialog } from 'vant';
-import { orderDetail, orderPrepay, orderH5pay, simulatePay } from '@/api/api';
-import _ from 'lodash';
-import { getLocalStorage, setLocalStorage } from '@/utils/local-storage';
+import { Radio, RadioGroup, Dialog } from 'vant'
+import { orderDetail, orderPrepay, orderH5pay, simulatePay } from '@/api/api'
+import _ from 'lodash'
+import { getLocalStorage, setLocalStorage } from '@/utils/local-storage'
 
 export default {
-  name: 'payment',
+  name: 'Payment',
+
+  components: {
+    [Radio.name]: Radio,
+    [RadioGroup.name]: RadioGroup,
+    [Dialog.name]: Dialog
+  },
 
   data() {
     return {
@@ -54,72 +60,71 @@ export default {
         orderGoods: []
       },
       orderId: 0
-    };
+    }
   },
   created() {
     if (_.has(this.$route.params, 'orderId')) {
-      this.orderId = this.$route.params.orderId;
-      this.getOrder(this.orderId);
+      this.orderId = this.$route.params.orderId
+      this.getOrder(this.orderId)
     }
   },
   methods: {
     getOrder(orderId) {
-      orderDetail({orderId: orderId}).then(res => {
-        this.order = res.data.data;
-      });
+      orderDetail({ orderId: orderId }).then(res => {
+        this.order = res.data.data
+      })
     },
     pay() {
-      
       Dialog.alert({
         message: '你选择了' + (this.payWay === 'wx' ? '微信支付' : '支付宝支付')
       }).then(() => {
         if (this.payWay === 'wx') {
-          let ua = navigator.userAgent.toLowerCase();
-          let isWeixin = ua.indexOf('micromessenger') != -1;
+          const ua = navigator.userAgent.toLowerCase()
+          const isWeixin = ua.indexOf('micromessenger') != -1
           if (isWeixin) {
             orderPrepay({ orderId: this.orderId })
               .then(res => {
-                let data = res.data.data;
-                let prepay_data = JSON.stringify({
+                const data = res.data.data
+                const prepay_data = JSON.stringify({
                   appId: data.appId,
                   timeStamp: data.timeStamp,
                   nonceStr: data.nonceStr,
                   package: data.packageValue,
                   signType: 'MD5',
                   paySign: data.paySign
-                });
-                setLocalStorage({ prepay_data: prepay_data });
+                })
+                setLocalStorage({ prepay_data: prepay_data })
 
-                if (typeof WeixinJSBridge == 'undefined') {
+                if (typeof WeixinJSBridge === 'undefined') {
                   if (document.addEventListener) {
                     document.addEventListener(
                       'WeixinJSBridgeReady',
                       this.onBridgeReady,
                       false
-                    );
+                    )
                   } else if (document.attachEvent) {
                     document.attachEvent(
                       'WeixinJSBridgeReady',
                       this.onBridgeReady
-                    );
+                    )
                     document.attachEvent(
                       'onWeixinJSBridgeReady',
                       this.onBridgeReady
-                    );
+                    )
                   }
                 } else {
-                  this.onBridgeReady();
+                  this.onBridgeReady()
                 }
               })
               .catch(err => {
-                Dialog.alert({ message: err.data.errmsg });
+                Dialog.alert({ message: err.data.errmsg })
                 that.$router.replace({
                   name: 'paymentStatus',
                   params: {
                     status: 'failed'
                   }
-                });
-              });
+                })
+              })
           } else {
             /**
             orderH5pay({ orderId: this.orderId })
@@ -142,26 +147,28 @@ export default {
             */
             simulatePay({ orderId: this.orderId })
               .then(res => {
-                if (res.data.errno==0) {
-                  // 跳转到订单详情页面
+                if (res.data.errno == 0) {
+                  // 跳转到支付状态页面
                   this.$router.replace({
-                    path: '/order/order-detail',
-                    query: { orderId: this.orderId }
-                  });
+                    name: 'paymentStatus',
+                    params: {
+                      status: 'success'
+                    }
+                  })
                 }
               })
               .catch(err => {
-                Dialog.alert({ message: err.data.errmsg });
-              });
+                Dialog.alert({ message: err.data.errmsg })
+              })
           }
         } else {
-          //todo : alipay
+          // todo : alipay
         }
-      });
+      })
     },
     onBridgeReady() {
-      let that = this;
-      let data = getLocalStorage('prepay_data');
+      const that = this
+      const data = getLocalStorage('prepay_data')
       // eslint-disable-next-line no-undef
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest',
@@ -173,33 +180,27 @@ export default {
               params: {
                 status: 'success'
               }
-            });
+            })
           } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
             that.$router.replace({
               name: 'paymentStatus',
               params: {
                 status: 'cancel'
               }
-            });
+            })
           } else {
             that.$router.replace({
               name: 'paymentStatus',
               params: {
                 status: 'failed'
               }
-            });
+            })
           }
         }
-      );
+      )
     }
-  },
-
-  components: {
-    [Radio.name]: Radio,
-    [RadioGroup.name]: RadioGroup,
-    [Dialog.name]: Dialog
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
