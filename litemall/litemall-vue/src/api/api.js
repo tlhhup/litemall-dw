@@ -221,6 +221,14 @@ export function collectAddOrDelete(data) {
   })
 }
 const CommentList = 'wx/comment/list' // 评论列表
+export function commentList(query) {
+  return request({
+    url: CommentList,
+    method: 'get',
+    params: query
+  })
+}
+
 const CommentCount = 'wx/comment/count' // 评论总数
 const CommentPost = 'wx/comment/post' // 发表评论
 

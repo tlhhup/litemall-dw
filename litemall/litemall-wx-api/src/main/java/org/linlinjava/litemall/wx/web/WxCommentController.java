@@ -5,10 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.LitemallComment;
-import org.linlinjava.litemall.db.service.LitemallCommentService;
-import org.linlinjava.litemall.db.service.LitemallGoodsService;
-import org.linlinjava.litemall.db.service.LitemallTopicService;
-import org.linlinjava.litemall.db.service.LitemallUserService;
+import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.linlinjava.litemall.wx.dto.UserInfo;
 import org.linlinjava.litemall.wx.service.UserInfoService;
@@ -41,6 +38,8 @@ public class WxCommentController {
     private LitemallGoodsService goodsService;
     @Autowired
     private LitemallTopicService topicService;
+    @Autowired
+    private LitemallGoodsProductService productService;
 
     private Object validate(LitemallComment comment) {
         String content = comment.getContent();
@@ -139,13 +138,19 @@ public class WxCommentController {
         List<Map<String, Object>> commentVoList = new ArrayList<>(commentList.size());
         for (LitemallComment comment : commentList) {
             Map<String, Object> commentVo = new HashMap<>();
+            commentVo.put("id",comment.getId());
             commentVo.put("addTime", comment.getAddTime());
             commentVo.put("content", comment.getContent());
+            commentVo.put("star", comment.getStar());
             commentVo.put("adminContent", comment.getAdminContent());
             commentVo.put("picList", comment.getPicUrls());
 
+            // 设置评论用户
             UserInfo userInfo = userInfoService.getInfo(comment.getUserId());
             commentVo.put("userInfo", userInfo);
+
+            // 设置评论sku信息 todo 评论中存储sku id
+            commentVo.put("sku","sku简介");
 
             commentVoList.add(commentVo);
         }

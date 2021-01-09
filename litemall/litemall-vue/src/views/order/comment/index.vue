@@ -187,7 +187,6 @@ export default {
             line-height: 20px;
             .star-dec {
               margin-left: 5px;
-              font-size: 8px;
             }
           }
         }
