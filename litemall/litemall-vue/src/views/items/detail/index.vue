@@ -52,7 +52,7 @@
         <span class="item-comment-header-total">{{ comments.total }}</span>
       </div>
       <!-- 评论列表 -->
-      <Comment :comments="comments.list" @itemClick="itemClick"/>
+      <Comment :comments="comments.list" @item-click="itemClick"/>
       <!-- 列表按钮 -->
       <div v-show="comments.total>0" class="item-comment-list-page">
         <span @click="commentList">查看全部评价</span>
