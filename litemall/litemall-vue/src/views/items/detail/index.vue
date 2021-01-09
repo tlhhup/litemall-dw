@@ -52,35 +52,7 @@
         <span class="item-comment-header-total">{{ comments.total }}</span>
       </div>
       <!-- 评论列表 -->
-      <div v-if="comments.list.length>0" class="item-comment-list">
-        <div v-for="item in comments.list" :key="item.id" class="item-comment-warpper">
-          <!-- 用户信息 -->
-          <div class="item-comment-user">
-            <div class="item-comment-user-avatar">
-              <van-image :src="item.userInfo.avatarUrl" round/>
-            </div>
-            <div class="item-comment-user-star">
-              <div class="item-comment-user-nickname">
-                {{ item.userInfo.nickName }}
-              </div>
-              <div class="item-comment-user-rate">
-                <van-rate v-model="item.star" readonly color="red" size="10"/>
-              </div>
-            </div>
-          </div>
-          <!-- 评论信息 -->
-          <div class="item-comment-content">
-            <div class="item-comment-content-message">{{ item.content?item.content:'暂无评论' }}</div>
-            <div class="item-comment-content-pics">
-              <van-image v-for="picUrl in item.picList" :key="picUrl" :src="picUrl" @click="show=true"/>
-              <van-image-preview v-model="show" :images="item.picList"/>
-            </div>
-          </div>
-          <!-- sku信息 -->
-          <div class="item-comment-sku">{{ item.sku }}</div>
-        </div>
-      </div>
-      <div v-else class="item-comment-empty">暂无评论</div>
+      <Comment :comments="comments.list" @itemClick="itemClick"/>
       <!-- 列表按钮 -->
       <div v-show="comments.total>0" class="item-comment-list-page">
         <span @click="commentList">查看全部评价</span>
@@ -124,14 +96,12 @@ import {
   GoodsAction,
   GoodsActionButton,
   GoodsActionIcon,
-  Popup,
-  Image,
-  Rate,
-  ImagePreview
+  Popup
 } from 'vant'
 import { setLocalStorage } from '@/utils/local-storage'
 import popupProps from './popup-props'
 import _ from 'lodash'
+import Comment from '@/components/comment'
 
 export default {
   components: {
@@ -143,9 +113,7 @@ export default {
     [GoodsActionButton.name]: GoodsActionButton,
     [GoodsActionIcon.name]: GoodsActionIcon,
     [popupProps.name]: popupProps,
-    [Image.name]: Image,
-    [Rate.name]: Rate,
-    [ImagePreview.Component.name]: ImagePreview.Component
+    Comment
   },
   props: {
     itemId: [String, Number]
@@ -460,6 +428,9 @@ export default {
     },
     commentList() {
       console.info('评论列表')
+    },
+    itemClick(item) {
+      console.info(item)
     }
   }
 }
@@ -554,50 +525,6 @@ export default {
     }
   }
 
-  .item-comment-list {
-    .item-comment-warpper {
-      // 用户信息
-      .item-comment-user {
-        height: 28px;
-        display: flex;
-        // 头像
-        .item-comment-user-avatar {
-          width: 28px;
-        }
-        .item-comment-user-star {
-          margin-left: 5px;
-          font-size: 12px;
-          .item-comment-user-nickname {
-          }
-          .item-comment-user-rate {
-          }
-        }
-      }
-      .item-comment-content {
-        margin-top: 5px;
-        .item-comment-content-message {
-        }
-        .item-comment-content-pics {
-          margin-top: 10px;
-          height: 80px;
-          overflow: scroll;
-          .van-image {
-            margin-right: 5px;
-            float: left;
-            width: 80px;
-            height: 80px;
-          }
-        }
-      }
-      .item-comment-sku {
-        font-size: 12px;
-        color: gray;
-      }
-    }
-  }
-  .item-comment-empty {
-    text-align: center;
-  }
   // 评论列表按钮
   .item-comment-list-page {
     text-align: center;
