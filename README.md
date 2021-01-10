@@ -1,8 +1,35 @@
+## 项目说明
 基于litemall构建的数据仓库
 
-1. 数据仓库
+### 核心模块
+1. 数据仓库(离线/实时)
 2. 推荐系统
-3. 反爬虫
+
+### 使用技术
+1. 大数据
+	1. Hadoop
+	2. hive on tez
+	3. sqoop
+	4. spark
+	5. kafka	
+	6. azkaban
+2. 后端
+	1. spring boot
+	2. mysql
+	3. redis
+	4. mongo
+	5. openresty
+
+### 运行环境
+1. Hadoop主机
+	1. Hadoop：3.1.2
+	2. hive：3.1.2
+	3. tez：0.10.1 结合对应的hive版本进行源码编译
+	3. sqoop：1.4.7
+	4. spark $\ge$2.4.7 
+2. Kafka
+	1. zookeeper：3.6.1
+	2. Kafka：2.13-2.6.0  
 
 ## 数据准备
 ### 埋点
