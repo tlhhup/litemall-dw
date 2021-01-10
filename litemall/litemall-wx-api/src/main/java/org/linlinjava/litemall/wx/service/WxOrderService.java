@@ -1032,6 +1032,7 @@ public class WxOrderService {
         comment.setContent(content);
         comment.setHasPicture(hasPicture);
         comment.setPicUrls(picUrls.toArray(new String[]{}));
+        comment.setProductId(orderGoods.getProductId());
         commentService.save(comment);
 
         // 2. 更新订单商品的评价列表
@@ -1180,6 +1181,7 @@ public class WxOrderService {
                 List<String> pics = orderGood.getCommentPics().stream().map(VantUploaderVo::getUrl).collect(Collectors.toList());
                 comment.setPicUrls(pics.toArray(new String[]{}));
             }
+            comment.setProductId(orderGood.getProductId());
             commentService.save(comment);
 
             // 2. 更新订单商品的评价列表

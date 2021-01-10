@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.LitemallComment;
+import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.domain.LitemallGoodsProduct;
 import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.linlinjava.litemall.wx.dto.UserInfo;
@@ -124,7 +126,7 @@ public class WxCommentController {
      * @param valueId  商品或专题ID。如果type是0，则是商品ID；如果type是1，则是专题ID。
      * @param showType 显示类型。如果是0，则查询全部；如果是1，则查询有图片的评论。
      * @param page     分页页数
-     * @param limit     分页大小
+     * @param limit    分页大小
      * @return 评论列表
      */
     @GetMapping("list")
@@ -138,7 +140,7 @@ public class WxCommentController {
         List<Map<String, Object>> commentVoList = new ArrayList<>(commentList.size());
         for (LitemallComment comment : commentList) {
             Map<String, Object> commentVo = new HashMap<>();
-            commentVo.put("id",comment.getId());
+            commentVo.put("id", comment.getId());
             commentVo.put("addTime", comment.getAddTime());
             commentVo.put("content", comment.getContent());
             commentVo.put("star", comment.getStar());
@@ -149,8 +151,20 @@ public class WxCommentController {
             UserInfo userInfo = userInfoService.getInfo(comment.getUserId());
             commentVo.put("userInfo", userInfo);
 
-            // 设置评论sku信息 todo 评论中存储sku id
-            commentVo.put("sku","sku简介");
+            // 设置评论sku信息
+            String skuBrief = null;
+            LitemallGoodsProduct product = this.productService.findById(comment.getProductId());
+            if (product != null) {
+                LitemallGoods goods = this.goodsService.findById(product.getGoodsId());
+                if (goods != null) {
+                    StringBuilder builder = new StringBuilder("[");
+                    builder.append(StringUtils.join(product.getSpecifications(), ","))
+                            .append("]")
+                            .append(goods.getName());
+                    skuBrief = builder.toString();
+                }
+            }
+            commentVo.put("sku", skuBrief);
 
             commentVoList.add(commentVo);
         }
