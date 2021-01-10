@@ -67,7 +67,9 @@ export default {
 <style lang="scss" scoped>
 .comment-container {
   .item-comment-list {
+    background-color: white;
     .item-comment-warpper {
+      background-color: white;
       padding: 2px;
       margin-bottom: 2px;
       box-shadow: 0 1px 2px rgba($color: #000000, $alpha: 0.03);

@@ -96,5 +96,15 @@ export default [
       showHeader: true,
       title: '专题列表'
     }
+  },
+  {
+    path: '/items/comment-list/:itemId',
+    name: 'commentList',
+    component: () => import('@/views/items/comment'),
+    props: true,
+    meta: {
+      showHeader: true,
+      title: '商品评论'
+    }
   }
 ]

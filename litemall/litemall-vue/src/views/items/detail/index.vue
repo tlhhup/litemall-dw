@@ -427,7 +427,7 @@ export default {
       return specifications
     },
     commentList() {
-      console.info('评论列表')
+      this.$router.push(`/items/comment-list/${this.itemId}`)
     },
     itemClick(item) {
       console.info(item)
