@@ -26,6 +26,9 @@ buildNumber.properties
 # Log file
 *.log
 
+# local storage
+storage
+
 # BlueJ files
 *.ctxt
 
