@@ -1,8 +1,8 @@
 <template>
   <div class="comment-container">
     <!-- 评论列表 -->
-    <div v-if="comments.length>0" class="item-comment-list">
-      <div v-for="item in comments" :key="item.id" class="item-comment-warpper">
+    <div v-if="value.length>0" class="item-comment-list">
+      <div v-for="item in value" :key="item.id" class="item-comment-warpper">
         <!-- 用户信息 -->
         <div class="item-comment-user">
           <div class="item-comment-user-avatar">
@@ -43,7 +43,7 @@ export default {
     [ImagePreview.Component.name]: ImagePreview.Component
   },
   props: {
-    comments: {
+    value: {
       type: Array,
       default: function() {
         return []
@@ -68,6 +68,9 @@ export default {
 .comment-container {
   .item-comment-list {
     .item-comment-warpper {
+      padding: 2px;
+      margin-bottom: 2px;
+      box-shadow: 0 1px 2px rgba($color: #000000, $alpha: 0.03);
       // 用户信息
       .item-comment-user {
         height: 28px;

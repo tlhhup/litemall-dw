@@ -13,7 +13,7 @@
             <span class="star-title">{{ item.goodsName }}</span>
             <!-- star -->
             <div class="star-number">
-              <van-rate v-model="item.star" class="star-rate" @change="changeItemStardec(item,arguments)"/>
+              <van-rate v-model="item.star" class="star-rate" color="red" @change="changeItemStardec(item,arguments)"/>
               <span class="star-dec">{{ item.starDesc ? item.starDesc:'非常好' }}</span>
             </div>
           </div>
@@ -52,15 +52,15 @@
       </div>
       <div class="ship-item">
         <span class="item-type">快递包装</span>
-        <van-rate v-model="shipStar" class="item-star"/>
+        <van-rate v-model="shipStar" class="item-star" color="red"/>
       </div>
       <div class="ship-item">
         <span class="item-type">送货速度</span>
-        <van-rate v-model="shipSpeedStar" class="item-star"/>
+        <van-rate v-model="shipSpeedStar" class="item-star" color="red"/>
       </div>
       <div class="ship-item">
         <span class="item-type">配送员服务</span>
-        <van-rate v-model="shiperStar" class="item-star"/>
+        <van-rate v-model="shiperStar" class="item-star" color="red"/>
       </div>
     </div>
 
