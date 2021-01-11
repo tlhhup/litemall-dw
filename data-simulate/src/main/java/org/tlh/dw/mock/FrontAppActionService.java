@@ -17,6 +17,7 @@ import org.tlh.dw.rest.FrontAppAction;
 import org.tlh.dw.service.CommonDataService;
 import org.tlh.dw.service.UserInfoService;
 import org.tlh.dw.util.RanOpt;
+import org.tlh.dw.util.RandomEmail;
 import org.tlh.dw.util.RandomNumString;
 import org.tlh.dw.util.RandomOptionGroup;
 import retrofit2.Response;
@@ -95,6 +96,37 @@ public class FrontAppActionService {
     }
 
     /**
+     * 用户注册
+     */
+    private void register() {
+        //1. 是否需要注册新用户
+        if (RandomUtils.nextBoolean()) {
+            String email = RandomEmail.getEmail(6, 12);
+            String username = email.split("@")[0];
+            UserRegister user = new UserRegister();
+            user.setUsername(username);
+            user.setMobile("13" + RandomNumString.getRandNumString(1, 9, 9, ""));
+            user.setPassword(UserInfoService.PASSWORD);
+            //2. 注册
+            Response<Map<String, Object>> response = this.frontAppAction.register(user);
+            if (response.isSuccessful()) {
+                Map<String, Object> body = response.body();
+                if (body != null && body.containsKey("data")) {
+                    Map<String, Object> data = (Map<String, Object>) body.get("data");
+                    if (data != null && data.containsKey("token")) {
+                        String token = data.get("token").toString();
+                        int userId = Integer.parseInt(((Map<String, Object>) data.get("userInfo")).get("userId").toString());
+                        //3. 存储
+                        this.tokens.put(userId, token);
+                        this.tokenCaches.add(new UserTokenCache(userId, UserTokenCache.TOKEN_EXPIRE_SECONDS));
+                        log.info("user [{}] register success!",userId);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 用户登录
      */
     private void login(int userId) {
@@ -154,9 +186,9 @@ public class FrontAppActionService {
                 int number = RandomUtils.nextInt(0, this.simulateProperty.getCart().getSkuMaxCountPerCart()) + 1;
                 cart.setNumber((short) number);
                 Response<Map<String, Object>> response = this.frontAppAction.addCart(cart);
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Map<String, Object> body = response.body();
-                    if (body!=null&&body.get("errno").equals(0)){
+                    if (body != null && body.get("errno").equals(0)) {
                         log.info("add cart success userId:[{}]", userId);
                     }
                 }
@@ -234,9 +266,9 @@ public class FrontAppActionService {
 
                     //7. 下单
                     Response<Map<String, Object>> response = this.frontAppAction.order(orderSubmit);
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Map<String, Object> body = response.body();
-                        if (body!=null&&body.get("errno").equals(0)){
+                        if (body != null && body.get("errno").equals(0)) {
                             log.info("order success userId:[{}]", userId);
                         }
                     }
@@ -270,9 +302,9 @@ public class FrontAppActionService {
                     OrderConfirm confirm = new OrderConfirm();
                     confirm.setOrderId(orderId);
                     Response<Map<String, Object>> response = this.frontAppAction.payment(confirm);
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Map<String, Object> body = response.body();
-                        if (body!=null&&body.get("errno").equals(0)){
+                        if (body != null && body.get("errno").equals(0)) {
                             log.info("payment success userId:[{}]", userId);
                         }
                     }
@@ -306,9 +338,9 @@ public class FrontAppActionService {
                     OrderConfirm confirm = new OrderConfirm();
                     confirm.setOrderId(orderId);
                     Response<Map<String, Object>> response = this.frontAppAction.confirm(confirm);
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Map<String, Object> body = response.body();
-                        if (body!=null&&body.get("errno").equals(0)){
+                        if (body != null && body.get("errno").equals(0)) {
                             log.info("confirm success userId:[{}]", userId);
                         }
                     }
@@ -342,9 +374,9 @@ public class FrontAppActionService {
                     OrderConfirm refund = new OrderConfirm();
                     refund.setOrderId(orderId);
                     Response<Map<String, Object>> response = this.frontAppAction.refund(refund);
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Map<String, Object> body = response.body();
-                        if (body!=null&&body.get("errno").equals(0)){
+                        if (body != null && body.get("errno").equals(0)) {
                             log.info("refund success userId:[{}]", userId);
                         }
                     }
@@ -388,9 +420,9 @@ public class FrontAppActionService {
                         comment.setContent("评论内容" + RandomNumString.getRandNumString(1, 9, 50, ""));
 
                         Response<Map<String, Object>> response = this.frontAppAction.comment(comment);
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             Map<String, Object> body = response.body();
-                            if (body!=null&&body.get("errno").equals(0)){
+                            if (body != null && body.get("errno").equals(0)) {
                                 log.info("comment success userId:[{}]", userId);
                             }
                         }
@@ -415,9 +447,9 @@ public class FrontAppActionService {
             collectDto.setType(type);
             collectDto.setValueId(valueId);
             Response<Map<String, Object>> response = this.frontAppAction.collect(collectDto);
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Map<String, Object> body = response.body();
-                if (body!=null&&body.get("errno").equals(0)){
+                if (body != null && body.get("errno").equals(0)) {
                     log.info("collect success userId:[{}]", userId);
                 }
             }
@@ -440,6 +472,7 @@ public class FrontAppActionService {
             this.threadPool.submit(() -> {
                 int userId = commonDataService.randomUserId();
                 log.info("current userId:[{}]", userId);
+                this.register();
                 this.login(userId);
                 this.addCart(userId);
                 this.order(userId);

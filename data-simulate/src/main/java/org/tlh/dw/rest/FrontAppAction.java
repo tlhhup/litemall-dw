@@ -27,7 +27,7 @@ public interface FrontAppAction {
      *
      * @param userRegister
      */
-    @POST("/wx/auth/register")
+    @POST("/wx/auth/simulateRegister")
     Response<Map<String, Object>> register(@Body UserRegister userRegister);
 
     /**

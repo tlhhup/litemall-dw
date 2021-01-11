@@ -4,6 +4,8 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
 import org.linlinjava.litemall.core.util.*;
@@ -23,9 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 
@@ -554,5 +555,67 @@ public class WxAuthController {
         data.put("mobile", user.getMobile());
 
         return ResponseUtil.ok(data);
+    }
+
+
+    // 注册，仅限用于测试
+    @PostMapping("simulateRegister")
+    public Object simulateRegister(@RequestBody String body, HttpServletRequest request) {
+        String username = JacksonUtil.parseString(body, "username");
+        String password = JacksonUtil.parseString(body, "password");
+        String mobile = JacksonUtil.parseString(body, "mobile");
+
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(mobile)) {
+            return ResponseUtil.badArgument();
+        }
+
+        List<LitemallUser> userList = userService.queryByUsername(username);
+        if (userList.size() > 0) {
+            return ResponseUtil.fail(AUTH_NAME_REGISTERED, "用户名已注册");
+        }
+
+        userList = userService.queryByMobile(mobile);
+        if (userList.size() > 0) {
+            return ResponseUtil.fail(AUTH_MOBILE_REGISTERED, "手机号已注册");
+        }
+        if (!RegexUtil.isMobileSimple(mobile)) {
+            return ResponseUtil.fail(AUTH_INVALID_MOBILE, "手机号格式不正确");
+        }
+
+        LitemallUser user = null;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(password);
+        user = new LitemallUser();
+        user.setUsername(username);
+        user.setPassword(encodedPassword);
+        user.setMobile(mobile);
+        user.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
+        user.setNickname(username);
+        user.setGender((byte) 0);
+        user.setUserLevel((byte) 0);
+        user.setStatus((byte) 0);
+        Date birthday = DateUtils.addMonths(new Date(), -1 * RandomUtils.nextInt(15,55) * 12);
+        user.setBirthday(birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        user.setWeixinOpenid(UUID.randomUUID().toString());
+        user.setLastLoginTime(LocalDateTime.now());
+        user.setLastLoginIp(IpUtil.getIpAddr(request));
+        userService.add(user);
+
+        // 给新用户发送注册优惠券
+        couponAssignService.assignForRegister(user.getId());
+
+        // userInfo
+        UserInfo userInfo = new UserInfo();
+        userInfo.setNickName(username);
+        userInfo.setAvatarUrl(user.getAvatar());
+        userInfo.setUserId(user.getId());
+
+        // token
+        String token = UserTokenManager.generateToken(user.getId());
+
+        Map<Object, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("userInfo", userInfo);
+        return ResponseUtil.ok(result);
     }
 }

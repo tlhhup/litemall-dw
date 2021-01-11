@@ -20,6 +20,11 @@ public class FrontAppActionServiceTest {
     private FrontAppActionService frontAppActionService;
 
     @Test
+    public void register(){
+        this.frontAppActionService.process();
+    }
+
+    @Test
     public void order(){
         this.frontAppActionService.process();
     }
