@@ -71,17 +71,20 @@ public class ReportBoardServiceImpl implements ReportBoardService {
 
             item = new HashMap<>();
             item.put("name", "加购");
-            item.put("value", convertDay.getCart2orderConvertRatio().doubleValue() * 100);
+            double addCartRate = convertDay.getVisitor2cartConvertRatio().doubleValue();
+            item.put("value", addCartRate * 100);
             result.add(item);
 
             item = new HashMap<>();
             item.put("name", "订单");
-            item.put("value", convertDay.getCart2orderConvertRatio().doubleValue() * 100);
+            double orderRate = convertDay.getCart2orderConvertRatio().doubleValue() * addCartRate;
+            item.put("value", orderRate * 100);
             result.add(item);
 
             item = new HashMap<>();
             item.put("name", "支付");
-            item.put("value", convertDay.getOrder2paymentConvertRatio().doubleValue() * 100);
+            double paymentRate = convertDay.getOrder2paymentConvertRatio().doubleValue() * orderRate;
+            item.put("value", paymentRate * 100);
             result.add(item);
         }
         return result;
