@@ -616,6 +616,10 @@ public class WxAuthController {
         Map<Object, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("userInfo", userInfo);
+
+        // todo 用户注册日志采集
+        log.warn("9|{}|{}",userInfo.getUserId(),userInfo.getNickName());
+
         return ResponseUtil.ok(result);
     }
 }

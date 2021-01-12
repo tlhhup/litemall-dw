@@ -161,6 +161,7 @@ public class OrderInfoService {
                 orderDetail.setPicUrl(cartInfo.getPicUrl());
                 orderDetail.setAddTime(localDateTime);
                 orderDetail.setDeleted(false);
+                orderDetail.setComment(0);// 可以评价
 
                 // 判断该商品是否参加活动
                 if (joinActivity && joinActivityRateOptionGroup.getRandBoolValue()) {
@@ -221,6 +222,8 @@ public class OrderInfoService {
         order.setOrderPrice(orderPrice);
         order.setActualPrice(actualPrice);
         order.setAddTime(localDateTime);
+        // 设置待评论数量
+        order.setComments((short) orderDetailList.size());
 
         //4.保存订单
         this.orderMapper.insert(order);
@@ -233,7 +236,7 @@ public class OrderInfoService {
         //6.更新附加数据
         //6.1移除购物车数据,执行软删除，复用deleted作为是否下单标示
         for (Integer cartId : cartIdForRemove) {
-            LitemallCart record=new LitemallCart();
+            LitemallCart record = new LitemallCart();
             record.setId(cartId);
             //标示为已经下单
             record.setDeleted(true);
