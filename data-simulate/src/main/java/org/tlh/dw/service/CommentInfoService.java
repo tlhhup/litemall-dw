@@ -6,6 +6,7 @@ import org.linlinjava.litemall.db.domain.LitemallComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tlh.dw.config.SimulateProperty;
+import org.tlh.dw.dto.CommentDto;
 import org.tlh.dw.util.ParamUtil;
 import org.tlh.dw.util.RanOpt;
 import org.tlh.dw.util.RandomNumString;
@@ -16,6 +17,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * 评论
@@ -41,12 +43,12 @@ public class CommentInfoService {
 
     public void genComments() {
         //商品评论
-        saveComment(0, this.commonDataService.getSkuId());
+        saveComment(0, this.commonDataService.randomSku(30));
         //主题评论
-        saveComment(1, this.commonDataService.getTopicId());
+        saveComment(1, this.commonDataService.randomTopic(30));
     }
 
-    private void saveComment(int type, List<Integer> valueIds) {
+    private void saveComment(int type, Set<CommentDto> valueIds) {
         int rate = this.simulateProperty.getComment().getRate();
         RandomOptionGroup<Boolean> ifComment = new RandomOptionGroup<>(new RanOpt[]{new RanOpt(true, rate), new RanOpt(false, 100 - rate)});
 
@@ -63,7 +65,7 @@ public class CommentInfoService {
                 new RanOpt(1, appraiseRate.get(3))});
 
         int commentCount = 0;
-        for (int valueId : valueIds) {
+        for (CommentDto valueId : valueIds) {
             if (ifComment.getRandBoolValue()) {
                 int userId = this.commonDataService.randomUserId();
                 LitemallComment comment = init(userId, valueId, type, localDateTime);
@@ -78,10 +80,13 @@ public class CommentInfoService {
         log.info("总共生成{}评价{}条", type == 1 ? "主题" : "商品", commentCount);
     }
 
-    private LitemallComment init(int userId, int valueId, int type, LocalDateTime dateTime) {
+    private LitemallComment init(int userId, CommentDto valueId, int type, LocalDateTime dateTime) {
         LitemallComment litemallComment = new LitemallComment();
         litemallComment.setUserId(userId);
-        litemallComment.setValueId(valueId);
+        if (type == 0) {
+            litemallComment.setProductId(valueId.getProductId());
+        }
+        litemallComment.setValueId(valueId.getValueId());
         litemallComment.setType((byte) type);
         litemallComment.setDeleted(false);
         litemallComment.setAddTime(dateTime);

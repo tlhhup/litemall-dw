@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.tlh.dw.bean.RegionInfo;
+import org.tlh.dw.dto.CommentDto;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -155,9 +156,9 @@ public class CommonDataService {
         }
         //加载sku信息
         List<LitemallGoodsProduct> litemallGoodsProducts = this.goodsProductMapper.selectByExample(null);
-        if(!ObjectUtils.isEmpty(litemallGoodsProducts)){
+        if (!ObjectUtils.isEmpty(litemallGoodsProducts)) {
             this.skus.addAll(litemallGoodsProducts);
-            this.skuId.addAll(litemallGoodsProducts.stream().map(item->item.getId()).collect(Collectors.toSet()));
+            this.skuId.addAll(litemallGoodsProducts.stream().map(item -> item.getId()).collect(Collectors.toSet()));
         }
     }
 
@@ -191,7 +192,7 @@ public class CommonDataService {
         return this.litemallGoods.get(index);
     }
 
-    public int randomSkuId(){
+    public int randomSkuId() {
         int index = random.nextInt(this.skuId.size());
         return this.skuId.get(index);
     }
@@ -200,9 +201,25 @@ public class CommonDataService {
         return skuId;
     }
 
-    public LitemallGoodsProduct randomSku(){
+    public LitemallGoodsProduct randomSku() {
         int index = random.nextInt(this.skus.size());
         return this.skus.get(index);
+    }
+
+    public Set<CommentDto> randomSku(int weight) {
+        int size = this.skus.size();
+        int fetchSize = size * weight / 100;
+        Set<CommentDto> result = new HashSet<>();
+        CommentDto item = null;
+        for (int i = 0; i < fetchSize; i++) {
+            int index = new Random().nextInt(size);
+            LitemallGoodsProduct litemallGoodsProduct = this.skus.get(index);
+            item = new CommentDto(litemallGoodsProduct.getGoodsId(), litemallGoodsProduct.getId());
+            result.add(item);
+
+            item=null;
+        }
+        return result;
     }
 
     public int randomTopicId() {
@@ -212,6 +229,22 @@ public class CommonDataService {
 
     public List<Integer> getTopicId() {
         return topicId;
+    }
+
+    public Set<CommentDto> randomTopic(int weight) {
+        int size = this.topicId.size();
+        int fetchSize = size * weight / 100;
+        Set<CommentDto> result = new HashSet<>();
+        CommentDto item = null;
+        for (int i = 0; i < fetchSize; i++) {
+            int index = new Random().nextInt(size);
+            item = new CommentDto();
+            item.setValueId(this.topicId.get(index));
+            result.add(item);
+
+            item=null;
+        }
+        return result;
     }
 
     public RegionInfo randomRegion() {

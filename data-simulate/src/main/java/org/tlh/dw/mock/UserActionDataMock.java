@@ -535,7 +535,8 @@ public class UserActionDataMock implements Observer {
         comment.setType(type);
         switch (type) {
             case 0:
-                comment.setValueId(this.commonDataService.randomSkuId());
+                LitemallGoodsProduct sku = this.commonDataService.randomSku();
+                comment.setValueId(sku.getGoodsId());
                 break;
             case 1:
                 comment.setValueId(this.commonDataService.randomTopicId());
