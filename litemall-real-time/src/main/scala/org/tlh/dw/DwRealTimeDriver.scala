@@ -106,6 +106,12 @@ object DwRealTimeDriver {
       CollectProcess.process(rdd)
     })
 
+    //注册
+    val registerDs = oDs.filter(item => item.eventType == 9)
+    registerDs.foreachRDD(rdd => {
+      RegisterProcess.process(rdd)
+    })
+
     //6. 启动
     ssc.start()
     ssc.awaitTermination()

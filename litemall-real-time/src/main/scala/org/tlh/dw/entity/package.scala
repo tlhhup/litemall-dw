@@ -9,6 +9,7 @@ package object entity {
 
   // 用户
   val USER_LOGIN_COUNT = "user:login:count:"
+  val USER_REGISTER_COUNT = ":user:register:count"
   val USER_ORDER_COUNT = "user:order:count:"
   val USER_ORDER_AMOUNT = "user:order:amount:"
   val USER_PAY_COUNT = "user:pay:count:"
