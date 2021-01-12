@@ -408,6 +408,7 @@ CREATE TABLE `litemall_comment` (
   KEY `id_value` (`value_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论表';
 
+alter table litemall_comment add `product_id` int COMMENT '商品货品表ID';
 
 
 # Dump of table litemall_coupon
