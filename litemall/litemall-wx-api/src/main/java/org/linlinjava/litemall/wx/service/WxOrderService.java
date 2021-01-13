@@ -389,6 +389,10 @@ public class WxOrderService {
         order.setIntegralPrice(integralPrice);
         order.setOrderPrice(orderTotalPrice);
         order.setActualPrice(actualPrice);
+        // 记录地理信息
+        order.setProvince(Integer.parseInt(checkedAddress.getProvince()));
+        order.setCity(Integer.parseInt(checkedAddress.getCity()));
+        order.setCountry(Integer.parseInt(checkedAddress.getCounty()));
 
         // 有团购
         if (grouponRules != null) {

@@ -238,9 +238,11 @@ public class OrderInfoService {
         for (Integer cartId : cartIdForRemove) {
             LitemallCart record = new LitemallCart();
             record.setId(cartId);
-            //标示为已经下单
             record.setDeleted(true);
             record.setUpdateTime(localDateTime);
+            //标示为已经下单
+            record.setOrdered(true);
+            record.setOrderedTime(localDateTime);
             this.cartMapper.updateByPrimaryKeySelective(record);
         }
         //6.2更新参加活动信息

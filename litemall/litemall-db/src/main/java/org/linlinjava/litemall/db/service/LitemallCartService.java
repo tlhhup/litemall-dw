@@ -77,6 +77,9 @@ public class LitemallCartService {
         example.or().andUserIdEqualTo(userId).andCheckedEqualTo(true);
         LitemallCart cart = new LitemallCart();
         cart.setDeleted(true);
+        // 设置下单时间和已经下单
+        cart.setOrdered(true);
+        cart.setOrderedTime(LocalDateTime.now());
         cartMapper.updateByExampleSelective(cart, example);
     }
 
@@ -101,7 +104,14 @@ public class LitemallCartService {
     }
 
     public void deleteById(Integer id) {
-        cartMapper.logicalDeleteByPrimaryKey(id);
+        LitemallCart cart = new LitemallCart();
+        cart.setId(id);
+        // 设置下单时间和已经下单
+        cart.setOrdered(true);
+        cart.setOrderedTime(LocalDateTime.now());
+        // 逻辑删除
+        cart.setDeleted(true);
+        cartMapper.updateByPrimaryKeySelective(cart);
     }
 
     public boolean checkExist(Integer goodsId) {

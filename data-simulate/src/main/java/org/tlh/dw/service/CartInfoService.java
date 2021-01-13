@@ -72,7 +72,7 @@ public class CartInfoService {
                 .andUserIdEqualTo(userId)
                 .andGoodsIdEqualTo(sku.getGoodsId())
                 .andProductIdEqualTo(sku.getId())
-                .andDeletedEqualTo(false);//没有下单
+                .andDeletedEqualTo(false);//没有下单,下单做的是软删除
         LitemallCart cart = this.cartMapper.selectOneByExample(e);
         if (cart != null) {
             //2.1 随机是否删除

@@ -414,6 +414,12 @@
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
       </if>
+      <if test="record.ordered != null">
+        ordered = #{record.ordered,jdbcType=BIT},
+      </if>
+      <if test="record.orderedTime != null">
+        ordered_time = #{record.orderedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -488,6 +494,12 @@
       </if>
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="ordered != null">
+        ordered = #{ordered,jdbcType=BIT},
+      </if>
+      <if test="orderedTime != null">
+        ordered_time = #{orderedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

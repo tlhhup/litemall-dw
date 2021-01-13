@@ -239,6 +239,10 @@ CREATE TABLE `litemall_cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车商品表';
 
+alter table litemall_cart add column(
+  `ordered` tinyint(1) default '0' comment '是否下单',
+  `ordered_time` datetime default null comment '是否下单'
+);
 
 
 # Dump of table litemall_category
