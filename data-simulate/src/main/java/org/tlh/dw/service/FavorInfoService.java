@@ -64,7 +64,7 @@ public class FavorInfoService {
             Boolean isCancel = isCancelOptionGroup.getRandBoolValue();
             if (isCancel) {
                 //删除
-                this.collectMapper.deleteByPrimaryKey(collect.getId());
+                this.collectMapper.logicalDeleteByPrimaryKey(collect.getId());
             }
         } else {
             //3.收藏
