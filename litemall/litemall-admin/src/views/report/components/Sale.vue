@@ -68,6 +68,15 @@ export default {
           type: 'category',
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            formatter: function(value, index) {
+              if (value.length > 3) {
+                return value.substring(0, 3) + '...'
+              } else {
+                return value
+              }
+            }
           }
         },
         series: [
