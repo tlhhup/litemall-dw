@@ -167,7 +167,8 @@ select
     type,
     user_id,
     star,
-    add_time
+    add_time,
+    product_id
 from ods_comment
 where dt='$do_date';
 
@@ -216,7 +217,9 @@ select
     price,
     number,
     checked,
-    add_time
+    add_time,
+    ordered,
+    ordered_time
 from ods_cart
 where dt='$do_date';
 

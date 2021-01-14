@@ -566,6 +566,11 @@ LOCATION '/warehouse/litemall/dwd/dwd_dim_user_info_his_temp'
 TBLPROPERTIES ('parquet.compression'='lzo');
 
 -- 加购事实表，添加加时间字段
-alter table dwd_fact_cart_info add columns (add_time string comment '加购时间');
--- 修改 取消收藏时间
-alter table dwd_fact_collect_info change cancel_time update_time string COMMENT '更新时间';
+alter table dwd_fact_cart_info add columns (
+    add_time string comment '加购时间',
+    ordered tinyint comment '是否下单',
+    ordered_time string comment '下单时间'
+);
+
+-- 评论事实表添加product_id
+alter table dwd_fact_comment_info add columns (product_id int comment '商品货品表ID');
