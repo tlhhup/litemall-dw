@@ -99,7 +99,7 @@ public class ReportBoardServiceImpl implements ReportBoardService {
         List<AdsProductSaleTopn> data = this.productSaleTopnService.list(wrapper);
         if (!ObjectUtils.isEmpty(data)) {
             List<EchartBarVo> result = data.stream()
-                    .map(item -> new EchartBarVo(item.getSkuId() + "", item.getPaymentCount()))
+                    .map(item -> new EchartBarVo(item.getSpuName() + "", item.getPaymentCount()))
                     .collect(Collectors.toList());
             return result;
         }
@@ -198,7 +198,7 @@ public class ReportBoardServiceImpl implements ReportBoardService {
         List<AdsProductFavorTopn> data = this.favorTopnService.list(wrapper);
         if (!ObjectUtils.isEmpty(data)) {
             List<EchartBarVo> result = data.stream()
-                    .map(item -> new EchartBarVo(item.getSkuId() + "", item.getFavorCount()))
+                    .map(item -> new EchartBarVo(item.getSpuName() + "", item.getFavorCount()))
                     .collect(Collectors.toList());
             return result;
         }

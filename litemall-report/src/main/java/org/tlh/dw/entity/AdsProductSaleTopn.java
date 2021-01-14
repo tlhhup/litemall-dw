@@ -1,10 +1,11 @@
 package org.tlh.dw.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -36,6 +37,10 @@ public class AdsProductSaleTopn implements Serializable {
      * 销量
      */
     private Long paymentCount;
+
+    // 商品 spu 信息
+    private Integer spuId;
+    private String spuName;
 
 
 }
