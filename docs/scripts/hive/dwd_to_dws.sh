@@ -366,7 +366,7 @@ temp_collect as
             value_id as spu_id,
             count(1) as collect_count
         from dwd_fact_collect_info
-        where dt='$do_date' and type=0 and is_cancel=0
+        where dt='$do_date' and type=0 and is_cancel=0 and date_format(collect_time,'yyyy-MM-dd')='$do_date'
         group by value_id
     )c 
     join
