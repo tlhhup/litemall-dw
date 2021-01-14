@@ -449,7 +449,11 @@ INPUTFORMAT  "com.hadoop.mapred.DeprecatedLzoTextInputFormat"
 OUTPUTFORMAT "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
 LOCATION '/warehouse/litemall/ods/ods_region';
 
+-- 评论表添加product_id
+alter table ods_comment add columns (product_id int comment '商品货品表ID');
 
+-- 加购表添加ordered和ordered_time
+alter table ods_cart add columns (ordered tinyint comment '是否下单',ordered_time string comment '下单时间');
 
 
 
