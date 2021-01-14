@@ -380,7 +380,7 @@ temp_collect as
 temp_comment as
 (
     select
-        value_id as sku_id,
+        product_id as sku_id,
         count(1) as comment_count,
         sum(if(star=5,1,0)) as appraise_good_count,
         sum(if(star=3,1,0)) as appraise_mid_count,
@@ -388,7 +388,7 @@ temp_comment as
         sum(if(star=4,1,0)) as appraise_default_count
     from dwd_fact_comment_info
     where dt='$do_date' and type=0
-    group by value_id
+    group by product_id
 ),
 temp_payment as
 (
