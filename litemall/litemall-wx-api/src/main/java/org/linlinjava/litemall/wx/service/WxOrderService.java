@@ -506,7 +506,7 @@ public class WxOrderService {
 
         // todo 下单日志采集
         ext.put("grouponId", grouponLinkId);
-        log.warn("3|{}|{}|{}|{}", userId, orderId, order.getActualPrice(), JacksonUtil.toJson(ext));
+        log.warn("3|{}|{}|{}|{}|{}|{}|{}", userId, orderId, order.getActualPrice(), JacksonUtil.toJson(ext),checkedAddress.getProvince(),checkedAddress.getCity(),checkedAddress.getCounty());
         return ResponseUtil.ok(data);
     }
 

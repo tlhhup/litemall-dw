@@ -238,46 +238,121 @@ insert OVERWRITE table ads_product_sale_topN
 PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
-    sku_id,
-    payment_count
-from dwt_sku_topic
-order by payment_count desc limit 10;
+    sku.sku_id,
+    sku.payment_count,
+    sku_info.spu_id,
+    sku_info.name
+from
+(
+    select
+        sku_id,
+        payment_count
+    from dwt_sku_topic
+    order by payment_count desc limit 10
+)sku 
+join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info on sku.sku_id=sku_info.sku_id; 
 
 insert OVERWRITE table ads_product_favor_topN
 PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
-    sku_id,
-    collect_count
-from dwt_sku_topic
-order by collect_count desc limit 10;
+    sku.sku_id,
+    sku.collect_count,
+    sku_info.spu_id,
+    sku_info.name
+from
+(
+    select
+        sku_id,
+        collect_count
+    from dwt_sku_topic
+    order by collect_count desc limit 10
+)sku 
+join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info on sku.sku_id=sku_info.sku_id;
 
 insert OVERWRITE table ads_product_cart_topN
 PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
-    sku_id,
-    cart_num
-from dwt_sku_topic
-order by cart_num desc limit 10;
+    sku.sku_id,
+    sku.cart_num,
+    sku_info.spu_id,
+    sku_info.name
+from
+(
+    select
+        sku_id,
+        cart_num
+    from dwt_sku_topic
+    order by cart_num desc limit 10
+)sku 
+join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info on sku.sku_id=sku_info.sku_id;
 
 insert OVERWRITE table ads_product_refund_topN
 PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
-    sku_id,
-    if(order_30_days_count=0,0,(refund_30_days_count/payment_30_days_count)) as refund_ratio
-from dwt_sku_topic
-order by refund_ratio desc limit 10;
+    sku.sku_id,
+    sku.refund_ratio,
+    sku_info.spu_id,
+    sku_info.name
+from
+(
+    select
+        sku_id,
+        if(order_30_days_count=0,0,(refund_30_days_count/payment_30_days_count)) as refund_ratio
+    from dwt_sku_topic
+    order by refund_ratio desc limit 10
+)sku 
+join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info on sku.sku_id=sku_info.sku_id;
 
 insert OVERWRITE table ads_appraise_bad_topN
 PARTITION(dt='$do_date')
 select
     '$do_date' as stat_date,
-    sku_id,
-    (comment_bad_count/(comment_bad_count+comment_mid_count+comment_good_count)) as appraise_bad_ratio
-from dwt_sku_topic
-order by appraise_bad_ratio desc limit 10;
+    sku.sku_id,
+    sku.appraise_bad_ratio,
+    sku_info.spu_id,
+    sku_info.name
+from
+(
+    select
+        sku_id,
+        (comment_bad_count/(comment_bad_count+comment_mid_count+comment_good_count)) as appraise_bad_ratio
+    from dwt_sku_topic
+    order by appraise_bad_ratio desc limit 10
+)sku 
+join
+(
+    select
+        *
+    from dwd_dim_goods_info
+    where dt='$do_date'
+)sku_info on sku.sku_id=sku_info.sku_id;
 
 insert into table ads_order_daycount
 select

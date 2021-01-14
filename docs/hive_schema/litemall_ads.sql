@@ -131,7 +131,9 @@ drop table if exists ads_product_sale_topN;
 create external table ads_product_sale_topN(
     `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
-    `payment_count` bigint COMMENT '销量'
+    `payment_count` bigint COMMENT '销量',
+    `spu_id` int comment '商品 spu_id',
+    `spu_name` string comment '商品名称'
 ) COMMENT '商品个数信息'
 PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
@@ -142,7 +144,9 @@ drop table if exists ads_product_favor_topN;
 create external table ads_product_favor_topN(
     `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
-    `favor_count` bigint COMMENT '收藏量'
+    `favor_count` bigint COMMENT '收藏量',
+    `spu_id` int comment '商品 spu_id',
+    `spu_name` string comment '商品名称'
 ) COMMENT '商品收藏 TopN'
 PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
@@ -153,7 +157,9 @@ drop table if exists ads_product_cart_topN;
 create external table ads_product_cart_topN(
     `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
-    `cart_num` bigint COMMENT '加入购物车数量'
+    `cart_num` bigint COMMENT '加入购物车数量',
+    `spu_id` int comment '商品 spu_id',
+    `spu_name` string comment '商品名称'
 ) COMMENT '商品加入购物车 TopN'
 PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
@@ -164,7 +170,9 @@ drop table if exists ads_product_refund_topN;
 create external table ads_product_refund_topN(
     `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
-    `refund_ratio` decimal(10,2) COMMENT '退款率'
+    `refund_ratio` decimal(10,2) COMMENT '退款率',
+    `spu_id` int comment '商品 spu_id',
+    `spu_name` string comment '商品名称'
 ) COMMENT '商品退款率 TopN'
 PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'
@@ -175,7 +183,9 @@ drop table if exists ads_appraise_bad_topN;
 create external table ads_appraise_bad_topN(
     `stat_date` string COMMENT '统计日期',
     `sku_id` int COMMENT '商品 ID',
-    `appraise_bad_ratio` decimal(10,2) COMMENT '差评率'
+    `appraise_bad_ratio` decimal(10,2) COMMENT '差评率',
+    `spu_id` int comment '商品 spu_id',
+    `spu_name` string comment '商品名称'
 ) COMMENT '商品差评率 TopN'
 PARTITIONED BY (dt string)
 row format delimited fields terminated by '\t'

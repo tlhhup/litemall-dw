@@ -32,6 +32,10 @@ CREATE TABLE `ads_appraise_bad_topN` (
   `appraise_bad_ratio` decimal(10,2) DEFAULT NULL COMMENT '差评率'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品差评率 TopN';
 
+alter table ads_appraise_bad_topN add column(
+  `spu_id` int comment '商品 spu_id',
+  `spu_name` varchar(200) comment '商品名称'
+);
 
 
 # Dump of table ads_back_count
@@ -167,6 +171,10 @@ CREATE TABLE `ads_product_cart_topN` (
   `cart_num` bigint(20) DEFAULT NULL COMMENT '加入购物车数量'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品加入购物车 TopN';
 
+alter table ads_product_cart_topN add column(
+  `spu_id` int comment '商品 spu_id',
+  `spu_name` varchar(200) comment '商品名称'
+);
 
 
 # Dump of table ads_product_favor_topN
@@ -180,6 +188,10 @@ CREATE TABLE `ads_product_favor_topN` (
   `favor_count` bigint(20) DEFAULT NULL COMMENT '收藏量'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品收藏 TopN';
 
+alter table ads_product_favor_topN add column(
+  `spu_id` int comment '商品 spu_id',
+  `spu_name` varchar(200) comment '商品名称'
+);
 
 
 # Dump of table ads_product_info
@@ -207,6 +219,10 @@ CREATE TABLE `ads_product_refund_topN` (
   `refund_ratio` decimal(10,2) DEFAULT NULL COMMENT '退款率'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品退款率 TopN';
 
+alter table ads_product_refund_topN add column(
+  `spu_id` int comment '商品 spu_id',
+  `spu_name` varchar(200) comment '商品名称'
+);
 
 
 # Dump of table ads_product_sale_topN
@@ -220,6 +236,10 @@ CREATE TABLE `ads_product_sale_topN` (
   `payment_count` bigint(20) DEFAULT NULL COMMENT '销量'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品个数信息';
 
+alter table ads_product_sale_topN add column(
+  `spu_id` int comment '商品 spu_id',
+  `spu_name` varchar(200) comment '商品名称'
+);
 
 
 # Dump of table ads_sale_brand_category1_stat_mn
