@@ -74,11 +74,15 @@ export default {
       this.chartInstance.setOption(option)
     },
     loadData() {
-      orderSpeed().then(response => {
-        const { data: ret } = response.data
-        this.allData = ret
-        this.updateChart()
-      })
+      orderSpeed()
+        .then(response => {
+          const { data: ret } = response.data
+          this.allData = ret
+          this.updateChart()
+        })
+        .catch(response => {
+          clearInterval(this.timer)
+        })
     },
     updateChart() {
       // 时间

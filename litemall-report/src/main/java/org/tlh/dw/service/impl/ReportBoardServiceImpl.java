@@ -8,20 +8,16 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.tlh.dw.entity.AdsProductFavorTopn;
-import org.tlh.dw.entity.AdsProductSaleTopn;
-import org.tlh.dw.entity.AdsRegionDayCount;
-import org.tlh.dw.entity.AdsUserActionConvertDay;
+import org.tlh.dw.entity.*;
 import org.tlh.dw.mapper.AdsRegionDayCountMapper;
-import org.tlh.dw.service.IAdsProductFavorTopnService;
-import org.tlh.dw.service.IAdsProductSaleTopnService;
-import org.tlh.dw.service.IAdsUserActionConvertDayService;
-import org.tlh.dw.service.ReportBoardService;
+import org.tlh.dw.service.*;
 import org.tlh.dw.util.Constants;
+import org.tlh.dw.util.JsonUtil;
 import org.tlh.dw.vo.EchartBarVo;
 import org.tlh.dw.vo.OrderSpeedVo;
 import org.tlh.dw.vo.RealTimeVo;
@@ -54,6 +50,9 @@ public class ReportBoardServiceImpl implements ReportBoardService {
 
     @Autowired
     private IAdsProductFavorTopnService favorTopnService;
+
+    @Autowired
+    private LitemallRegionGeoService litemallRegionGeoService;
 
     @Override
     public List<Map<String, Object>> uaConvert(String date) {
@@ -203,5 +202,42 @@ public class ReportBoardServiceImpl implements ReportBoardService {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public List<Object[]> realTimeRegionOrder() {
+        // 1. 获取redis topN 数据
+        String prefix = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+        ZSetOperations<String, String> ops = this.redisTemplate.opsForZSet();
+        // 区域订单
+        Set<ZSetOperations.TypedTuple<String>> regions = ops.rangeWithScores(prefix + Constants.REGION_ORDER_COUNT, 0, Constants.REGION_ORDER_COUNT_TOP_N-1);
+        if (ObjectUtils.isEmpty(regions)){
+            return null;
+        }
+        Set<String> regionIds = regions.stream().map(item -> item.getValue()).collect(Collectors.toSet());
+        // 2. 查询数据获取geo
+        Wrapper<LitemallRegionGeo> wrapper=new QueryWrapper<LitemallRegionGeo>().in("region_id",regionIds);
+        List<LitemallRegionGeo> litemallRegionGeos = this.litemallRegionGeoService.list(wrapper);
+        if (ObjectUtils.isEmpty(litemallRegionGeos)){
+            return null;
+        }
+        Map<Integer,String> regionMap=new HashMap<>();
+        litemallRegionGeos.forEach(item->{
+            regionMap.put(item.getRegionId(),item.getGeo());
+        });
+        // 3. 封装数据
+        List<Object[]> result=new ArrayList<>();
+        for (ZSetOperations.TypedTuple<String> region : regions) {
+            //3.1 geo数据
+            String geoJson = regionMap.get(Integer.parseInt(region.getValue()));
+            if (StringUtils.hasText(geoJson)) {
+                //3.2 转换为数据
+                List<String> geo = JsonUtil.toList(geoJson, String.class);
+                //3.3 添加订单数
+                geo.add(region.getScore().toString());
+                result.add(geo.toArray());
+            }
+        }
+        return result;
     }
 }

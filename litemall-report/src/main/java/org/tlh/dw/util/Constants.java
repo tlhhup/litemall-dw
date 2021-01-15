@@ -43,4 +43,8 @@ public interface Constants {
             "内蒙古", "广西", "西藏", "宁夏", "新疆",
             "北京", "天津", "天津", "重庆");
 
+    //区域
+    String REGION_ORDER_COUNT = ":region:order:count";
+    int REGION_ORDER_COUNT_TOP_N = 10;
+
 }

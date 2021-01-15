@@ -44,4 +44,10 @@ public class ReportBoardServiceImplTest {
         System.out.println(orderSpeedVos);
     }
 
+    @Test
+    public void realTimeRegionOrder(){
+        List<Object[]> result = this.reportBoardService.realTimeRegionOrder();
+        System.out.println(result.size());
+    }
+
 }

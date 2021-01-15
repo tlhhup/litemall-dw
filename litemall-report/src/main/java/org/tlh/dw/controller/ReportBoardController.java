@@ -78,4 +78,13 @@ public class ReportBoardController {
         return ResponseUtil.ok(result);
     }
 
+    @GetMapping("/regionOrderRealTime")
+    public Object regionOrderRealTime() {
+        List<Object[]> result = this.reportBoardService.realTimeRegionOrder();
+        if (result == null) {
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok(result);
+    }
+
 }

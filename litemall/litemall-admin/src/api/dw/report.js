@@ -86,3 +86,11 @@ export function favor(query) {
     query
   })
 }
+
+const RegionOrderRealTimeTopN = '/dw/report/regionOrderRealTime'
+export function regionOrderRealTime() {
+  return request({
+    url: RegionOrderRealTimeTopN,
+    method: 'get'
+  })
+}

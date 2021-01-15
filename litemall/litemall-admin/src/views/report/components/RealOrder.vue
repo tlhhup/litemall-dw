@@ -46,10 +46,14 @@ export default {
   },
   methods: {
     loadData() {
-      realTime().then(response => {
-        const { data: ret } = response.data
-        this.real = ret
-      })
+      realTime()
+        .then(response => {
+          const { data: ret } = response.data
+          this.real = ret
+        })
+        .catch(response => {
+          clearInterval(this.timer)
+        })
     },
     startInteval() {
       this.timer = setInterval(() => {

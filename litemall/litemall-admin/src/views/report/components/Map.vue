@@ -10,7 +10,7 @@ import '@/assets/theme/chalk'
 require('echarts/theme/macarons')
 import { mapState } from 'vuex'
 import { getProvinceMapInfo } from '@/utils/mapUtil'
-import { mapJson, chartRegion } from '@/api/dw/report'
+import { mapJson, chartRegion, regionOrderRealTime } from '@/api/dw/report'
 
 export default {
   data() {
@@ -25,7 +25,10 @@ export default {
         date: undefined,
         type: 0,
         name: undefined
-      }
+      },
+      timerId: undefined,
+      regionOrder: undefined,
+      showRegionOrder: true
     }
   },
   computed: {
@@ -33,13 +36,22 @@ export default {
       theme: state => state.theme.theme
     })
   },
+  watch: {
+    currentMap: function(val) {
+      this.showRegionOrder = val === 'china'
+      console.info(this.showRegionOrder)
+    }
+  },
   mounted() {
     this.initChart()
     this.loadData()
     window.addEventListener('resize', this.screenAdapter)
+    // 启动定时器
+    this.startInterval()
   },
   destroyed() {
     window.removeEventListener('resize', this.screenAdapter)
+    clearInterval(this.timerId)
   },
   methods: {
     async initChart() {
@@ -133,12 +145,27 @@ export default {
         }
       })
 
+      let scatterData = []
+      // 添加涟漪数据
+      if (this.regionOrder && this.showRegionOrder) {
+        scatterData = this.regionOrder
+      }
+
       const option = {
         series: [
           {
             type: 'map',
             geoIndex: 0,
             data: showData
+          },
+          {
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: scatterData,
+            rippleEffect: {
+              scale: 5,
+              brushType: 'stroke'
+            }
           }
         ],
         visualMap: [
@@ -192,6 +219,21 @@ export default {
         this.listQuery.type--
         this.loadData()
       }
+    },
+    loadRealTimeOrder() {
+      regionOrderRealTime()
+        .then(response => {
+          this.regionOrder = response.data.data
+          this.updateChart()
+        })
+        .catch(response => {
+          clearInterval(this.timerId)
+        })
+    },
+    startInterval() {
+      this.timerId = setInterval(() => {
+        this.loadRealTimeOrder()
+      }, 10 * 1000)
     }
   }
 }

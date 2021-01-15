@@ -63,4 +63,11 @@ public interface ReportBoardService {
      * @return
      */
     List<EchartBarVo> favorTopN(String date);
+
+    /**
+     * 实时区域订单量
+     *
+     * @return
+     */
+    List<Object[]> realTimeRegionOrder();
 }
