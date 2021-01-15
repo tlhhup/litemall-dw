@@ -7,7 +7,7 @@
 #
 # Host: storage (MySQL 5.7.31)
 # Database: litemall_report
-# Generation Time: 2020-12-07 06:23:05 +0000
+# Generation Time: 2021-01-15 10:58:50 +0000
 # ************************************************************
 
 
@@ -29,13 +29,11 @@ DROP TABLE IF EXISTS `ads_appraise_bad_topN`;
 CREATE TABLE `ads_appraise_bad_topN` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '统计日期',
   `sku_id` int(11) DEFAULT NULL COMMENT '商品 ID',
-  `appraise_bad_ratio` decimal(10,2) DEFAULT NULL COMMENT '差评率'
+  `appraise_bad_ratio` decimal(10,2) DEFAULT NULL COMMENT '差评率',
+  `spu_id` int(11) DEFAULT NULL COMMENT '商品 spu_id',
+  `spu_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品差评率 TopN';
 
-alter table ads_appraise_bad_topN add column(
-  `spu_id` int comment '商品 spu_id',
-  `spu_name` varchar(200) comment '商品名称'
-);
 
 
 # Dump of table ads_back_count
@@ -168,13 +166,11 @@ DROP TABLE IF EXISTS `ads_product_cart_topN`;
 CREATE TABLE `ads_product_cart_topN` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '统计日期',
   `sku_id` int(11) DEFAULT NULL COMMENT '商品 ID',
-  `cart_num` bigint(20) DEFAULT NULL COMMENT '加入购物车数量'
+  `cart_num` bigint(20) DEFAULT NULL COMMENT '加入购物车数量',
+  `spu_id` int(11) DEFAULT NULL COMMENT '商品 spu_id',
+  `spu_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品加入购物车 TopN';
 
-alter table ads_product_cart_topN add column(
-  `spu_id` int comment '商品 spu_id',
-  `spu_name` varchar(200) comment '商品名称'
-);
 
 
 # Dump of table ads_product_favor_topN
@@ -185,13 +181,11 @@ DROP TABLE IF EXISTS `ads_product_favor_topN`;
 CREATE TABLE `ads_product_favor_topN` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '统计日期',
   `sku_id` int(11) DEFAULT NULL COMMENT '商品 ID',
-  `favor_count` bigint(20) DEFAULT NULL COMMENT '收藏量'
+  `favor_count` bigint(20) DEFAULT NULL COMMENT '收藏量',
+  `spu_id` int(11) DEFAULT NULL COMMENT '商品 spu_id',
+  `spu_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品收藏 TopN';
 
-alter table ads_product_favor_topN add column(
-  `spu_id` int comment '商品 spu_id',
-  `spu_name` varchar(200) comment '商品名称'
-);
 
 
 # Dump of table ads_product_info
@@ -216,13 +210,11 @@ DROP TABLE IF EXISTS `ads_product_refund_topN`;
 CREATE TABLE `ads_product_refund_topN` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '统计日期',
   `sku_id` int(11) DEFAULT NULL COMMENT '商品 ID',
-  `refund_ratio` decimal(10,2) DEFAULT NULL COMMENT '退款率'
+  `refund_ratio` decimal(10,2) DEFAULT NULL COMMENT '退款率',
+  `spu_id` int(11) DEFAULT NULL COMMENT '商品 spu_id',
+  `spu_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品退款率 TopN';
 
-alter table ads_product_refund_topN add column(
-  `spu_id` int comment '商品 spu_id',
-  `spu_name` varchar(200) comment '商品名称'
-);
 
 
 # Dump of table ads_product_sale_topN
@@ -233,13 +225,11 @@ DROP TABLE IF EXISTS `ads_product_sale_topN`;
 CREATE TABLE `ads_product_sale_topN` (
   `dt` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '统计日期',
   `sku_id` int(11) DEFAULT NULL COMMENT '商品 ID',
-  `payment_count` bigint(20) DEFAULT NULL COMMENT '销量'
+  `payment_count` bigint(20) DEFAULT NULL COMMENT '销量',
+  `spu_id` int(11) DEFAULT NULL COMMENT '商品 spu_id',
+  `spu_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品名称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品个数信息';
 
-alter table ads_product_sale_topN add column(
-  `spu_id` int comment '商品 spu_id',
-  `spu_name` varchar(200) comment '商品名称'
-);
 
 
 # Dump of table ads_sale_brand_category1_stat_mn
@@ -357,6 +347,11 @@ CREATE TABLE `ads_wastage_count` (
   `wastage_count` bigint(20) DEFAULT NULL COMMENT '流失设备数',
   PRIMARY KEY (`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='流失用户数';
+
+
+
+# Dump of table litemall_region_geo
+# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `litemall_region_geo`;
 
@@ -3497,6 +3492,7 @@ VALUES
 
 /*!40000 ALTER TABLE `litemall_region_geo` ENABLE KEYS */;
 UNLOCK TABLES;
+
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
