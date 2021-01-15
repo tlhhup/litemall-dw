@@ -35,4 +35,7 @@ package object entity {
   val GOODS_COMMENT_GOOD = ":goods:comment:good"
   val GOODS_COMMENT_BAD = ":goods:comment:bad"
 
+  // region
+  val REGION_ORDER_COUNT = ":region:order:count"
+
 }

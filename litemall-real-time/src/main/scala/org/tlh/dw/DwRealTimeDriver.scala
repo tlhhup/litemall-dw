@@ -70,6 +70,11 @@ object DwRealTimeDriver {
       OrderSubmitProcess.process(rdd)
     })
 
+    // 区域订单
+    orderDs.foreachRDD(rdd=>{
+      RegionOrderProcess.process(rdd)
+    })
+
     // 订单处理速度
     orderDs.window(Seconds(widowDuration), Seconds(slideDuration))
       .foreachRDD(rdd => {
