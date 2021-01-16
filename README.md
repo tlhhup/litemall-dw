@@ -202,11 +202,13 @@
 5. 加载时间维度数据
 
 		LOAD DATA  INPATH '/date_info.txt' OVERWRITE INTO TABLE dwd_dim_date_info;
-6. 将数据导出到mysql数据重复
+
+#### 导出数据
+1. 将数据导出到mysql数据重复
 	1. 对于以日期为基础的数据
 		1. 如果只有一条，则mysql中日期列设置为主键
 		2. 如果是多条，则hive中需要以日期进行分区
-7. 目前通过Sqoop从Hive的parquet抽数到关系型数据库的时候会报kitesdk找不到文件的错，这是Sqoop已知的问题
+2. 目前通过Sqoop从Hive的parquet抽数到关系型数据库的时候会报kitesdk找不到文件的错，这是Sqoop已知的问题
 	1. 将需要导出的表存储方式采用默认的`textfile`
 
 ##术语
