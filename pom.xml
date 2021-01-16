@@ -16,6 +16,7 @@
         <module>litemall-report</module>
         <module>litemall-real-time</module>
         <module>spark-commons</module>
+        <module>litemall-recommendation</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +31,7 @@
         <scala.version>2.12.8</scala.version>
         <scala.maven.version>4.3.1</scala.maven.version>
         <spark.version>2.4.7</spark.version>
+        <spark.mongo.version>2.4.2</spark.mongo.version>
     </properties>
 
     <dependencyManagement>
@@ -55,6 +57,7 @@
                 <version>${hive.version}</version>
             </dependency>
 
+            <!--     spark       -->
             <dependency>
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
@@ -69,6 +72,26 @@
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
                 <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-sql_2.12</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-hive_2.12</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb.spark</groupId>
+                <artifactId>mongo-spark-connector_2.12</artifactId>
+                <version>${spark.mongo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb.scala</groupId>
+                <artifactId>mongo-scala-driver_2.12</artifactId>
+                <version>${spark.mongo.version}</version>
             </dependency>
 
             <dependency>

@@ -211,6 +211,24 @@
 2. 目前通过Sqoop从Hive的parquet抽数到关系型数据库的时候会报kitesdk找不到文件的错，这是Sqoop已知的问题
 	1. 将需要导出的表存储方式采用默认的`textfile`
 
+### 推荐系统
+#### 加载hive中的数据
+1. 启动hiveserver
+
+		hive --service hiveserver2
+2. spark配置通过域名通信
+
+		conf.set("dfs.client.use.datanode.hostname", "true")
+3. 注意事项
+	1. mac环境下读取hive中lzo压缩的数据
+		1. 使用homebrew安装lzo、lzop
+
+				brew install lzop lzo
+		2. 编译安装hadoop-lzo  
+
+				git clone git@github.com:twitter/hadoop-lzo.git
+				mvn clean package install -DskipTests
+
 ##术语
 1. 支付转换率：所选时间内，支付买家数除以访客数（支付买家数/访客数），即访客转化为支付买家的比例
 	$$
