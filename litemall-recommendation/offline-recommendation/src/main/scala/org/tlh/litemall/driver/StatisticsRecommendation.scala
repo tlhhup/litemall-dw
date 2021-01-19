@@ -1,7 +1,7 @@
 package org.tlh.litemall.driver
 
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 /**
   * 基于统计的推荐
@@ -12,7 +12,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
   * @desc
   * @date 2021-01-16
   */
-object StatisticsRecommendation {
+object StatisticsRecommendation extends BaseDriver {
 
   val sale_topN = 20
   val sale="sale"
@@ -20,8 +20,6 @@ object StatisticsRecommendation {
   val comment_topN = 20
   val comment="comment"
   val recently_comment="recently_comment"
-
-  implicit val mongoConf = MongoConf("mongodb://storage:27017/litemall", "litemall")
 
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("StatisticsRecommendation").setMaster("local[*]")
@@ -102,15 +100,4 @@ object StatisticsRecommendation {
     spark.stop()
   }
 
-  def saveToMongoDb(df: DataFrame, collectionName: String)(implicit mongoConf: MongoConf): Unit = {
-    df.write
-      .option("uri", mongoConf.uri)
-      .option("collection", collectionName)
-      .mode("overwrite")
-      .format("com.mongodb.spark.sql")
-      .save()
-  }
-
 }
-
-case class MongoConf(uri: String, db: String)
