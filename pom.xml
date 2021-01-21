@@ -32,6 +32,7 @@
         <scala.maven.version>4.3.1</scala.maven.version>
         <spark.version>2.4.7</spark.version>
         <spark.mongo.version>2.4.2</spark.mongo.version>
+        <jblas.version>1.2.5</jblas.version>
     </properties>
 
     <dependencyManagement>
@@ -97,6 +98,12 @@
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-mllib_2.12</artifactId>
                 <version>${spark.version}</version>
+            </dependency>
+            <!--   线性代数     -->
+            <dependency>
+                <groupId>org.jblas</groupId>
+                <artifactId>jblas</artifactId>
+                <version>${jblas.version}</version>
             </dependency>
 
             <dependency>

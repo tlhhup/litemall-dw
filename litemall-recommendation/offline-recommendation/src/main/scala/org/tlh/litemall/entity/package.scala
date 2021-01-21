@@ -9,6 +9,7 @@ package object entity {
 
 }
 
+case class Rating(userId: Int, itemId: Int, rating: Float)
 
 case class MongoConf(uri: String, db: String)
 

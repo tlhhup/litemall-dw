@@ -54,6 +54,10 @@
             <artifactId>spark-mllib_2.12</artifactId>
             <version>${spark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jblas</groupId>
+            <artifactId>jblas</artifactId>
+        </dependency>
     </dependencies>
 
     <!--  定义环境  -->
