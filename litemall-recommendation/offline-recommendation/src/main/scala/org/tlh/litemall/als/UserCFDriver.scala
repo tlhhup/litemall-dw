@@ -66,11 +66,10 @@ object UserCFDriver extends BaseDriver {
 
     // Generate top n recommendations for each user
     val userRecs = model.recommendForAllUsers(top_n)
-    val temp = userRecs.map(row => {
-      val user_id = row.getInt(0)
-      val recommendations = row.getAs[mutable.WrappedArray[Row]](1)
-      UserRecs(user_id, recommendations.map(item => Recommendation(item.getInt(0), item.getFloat(1))))
-    }).toDF()
+    val temp = userRecs.as[(Int, Array[(Int, Float)])]
+      .map {
+        case (userId, recs) => UserRecs(userId, recs.toList.sortWith(_._2 > _._2).map(item => Recommendation(item._1, item._2)))
+      }.toDF()
     saveToMongoDb(temp, user_spu)
 
     //3. 获取商品特征矩阵
