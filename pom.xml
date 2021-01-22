@@ -33,6 +33,7 @@
         <spark.version>2.4.7</spark.version>
         <spark.mongo.version>2.4.2</spark.mongo.version>
         <jblas.version>1.2.5</jblas.version>
+        <kafka.version>2.6.0</kafka.version>
     </properties>
 
     <dependencyManagement>
@@ -110,6 +111,13 @@
                 <groupId>org.tlh</groupId>
                 <artifactId>spark-commons</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!-- kafka -->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams-scala_2.12</artifactId>
+                <version>${kafka.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

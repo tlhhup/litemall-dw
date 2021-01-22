@@ -13,6 +13,7 @@
     <description>数据预处理</description>
     <modules>
         <module>flume-interceptor</module>
+        <module>kafka-extractor</module>
     </modules>
     <packaging>pom</packaging>
 
