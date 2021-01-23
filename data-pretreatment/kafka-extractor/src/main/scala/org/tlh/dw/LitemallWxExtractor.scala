@@ -7,6 +7,7 @@ import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala._
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
+import org.tlh.dw.entity.UserGoods
 
 /**
   * @author 离歌笑
@@ -19,7 +20,6 @@ object LitemallWxExtractor extends App {
 
   val source_topic = "litemall-wx"
   val target_topic = "litemall-recommend"
-  val filter_events = Array(2, 3, 7, 8)
 
   val props: Properties = {
     val p = new Properties()
@@ -34,24 +34,26 @@ object LitemallWxExtractor extends App {
   val events: KStream[String, String] = builder.stream[String, String](source_topic)
 
   // 提取数据
-  val results: KStream[String, String] = events.filter((key, value) => {
+  val results: KStream[String, String] = events.filter((_, value) => {
     // 为空处理
     if (value == null || "".equals(value)) {
       false
     } else {
       // 有效性处理
-      var attrs = value.split("#CS")
-      if (attrs.size != 2) {
-        false
-      } else {
-        // 提取事件类型
-        val data = attrs(1)
-        attrs = data.split("\\|")
-        val eventType = attrs(0).toInt
-        filter_events.contains(eventType)
-      }
+      val attrs = value.split("#CS")
+      attrs.size == 2
     }
-  })
+  }).mapValues(UserGoods(_))
+    .filter((_, item) => {
+      item.eventType match {// 保留关注的事件
+        case 2 => true
+        case 3 => true
+        case 7 => item.valueType == 0
+        case 8 => item.valueType == 0 && item.collected
+        case _ => false
+      }
+    })
+    .mapValues(_.toString)
 
   // 保存到另一个topic
   results.to(target_topic)
