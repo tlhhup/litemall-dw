@@ -1,0 +1,168 @@
+---
+- name: Create group 'hadoop'
+  group:
+    name: hadoop
+  tags: users
+
+- name: Create user 'flume'
+  user:
+    name: flume
+    home: /var/lib/flume-ng
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'hbase'
+  user:
+    name: hbase
+    home: /var/lib/hbase
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'hdfs'
+  user:
+    name: hdfs
+    groups:
+      - hadoop
+    home: /var/lib/hadoop-hdfs
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'hive'
+  user:
+    name: hive
+    home: /var/lib/hive
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'httpfs'
+  user:
+    name: httpfs
+    home: /var/lib/hadoop-httpfs
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'hue'
+  user:
+    name: hue
+    home: /usr/lib/hue
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'impala'
+  user:
+    name: impala
+    groups:
+      - hive
+    home: /var/lib/impala
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'kafka'
+  user:
+    name: kafka
+    home: /var/lib/kafka
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'kms'
+  user:
+    name: kms
+    home: /var/lib/hadoop-kms
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'kudu'
+  user:
+    name: kudu
+    home: /var/lib/kudu
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'mapred'
+  user:
+    name: mapred
+    groups:
+      - hadoop
+    home: /var/lib/hadoop-mapreduce
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'oozie'
+  user:
+    name: oozie
+    home: /var/lib/oozie
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'sentry'
+  user:
+    name: sentry
+    home: /var/lib/sentry
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'solr'
+  user:
+    name: solr
+    home: /var/lib/solr
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'spark'
+  user:
+    name: spark
+    home: /var/lib/spark
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'sqoop'
+  user:
+    name: sqoop
+    home: /var/lib/sqoop
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'sqoop2'
+  user:
+    name: sqoop2
+    groups:
+      - sqoop
+    home: /var/lib/sqoop2
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'yarn'
+  user:
+    name: yarn
+    groups:
+      - hadoop
+      - spark
+    home: /var/lib/hadoop-yarn
+    shell: /sbin/nologin
+    system: yes
+  tags: users
+
+- name: Create user 'zookeeper'
+  user:
+    name: zookeeper
+    home: /var/lib/zookeeper
+    shell: /sbin/nologin
+    system: yes
+  tags: users

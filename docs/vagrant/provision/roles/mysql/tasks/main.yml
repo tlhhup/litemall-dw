@@ -1,0 +1,43 @@
+---
+- name: Copy file
+  copy:
+    src: mysql-community-release-el7-5.noarch.rpm
+    dest: /tmp/mysql-community-release-el7-5.noarch.rpm
+  tags: mysql
+
+- name: Install yum repo
+  shell: |
+    rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm
+  tags: mysql
+
+- name: Install Mysql package
+  yum: name=mysql-server state=present
+  tags: mysql
+
+# - name: Configure SELinux to start mysql on any port
+#   seboolean: name=mysql_connect_any state=true persistent=yes
+#   when: sestatus.rc != 0
+
+- name: Create Mysql configuration file
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify:
+    - restart mysql
+  tags: mysql
+
+- name: Start Mysql Service
+  service: name=mysqld state=started enabled=yes
+  tags: mysql
+
+- name: Create Application Database
+  mysql_db: name={{ item }} encoding=utf8 collation=utf8_general_ci state=present
+  loop: '{{ dbs }}'
+  tags: mysql
+
+- name: Create Application DB User
+  mysql_user: name={{ item }} password={{ item }} priv=*.*:ALL host='%' state=present
+  loop: '{{ dbs }}'
+  tags: mysql
+
+- include: mysql_security.yml
+- include: init_cm.yml
+- include: clean_rep.yml

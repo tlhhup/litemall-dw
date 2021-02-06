@@ -1,0 +1,16 @@
+---
+clouderauser: cloudera-scm
+dbs:
+  - scm
+  - amon
+  - rman
+  - hue
+  - metastore
+  - sentry
+  - nav
+  - navms
+  - oozie
+  - hive
+
+mysql:
+  root_password: cmmysqlroot

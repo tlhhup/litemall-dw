@@ -1,0 +1,16 @@
+---
+- name: Mkdir
+  shell: |
+    mkdir -p /usr/share/java/
+  tags: mysql
+
+- name: Create Driver
+  copy:
+    src: mysql-connector-java-5.1.47.jar
+    dest: /usr/share/java/mysql-connector-java.jar
+  tags: mysql
+
+- name: Init CM DB
+  shell: |
+    sudo /opt/cloudera/cm/schema/scm_prepare_database.sh mysql scm scm scm
+  tags: mysql

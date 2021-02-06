@@ -1,0 +1,4 @@
+---
+- name: Start CM
+  service: name=cloudera-scm-server state=started enabled=yes
+  tags: cm

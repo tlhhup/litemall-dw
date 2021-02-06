@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "hashicorp-vagrant/centos-7.4"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # 定义master
+  config.vm.define "master-1" do |machine|
+    machine.vm.hostname="master-1"
+    machine.vm.network "private_network", ip: "192.168.33.20"
+
+    machine.vm.provider "virtualbox" do |v|
+      v.name = "master-1"
+      v.memory = 1024*6
+      v.cpus = 2
+    end
+  end
+
+  # 定义子节点
+  (1..2).each do |i|
+    config.vm.define "node-#{i}" do |node|
+      node.vm.hostname="node-#{i}"
+      node.vm.network "private_network", ip: "192.168.33.2#{i}"
+
+      node.vm.provider "virtualbox" do |v|
+        v.name = "node-#{i}"
+      end
+
+      node.vm.provision "shell", inline: "echo hello from node #{i}"
+    end
+  end
+
+  # 定义控制节点
+  config.vm.define "controller" do |machine|
+    machine.vm.hostname="controller"
+    machine.vm.network "private_network", ip: "192.168.33.10"
+
+    machine.vm.synced_folder ".", "/vagrant"
+
+    machine.vm.provider "virtualbox" do |vb|
+      vb.name="controller"
+    end
+
+    machine.vm.provision "shell", inline: <<-SHELL
+      sudo yum -y install epel-release
+      sudo yum -y install ansible
+    SHELL
+
+    machine.vm.provision "ansible_local" do |ansible|
+      # 设置配置文件
+      ansible.config_file="provision/ansible.cfg"
+      ansible.playbook="provision/site.yml"
+      ansible.verbose=true
+      # 设置所有主机
+      ansible.limit="all"
+      ansible.inventory_path="provision/inventory"
+      # 设置become权限
+      ansible.become=true
+      ansible.galaxy_role_file = "provision/requirements.yml"
+      ansible.galaxy_roles_path = "/etc/ansible/roles"
+      ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
+    end
+  end
+end

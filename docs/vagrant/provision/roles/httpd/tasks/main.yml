@@ -1,0 +1,44 @@
+---
+# 安装 httpd
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+  tags: httpd
+
+- name: Add httpd metaType
+  lineinfile:
+    path: '/etc/httpd/conf/httpd.conf'
+    insertafter: '<IfModule mime_module>'
+    line: 'AddType application/x-gzip .gz .tgz .parcel'
+  tags: httpd
+
+- name: http service state
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  tags: httpd
+
+- name: Copy files
+  copy:
+    src: cloudera-repos/
+    dest: /var/www/html/cloudera-repos
+  tags: repo
+
+- name: Install cm6 repos
+  copy:
+    src: cm6.3.1-redhat7.tar.gz
+    dest: /tmp/cm6.3.1-redhat7.tar.gz
+  tags: repo
+
+- name: Change Permission
+  shell: |
+    mkdir -p /var/www/html/cloudera-repos/cm6/6.3.1/redhat7/yum/
+    tar xvfz /tmp/cm6.3.1-redhat7.tar.gz -C /var/www/html/cloudera-repos/cm6/6.3.1/redhat7/yum/ --strip-components=1
+
+    chmod -R ugo+rX /var/www/html/cloudera-repos/cdh6
+    chmod -R ugo+rX /var/www/html/cloudera-repos/gplextras6
+    chmod -R ugo+rX /var/www/html/cloudera-repos/cm6
+    rm -f /tmp/cm6.3.1-redhat7.tar.gz
+  tags: repo

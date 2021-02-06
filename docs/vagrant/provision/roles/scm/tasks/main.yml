@@ -1,0 +1,32 @@
+---
+# 创建用户
+- name: Create Cloudera SCM User
+  user:
+    name: '{{ clouderauser }}'
+    append: yes
+    create_home: no
+    shell: '/bin/false'
+    comment: 'Cloudera SCM User'
+
+- name: Using local CM repo
+  shell: |
+    sudo mkdir -p /opt/cloudera/parcel-repo/
+    sudo chown -R cloudera-scm:cloudera-scm /opt/cloudera/parcel-repo/
+
+- name: Create the repository cm6
+  copy:
+    src: cloudera-manager.repo
+    dest: /etc/yum.repos.d/cloudera-manager.repo
+
+- name: Install jdk
+  yum:
+    name: oracle-j2sdk1.8
+    state: present
+
+- name: Install CM Server
+  yum:
+    name:
+      - cloudera-manager-daemons
+      - cloudera-manager-agent
+      - cloudera-manager-server
+    state: present

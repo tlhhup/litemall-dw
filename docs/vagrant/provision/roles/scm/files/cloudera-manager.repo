@@ -1,0 +1,8 @@
+[cloudera-manager]
+name=Cloudera Manager 6.3.1
+baseurl=http://master-1/cloudera-repos/cm6/6.3.1/redhat7/yum/
+gpgkey=http://master-1/cloudera-repos/cm6/6.3.1/redhat7/yum/RPM-GPG-KEY-cloudera
+gpgcheck=1
+enabled=1
+autorefresh=0
+type=rpm-md

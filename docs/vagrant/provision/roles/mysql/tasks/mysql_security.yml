@@ -1,0 +1,33 @@
+---
+- name: Set mysql root's password
+  mysql_user:
+    login_user: root
+    login_password: ''
+    name: root
+    password: '{{ mysql.root_password }}'
+    update_password: always
+    state: present
+    host_all: yes
+
+- name: Update localhost root user to all host
+  command: 'mysql -uroot -p{{ mysql.root_password }} -ne "{{ item }}"'
+  with_items:
+    - update mysql.user set Host='%' where User='root' and Host='localhost'
+
+- name: Remove anonymous users and disable remote login for root
+  command: 'mysql -uroot -p{{ mysql.root_password }} -ne "{{ item }}"'
+  with_items:
+    - DELETE FROM mysql.user WHERE User=''
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('127.0.0.1', '::1', 'locahost', '%')
+
+- name: Remove the test database
+  mysql_db:
+    login_user: root
+    login_password: '{{ mysql.root_password }}'
+    db: test
+    state: absent
+
+- name: Reload privilege tables
+  command: 'mysql -uroot -p{{ mysql.root_password }} -ne "{{ item }}"'
+  with_items:
+    - FLUSH PRIVILEGES

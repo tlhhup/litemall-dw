@@ -1,0 +1,6 @@
+[masters]
+master-1  ansible_ssh_host=192.168.33.20 ansible_user=vagrant ansible_ssh_private_key_file=/vagrant/.vagrant/machines/master-1/virtualbox/private_key
+
+[nodes]
+node-1  ansible_ssh_host=192.168.33.21 ansible_user=vagrant ansible_ssh_private_key_file=/vagrant/.vagrant/machines/node-1/virtualbox/private_key
+node-2  ansible_ssh_host=192.168.33.22 ansible_user=vagrant ansible_ssh_private_key_file=/vagrant/.vagrant/machines/node-2/virtualbox/private_key

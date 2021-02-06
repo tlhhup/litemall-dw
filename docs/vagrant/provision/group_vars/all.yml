@@ -1,0 +1,12 @@
+---
+# 使用的网卡
+iface: enp0s8
+
+# ntp
+ntpservers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 2.pool.ntp.org
+
+common:
+  timezone: Asia/Shanghai

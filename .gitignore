@@ -47,3 +47,6 @@ storage
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# cdh resources
+docs/vagrant/provision/roles/httpd/files/cloudera-repos
+
