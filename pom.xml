@@ -17,6 +17,7 @@
         <module>litemall-real-time</module>
         <module>spark-commons</module>
         <module>litemall-recommendation</module>
+        <module>user-profile</module>
     </modules>
     <packaging>pom</packaging>
 

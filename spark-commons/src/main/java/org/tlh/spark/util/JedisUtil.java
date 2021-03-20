@@ -6,6 +6,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -136,6 +137,12 @@ public final class JedisUtil {
         try (Jedis jedis = getJedis()) {
             String value = jedis.get(key);
             return Boolean.parseBoolean(value);
+        }
+    }
+
+    public static List<String> lrange(String key, int start, int end){
+        try (Jedis jedis = getJedis()) {
+            return jedis.lrange(key,start,end);
         }
     }
 

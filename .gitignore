@@ -49,4 +49,6 @@ hs_err_pid*
 
 # cdh resources
 docs/vagrant/provision/roles/httpd/files/cloudera-repos
+# vagrant
+docs/vagrant/.vagrant
 

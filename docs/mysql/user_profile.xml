@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?><Db flnm="user_profile" nm="user_profile" ver="1.3.4">
+  <VerLbl/>
+  <VerNotes/>
+  <DefTblOpts/>
+  <DocFolder>/Users/stevenhu/IdeaProjects/litemall-dw/docs/mysql</DocFolder>
+  <Sch Cm="" nm="user_profile">
+    <Tbl UsSo="1" nm="tb_basic_tag">
+      <Cm>基础标签</Cm>
+      <TblOpts/>
+      <Pk ClNs="id" nm="pktb_basic_tag"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>标签名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="industry" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>行业、子行业、业务类型、标签、属性</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="rule" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>标签规则: 四级 metadata表中数据  五级 值域</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="business" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>业务描述</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="level" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>标签等级</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="pid" nu="1">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>父标签ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="order" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>子标签排序字段</Cm>
+      </Cl>
+      <Cl au="0" df="current_timestamp" nm="create_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="TimeStamp" en="" id="93" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="state" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>状态：1申请中、2开发中、3开发完成、4已上线、5已下线、6已禁用</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="remark" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>备注</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="tb_merge_tag">
+      <Cm>组合标签</Cm>
+      <TblOpts/>
+      <Pk ClNs="id" nm="pktb_merge_tag"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="name" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>组合标签名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="condition" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>组合标签条件</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="intro" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>组合标签含义</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="purpose" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>组合用途</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="remark" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>备注</Cm>
+      </Cl>
+      <Cl au="0" df="current_timestamp" nm="create_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="TimeStamp" en="" id="93" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="state" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>状态：1申请中、2开发中、3开发完成、4已上线、5已下线、6已禁用</Cm>
+      </Cl>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="tb_merge_tag_detail">
+      <Cm>组合标签规则详情</Cm>
+      <TblOpts/>
+      <Pk ClNs="id" nm="pktb_merge_tag_detail"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="merge_tag_id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>组合标签ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="basic_tag_id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>基础标签ID（1级行业 or 5级属性）</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="condition" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>条件间关系： 1 and 2 or 3 not</Cm>
+      </Cl>
+      <Cl au="0" df="0" nm="condition_order" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>条件顺序</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="remark" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>备注</Cm>
+      </Cl>
+      <Cl au="0" df="current_timestamp" nm="create_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="TimeStamp" en="" id="93" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Fk deAc="3" nm="fk_tb_merge_tag_detail_tb_basic_tag" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="tb_basic_tag" oe="1" sch="user_profile" zr="0"/>
+        <CdTb mn="1" nm="tb_merge_tag_detail" oe="0" sch="user_profile" zr="1"/>
+        <ClPr cdCl="basic_tag_id" prCl="id"/>
+      </Fk>
+      <Fk deAc="3" nm="fk_tb_merge_tag_detail_tb_merge_tag" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="tb_merge_tag" oe="1" sch="user_profile" zr="0"/>
+        <CdTb mn="1" nm="tb_merge_tag_detail" oe="0" sch="user_profile" zr="1"/>
+        <ClPr cdCl="merge_tag_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="tb_tag_metadata">
+      <Cm>标签数据元数据信息</Cm>
+      <TblOpts/>
+      <Pk ClNs="id" nm="pktb_tag_metadata"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="tag_id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>标签ID</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="in_type" nu="0">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>数据源类型： 1 RDBMS 2 File 3 Hbase 4 Hive</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="driver" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>RDBMS数据库驱动</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="url" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="300" sc="null" sg="1" un="0"/>
+        <Cm>RDBMS数据库连接地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="user" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>RDBMS数据库用户名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="password" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>RDBMS数据库密码</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="db_table" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>RDBMS数据库表名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="query_sql" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>查询的sql语句</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="in_path" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>文件地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="sperator" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="50" sc="null" sg="1" un="0"/>
+        <Cm>分隔符</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="out_path" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>处理后输出的文件地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="zk_hosts" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>zookeeper主机地址, 格式：  host:port</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="hbase_table" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>Hbase数据源中的表名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="family" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>hbase数据源列簇</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="select_field_names" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>查询结果集中的列名，采用","分隔</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="where_field_names" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>查询where 字段</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="where_field_values" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>查询where 字段值</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="out_fields" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>处理之后的输出字段</Cm>
+      </Cl>
+      <Cl au="0" df="current_timestamp" nm="create_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="TimeStamp" en="" id="93" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="state" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>状态</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="remark" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>备注</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_tb_tag_metadata_tb_basic_tag" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="tb_basic_tag" oe="1" sch="user_profile" zr="0"/>
+        <CdTb mn="1" nm="tb_tag_metadata" oe="0" sch="user_profile" zr="1"/>
+        <ClPr cdCl="tag_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <Tbl UsSo="1" nm="tb_tag_model">
+      <Cm>标签模型</Cm>
+      <TblOpts/>
+      <Pk ClNs="id" nm="pktb_tag_model"/>
+      <Cl au="1" df="" nm="id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+      </Cl>
+      <Cl au="0" df="" nm="tag_id" nu="0">
+        <DT arr="0" ds="BigInt" en="" id="-5" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>标签ID(四级标签)</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_type" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>模型类型：1 匹配 2 统计 3 挖掘</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_name" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>模型名称</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_main" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>模型driver全限定名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_path" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>模型在hdfs中的地址</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_jar" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>模型jar包文件名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="model_args" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
+        <Cm>模型参数</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="spark_opts" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="1000" sc="null" sg="1" un="0"/>
+        <Cm>spark的执行参数</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="schedule_rule" nu="0">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>oozie的调度规则</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="operator" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>操作人</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="operation" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>操作类型</Cm>
+      </Cl>
+      <Cl au="0" df="current_timestamp" nm="create_time" nu="0">
+        <DT arr="0" ds="DateTime" en="" id="700" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>创建时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="update_time" nu="1">
+        <DT arr="0" ds="TimeStamp" en="" id="93" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>更新时间</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="state" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>状态</Cm>
+      </Cl>
+      <Fk deAc="3" nm="fk_tb_tag_model_tb_basic_tag" prLkCl="id" upAc="3">
+        <PrTb mn="0" nm="tb_basic_tag" oe="1" sch="user_profile" zr="0"/>
+        <CdTb mn="1" nm="tb_tag_model" oe="0" sch="user_profile" zr="1"/>
+        <ClPr cdCl="tag_id" prCl="id"/>
+      </Fk>
+      <UniqueConstraints/>
+      <SchTrHis/>
+    </Tbl>
+    <CustomTypes/>
+  </Sch>
+  <Dgm nm="diagramA">
+    <RnCf ClkAct="true" FtSz="12" lkStgy="RightAngleStrategy" zm="1.0">
+      <VbCfg>
+        <Fg ky="Auto Number" vl="0"/>
+        <Fg ky="Check" vl="0"/>
+        <Fg ky="Comment" vl="0"/>
+        <Fg ky="Data Type" vl="1"/>
+        <Fg ky="Default" vl="0"/>
+        <Fg ky="ENUM Values" vl="0"/>
+        <Fg ky="Length" vl="1"/>
+        <Fg ky="Name" vl="1"/>
+        <Fg ky="Nullable" vl="0"/>
+        <Fg ky="Schema Name" vl="0"/>
+        <Fg ky="Signed" vl="0"/>
+      </VbCfg>
+    </RnCf>
+    <DiaProps>
+      <Show AllCols="1" FkCols="1" FkNms="1" PkCols="1"/>
+      <ErNotation>BarkerErNotation</ErNotation>
+      <DbTableRectangleFill>HeaderFooterFill</DbTableRectangleFill>
+      <svg path=""/>
+    </DiaProps>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_basic_tag" x="676" y="446"/>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_tag_metadata" x="1125" y="330"/>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_tag_model" x="192" y="422"/>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_merge_tag" x="234" y="839"/>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_merge_tag_detail" x="693" y="855"/>
+    <FkGl bkCl="ff000000" childEdge="NORTH" nm="user_profile.tb_merge_tag_detail.fk_tb_merge_tag_detail_tb_basic_tag" parentEdge="SOUTH" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="804" x2="804" y1="680" y2="855"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="user_profile.tb_merge_tag_detail.fk_tb_merge_tag_detail_tb_merge_tag" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="473" x2="693" y1="940" y2="940"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="WEST" nm="user_profile.tb_tag_metadata.fk_tb_tag_metadata_tb_basic_tag" parentEdge="EAST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="915" x2="1125" y1="566" y2="566"/>
+      </positionableLines>
+    </FkGl>
+    <FkGl bkCl="ff000000" childEdge="EAST" nm="user_profile.tb_tag_model.fk_tb_tag_model_tb_basic_tag" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
+      <positionableLines>
+        <positionableLine lineRole="SINGLE_LINE" x1="676" x2="446" y1="570" y2="570"/>
+      </positionableLines>
+    </FkGl>
+    <Notes/>
+    <Zones/>
+  </Dgm>
+  <RnmMgr>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_tag_metadata" SupCls="Schema" SupNme="schemaA">
+      <Rnm nNm="query_sql" oNm="sql"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_tag_model" SupCls="Schema" SupNme="schemaA">
+      <Rnm nNm="model_type" oNm="type"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_tag_model" SupCls="Schema" SupNme="schemaA">
+      <Rnm nNm="model_args" oNm="args"/>
+    </RnmCh>
+    <RnmCh ObjCls="Schema" ParCls="Database" ParNme="user_profile" SupCls="" SupNme="">
+      <Rnm nNm="user_profile" oNm="schemaA"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_tag_model" SupCls="Schema" SupNme="user_profile">
+      <Rnm nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_basic_tag" SupCls="Schema" SupNme="user_profile">
+      <Rnm nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_tag_metadata" SupCls="Schema" SupNme="user_profile">
+      <Rnm nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_merge_tag_detail" SupCls="Schema" SupNme="user_profile">
+      <Rnm nNm="id" oNm="Id"/>
+    </RnmCh>
+    <RnmCh ObjCls="Column" ParCls="Table" ParNme="tb_merge_tag" SupCls="Schema" SupNme="user_profile">
+      <Rnm nNm="id" oNm="Id"/>
+    </RnmCh>
+  </RnmMgr>
+  <DbDocOptionMgr>
+    <BasicOptionMgr>
+      <Name>db.doc.option.mgr</Name>
+      <BoolOpt lbl="Diagrams" nm="doc.diagrams" on="1" spl="0"/>
+      <BoolOpt lbl="Foreign Keys" nm="doc.fks" on="1" spl="0"/>
+      <BoolOpt lbl="Indexes" nm="doc.indexes" on="1" spl="0"/>
+      <BoolOpt lbl="Overwrite CSS File" nm="doc.overwrite.css" on="1" spl="0"/>
+      <BoolOpt lbl="Procedures" nm="doc.procs" on="1" spl="0"/>
+      <BoolOpt lbl="Schemas" nm="doc.schemas" on="1" spl="0"/>
+      <BoolOpt lbl="Sequences" nm="doc.sequences" on="1" spl="0"/>
+      <BoolOpt lbl="Tables" nm="doc.tables" on="1" spl="0"/>
+      <BoolOpt lbl="Triggers" nm="doc.triggers" on="1" spl="0"/>
+      <BoolOpt lbl="Views" nm="doc.views" on="1" spl="0"/>
+    </BasicOptionMgr>
+  </DbDocOptionMgr>
+  <OpenEditors>
+    <OpenEditor ClsNm="Diagram" fqn="null.diagramA" selected="1"/>
+  </OpenEditors>
+  <TreePaths>
+    <TreePath/>
+    <TreePath>/Schemas (1)</TreePath>
+    <TreePath>/Diagrams (1)</TreePath>
+  </TreePaths>
+  <SqlTexts/>
+</Db>
