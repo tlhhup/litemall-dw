@@ -19,7 +19,7 @@
         <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
         <Cm>行业、子行业、业务类型、标签、属性</Cm>
       </Cl>
-      <Cl au="0" df="" nm="rule" nu="0">
+      <Cl au="0" df="" nm="rule" nu="1">
         <DT arr="0" ds="VarChar" en="" id="12" ln="500" sc="null" sg="1" un="0"/>
         <Cm>标签规则: 四级 metadata表中数据  五级 值域</Cm>
       </Cl>

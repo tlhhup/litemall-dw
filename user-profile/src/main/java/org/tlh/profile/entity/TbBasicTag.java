@@ -1,12 +1,14 @@
 package org.tlh.profile.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -59,6 +61,7 @@ public class TbBasicTag implements Serializable {
     /**
      * 子标签排序字段
      */
+    @TableField("`order`")
     private Integer order;
 
     /**

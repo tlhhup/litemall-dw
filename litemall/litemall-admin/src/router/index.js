@@ -680,6 +680,29 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/tag',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'tagManage',
+    meta: {
+      title: '用户画像',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'basicTag',
+        component: () => import('@/views/tag/basicTag'),
+        name: 'basicTag',
+        meta: {
+          perms: ['GET /tag/basicTag/list'],
+          title: '基础标签',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: 'external-link',
     component: Layout,
     redirect: 'noredirect',

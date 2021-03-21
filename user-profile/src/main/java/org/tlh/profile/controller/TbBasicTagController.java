@@ -1,9 +1,15 @@
 package org.tlh.profile.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.tlh.profile.dto.BasicTagDto;
+import org.tlh.profile.entity.TbBasicTag;
+import org.tlh.profile.service.ITbBasicTagService;
+import org.tlh.profile.util.ResponseUtil;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,8 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-03-20
  */
 @RestController
-@RequestMapping("/tbBasicTag")
+@RequestMapping("/basicTag")
 public class TbBasicTagController {
+
+    @Autowired
+    private ITbBasicTagService basicTagService;
+
+    @GetMapping("/list")
+    public Object list() {
+        List<TbBasicTag> tree = this.basicTagService.list();
+        return ResponseUtil.ok(tree);
+    }
+
+    @PostMapping("/primaryTag")
+    public Object addPrimaryTag(@RequestBody BasicTagDto basicTag) {
+        boolean flag = this.basicTagService.createPrimaryTag(basicTag);
+        return ResponseUtil.ok(flag);
+    }
 
 }
 
