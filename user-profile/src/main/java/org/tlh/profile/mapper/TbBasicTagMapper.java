@@ -2,6 +2,9 @@ package org.tlh.profile.mapper;
 
 import org.tlh.profile.entity.TbBasicTag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.tlh.profile.vo.ElementTreeVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-03-20
  */
 public interface TbBasicTagMapper extends BaseMapper<TbBasicTag> {
+
+    List<ElementTreeVo> queryPrimaryTree();
 
 }

@@ -8,6 +8,7 @@ import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.service.ITbBasicTagService;
 import org.tlh.profile.util.ResponseUtil;
+import org.tlh.profile.vo.ElementTreeVo;
 
 import java.util.List;
 
@@ -36,6 +37,12 @@ public class TbBasicTagController {
     public Object addPrimaryTag(@RequestBody BasicTagDto basicTag) {
         boolean flag = this.basicTagService.createPrimaryTag(basicTag);
         return ResponseUtil.ok(flag);
+    }
+
+    @GetMapping("primaryTagTree")
+    public Object primaryTagTree(){
+        List<ElementTreeVo> treeVos = this.basicTagService.queryPrimaryTree();
+        return ResponseUtil.ok(treeVos);
     }
 
 }

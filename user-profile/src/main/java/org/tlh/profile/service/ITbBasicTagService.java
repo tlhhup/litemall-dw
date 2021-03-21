@@ -3,6 +3,9 @@ package org.tlh.profile.service;
 import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.tlh.profile.vo.ElementTreeVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +24,10 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      * @return
      */
     boolean createPrimaryTag(BasicTagDto basicTag);
+
+    /**
+     * 查询一级和对应的二级标签
+     * @return
+     */
+    List<ElementTreeVo> queryPrimaryTree();
 }

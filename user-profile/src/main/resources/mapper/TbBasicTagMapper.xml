@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tlh.profile.mapper.TbBasicTagMapper">
 
+    <resultMap id="elementTree" type="org.tlh.profile.vo.ElementTreeVo">
+        <id column="id" property="id"/>
+        <result column="name" property="label"/>
+    </resultMap>
+
+    <resultMap id="primaryTree" type="org.tlh.profile.vo.ElementTreeVo" extends="elementTree">
+        <collection property="children" ofType="org.tlh.profile.vo.ElementTreeVo" column="id" select="queryChildren"/>
+    </resultMap>
+
+    <select id="queryPrimaryTree" resultMap="primaryTree">
+        select * from tb_basic_tag where level=1
+    </select>
+
+    <select id="queryChildren" resultMap="elementTree">
+        select * from tb_basic_tag where pid=#{value}
+    </select>
 </mapper>
