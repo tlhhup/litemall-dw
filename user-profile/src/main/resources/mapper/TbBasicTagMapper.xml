@@ -18,4 +18,15 @@
     <select id="queryChildren" resultMap="elementTree">
         select * from tb_basic_tag where pid=#{value}
     </select>
+
+    <!--  查询 1 2 3 4 级标签  -->
+    <select id="leftTree" resultMap="children">
+        select * from tb_basic_tag where level=1
+    </select>
+    <resultMap id="children" type="org.tlh.profile.vo.ElementTreeVo" extends="elementTree">
+        <collection property="children" ofType="org.tlh.profile.vo.ElementTreeVo" column="id" select="nextLevel"/>
+    </resultMap>
+    <select id="nextLevel" resultMap="children">
+        select * from tb_basic_tag where pid=#{value} and level in (2,3,4)
+    </select>
 </mapper>

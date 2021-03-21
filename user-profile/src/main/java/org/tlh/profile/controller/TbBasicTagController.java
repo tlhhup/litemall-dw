@@ -3,9 +3,7 @@ package org.tlh.profile.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import org.tlh.profile.dto.BasicTagDto;
-import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.service.ITbBasicTagService;
 import org.tlh.profile.util.ResponseUtil;
 import org.tlh.profile.vo.ElementTreeVo;
@@ -29,7 +27,7 @@ public class TbBasicTagController {
 
     @GetMapping("/list")
     public Object list() {
-        List<TbBasicTag> tree = this.basicTagService.list();
+        List<ElementTreeVo> tree = this.basicTagService.leftTree();
         return ResponseUtil.ok(tree);
     }
 

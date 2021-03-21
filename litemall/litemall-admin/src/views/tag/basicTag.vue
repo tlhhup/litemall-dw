@@ -3,10 +3,11 @@
     <el-aside class="left-warpper">
       <el-tree
         class="primary-tag-tree"
-        :props="props"
-        :load="loadNode"
-        lazy
-        @check-change="handleCheckChange"
+        :data="leftTagTree"
+        check-strictly
+        node-key="id"
+        :default-expanded-keys="[1]"
+        @node-click="handleNodeClick"
       />
       <el-row class="primary-tag-bt">
         <el-button type="primary" icon="el-icon-edit" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
@@ -61,10 +62,6 @@ export default {
           { required: true, message: '请输入所属行业', trigger: 'blur' }
         ]
       },
-      props: {
-        label: 'name',
-        children: 'zones'
-      },
       count: 1,
       leftTagTree: [],
       selectProps: {
@@ -81,44 +78,8 @@ export default {
     this.loadOneLevelTree()
   },
   methods: {
-    handleCheckChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate)
-    },
     handleNodeClick(data) {
       console.log(data)
-    },
-    loadNode(node, resolve) {
-      if (node.level === 0) {
-        return resolve([{ name: 'region1' }, { name: 'region2' }])
-      }
-      if (node.level > 3) return resolve([])
-
-      var hasChild
-      if (node.data.name === 'region1') {
-        hasChild = true
-      } else if (node.data.name === 'region2') {
-        hasChild = false
-      } else {
-        hasChild = Math.random() > 0.5
-      }
-
-      setTimeout(() => {
-        var data
-        if (hasChild) {
-          data = [
-            {
-              name: 'zone' + this.count++
-            },
-            {
-              name: 'zone' + this.count++
-            }
-          ]
-        } else {
-          data = []
-        }
-
-        resolve(data)
-      }, 500)
     },
     loadOneLevelTree() {
       oneLevelTag().then(response => {

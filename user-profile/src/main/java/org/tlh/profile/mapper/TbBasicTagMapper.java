@@ -18,4 +18,5 @@ public interface TbBasicTagMapper extends BaseMapper<TbBasicTag> {
 
     List<ElementTreeVo> queryPrimaryTree();
 
+    List<ElementTreeVo> leftTree();
 }

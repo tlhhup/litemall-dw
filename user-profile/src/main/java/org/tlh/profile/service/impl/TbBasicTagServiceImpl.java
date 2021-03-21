@@ -46,4 +46,9 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
     public List<ElementTreeVo> queryPrimaryTree() {
         return basicTagMapper.queryPrimaryTree();
     }
+
+    @Override
+    public List<ElementTreeVo> leftTree() {
+        return this.basicTagMapper.leftTree();
+    }
 }

@@ -30,4 +30,10 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      * @return
      */
     List<ElementTreeVo> queryPrimaryTree();
+
+    /**
+     * 左边的tree
+     * @return
+     */
+    List<ElementTreeVo> leftTree();
 }
