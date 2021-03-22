@@ -10,7 +10,7 @@
         @node-click="handleNodeClick"
       />
       <el-row class="primary-tag-bt">
-        <el-button type="primary" icon="el-icon-edit" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
       </el-row>
 
       <el-dialog
@@ -35,7 +35,83 @@
         </el-form>
       </el-dialog>
     </el-aside>
-    <el-main class="right-warpper">Main</el-main>
+    <el-main class="right-warpper">
+      <div class="nav">
+        <el-breadcrumb class="nav-breadcrumb" separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item v-for="item in leftTagStack" :key="item.id">{{ item.label }}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <div class="nav-operation">
+          <div class="nav-search">
+            <el-input v-model="searchTagName" placeholder="请输入关键词检索">
+              <el-button slot="append" icon="el-icon-search" @click="handleSearchTag" />
+            </el-input>
+          </div>
+          <el-button v-show="leftClickLevel===3" class="nav-addTag" type="primary" icon="el-icon-plus" size="medium" @click="modelTagDialog = true">新建业务标签</el-button>
+        </div>
+
+        <el-dialog
+          title="添加业务标签"
+          :visible.sync="modelTagDialog"
+          width="40%"
+        >
+          <el-form ref="modelForm" :model="modelTag" status-icon :rules="rules" size="small" label-width="100px">
+            <el-form-item label="标签名称" prop="name">
+              <el-input v-model="modelTag.name" type="text" />
+            </el-form-item>
+            <el-form-item label="标签分类">
+              <div style="display:flex">
+                <el-input v-model="modelTag.industry" readonly type="text" />
+                <el-input v-model="modelTag.industry" readonly style="margin:0 5px" type="text" />
+                <el-input v-model="modelTag.industry" readonly type="text" />
+              </div>
+            </el-form-item>
+            <el-form-item label="更新周期" prop="schedule">
+              <el-date-picker
+                v-model="modelTag.schedule"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              />
+            </el-form-item>
+            <el-form-item label="业务含义" prop="business">
+              <el-input v-model="modelTag.business" type="textarea" :rows="2" placeholder="最多可以输入400个字符" />
+            </el-form-item>
+            <el-form-item label="标签规则" prop="rule">
+              <el-input v-model="modelTag.rule" type="textarea" :rows="4" placeholder="key=value,例如：type=hive" />
+            </el-form-item>
+            <el-form-item label="程序入口" prop="modelMain">
+              <el-input v-model="modelTag.modelMain" type="text" />
+            </el-form-item>
+            <el-form-item label="算法名称" prop="modelName">
+              <el-input v-model="modelTag.modelName" type="text" />
+            </el-form-item>
+            <el-form-item label="算法引擎" prop="modelJar">
+              <el-input v-model="modelTag.modelJar" type="text" :disabled="true">
+                <el-upload
+                  slot="append"
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :multiple="false"
+                  :show-file-list="false"
+                  :on-success="handleUploadSuccess"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="模型参数" prop="modelArgs">
+              <el-input v-model="modelTag.modelArgs" type="textarea" :rows="2" placeholder="最多可以输入1000个字符" />
+            </el-form-item>
+            <el-form-item label-width="40%">
+              <el-button type="primary" @click="submitmodelForm()">提交</el-button>
+              <el-button @click="resetForm('modelForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
+      <hr style="width: 100%; height: 2px; border: none; background-color: #74bcff">
+    </el-main>
   </el-container>
 </template>
 
@@ -60,9 +136,24 @@ export default {
         name: [{ required: true, message: '请输入标签名称', trigger: 'blur' }],
         industry: [
           { required: true, message: '请输入所属行业', trigger: 'blur' }
+        ],
+        schedule: [
+          { required: true, message: '请输入更新周期', trigger: 'blur' }
+        ],
+        business: [
+          { required: true, message: '请输入业务含义', trigger: 'blur' }
+        ],
+        rule: [{ required: true, message: '请输入标签规则', trigger: 'blur' }],
+        modelMain: [
+          { required: true, message: '请输入程序入口', trigger: 'blur' }
+        ],
+        modelName: [
+          { required: true, message: '请输入算法名称', trigger: 'blur' }
+        ],
+        modelJar: [
+          { required: true, message: '请输入算法引擎', trigger: 'blur' }
         ]
       },
-      count: 1,
       leftTagTree: [],
       selectProps: {
         value: 'id',
@@ -70,7 +161,23 @@ export default {
         emitPath: false,
         expandTrigger: 'hover'
       },
-      oneLevelTree: []
+      oneLevelTree: [], // 主分类添加form
+      leftTagStack: [], // 面包屑
+      leftClickLevel: 1, // 当前点击节点的层级
+      searchTagName: undefined,
+      modelTagDialog: false,
+      modelTag: {
+        name: '',
+        industry: '',
+        schedule: '',
+        business: '',
+        rule: '',
+        modelMain: '',
+        modelName: '',
+        modelJar: '',
+        modelArgs: '',
+        pid: ''
+      }
     }
   },
   created() {
@@ -78,8 +185,21 @@ export default {
     this.loadOneLevelTree()
   },
   methods: {
-    handleNodeClick(data) {
-      console.log(data)
+    handleNodeClick(data, node) {
+      this.leftClickLevel = node.level
+      // 1.解析节点链
+      const stack = []
+      stack.push(node.data)
+      var parent = node.parent
+      while (parent !== null) {
+        stack.push(parent.data)
+        parent = parent.parent
+      }
+      // 2.移除最后一个(重复的最顶层)
+      stack.pop()
+      // 3. 倒序
+      stack.reverse()
+      this.leftTagStack = stack
     },
     loadOneLevelTree() {
       oneLevelTag().then(response => {
@@ -103,6 +223,7 @@ export default {
             industry: '',
             pid: ''
           }
+          this.loadLeftTree()
         } else {
           this.$notify.error({
             title: '失败',
@@ -113,6 +234,12 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    handleSearchTag() {
+      console.info(this.searchTagName)
+    },
+    handleUploadSuccess(response, file, fileList) {
+      console.info(file)
     }
   }
 }
@@ -141,6 +268,25 @@ export default {
   }
 
   .right-warpper {
+    .nav {
+      height: 40px;
+      .nav-breadcrumb {
+        float: left;
+        line-height: 40px;
+      }
+      .nav-operation {
+        float: right;
+        display: flex;
+        .nav-addTag {
+          width: 150px;
+        }
+        .nav-search {
+          width: 200px;
+          line-height: 40px;
+          margin-right: 10px;
+        }
+      }
+    }
   }
 }
 </style>

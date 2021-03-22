@@ -27,13 +27,32 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
 
     /**
      * 查询一级和对应的二级标签
+     *
      * @return
      */
     List<ElementTreeVo> queryPrimaryTree();
 
     /**
      * 左边的tree
+     *
      * @return
      */
     List<ElementTreeVo> leftTree();
+
+    /**
+     * 查询
+     *
+     * @param pid
+     * @return
+     */
+    List<BasicTagDto> childTags(long pid);
+
+    /**
+     * 通过标签名查询
+     *
+     * @param name
+     * @return
+     */
+    List<BasicTagDto> queryByTagName(String name);
+
 }

@@ -43,5 +43,17 @@ public class TbBasicTagController {
         return ResponseUtil.ok(treeVos);
     }
 
+    @GetMapping("/childTags")
+    public Object getChildren(@RequestParam("pid") long pId){
+        List<BasicTagDto> tags = this.basicTagService.childTags(pId);
+        return ResponseUtil.ok(tags);
+    }
+
+    @GetMapping("/searchTag/{name}")
+    public Object searchTag(@PathVariable("name") String name){
+        List<BasicTagDto> tags = this.basicTagService.queryByTagName(name);
+        return ResponseUtil.ok(tags);
+    }
+
 }
 
