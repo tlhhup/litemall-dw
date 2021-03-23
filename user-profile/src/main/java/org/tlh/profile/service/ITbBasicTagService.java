@@ -1,6 +1,7 @@
 package org.tlh.profile.service;
 
 import org.tlh.profile.dto.BasicTagDto;
+import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.tlh.profile.vo.ElementTreeVo;
@@ -55,4 +56,19 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      */
     List<BasicTagDto> queryByTagName(String name);
 
+    /**
+     * 添加业务标签
+     *
+     * @param modelTag
+     * @return
+     */
+    boolean createModelTag(ModelTagDto modelTag);
+
+    /**
+     * 添加业务标签值域
+     *
+     * @param basicTag
+     * @return
+     */
+    boolean saveModelRule(BasicTagDto basicTag);
 }

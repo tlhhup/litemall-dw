@@ -22,7 +22,8 @@
             </el-input>
           </div>
           <el-button v-show="leftClickLevel===3" class="nav-addTag" type="primary" icon="el-icon-plus" size="medium" @click="modelTagDialog = true">新建业务标签</el-button>
-          <el-button v-show="leftClickLevel!==3" type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
+          <el-button v-show="[1,2].includes(leftClickLevel)" type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
+          <el-button v-show="leftClickLevel===4" type="primary" icon="el-icon-plus" size="medium" @click="modelTagRule = true">添加标签属性</el-button>
         </div>
 
         <!-- 主分类 -->
@@ -58,7 +59,7 @@
             <el-form-item label="标签名称" prop="name">
               <el-input v-model="modelTag.name" type="text" />
             </el-form-item>
-            <el-form-item label="标签分类" prop="industry">
+            <el-form-item label="标签分类">
               <div style="display:flex">
                 <el-input v-model="modelTag.oneLevel" readonly type="text" />
                 <el-input v-model="modelTag.towLevel" readonly style="margin:0 5px" type="text" />
@@ -118,8 +119,31 @@
               <el-input v-model="modelTag.sparkOpts" type="textarea" :rows="2" placeholder="最多可以输入1000个字符" />
             </el-form-item>
             <el-form-item label-width="40%">
-              <el-button type="primary" @click="submitmodelForm()">提交</el-button>
+              <el-button type="primary" @click="submitmodelForm('modelForm')">提交</el-button>
               <el-button @click="resetForm('modelForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+        <!-- 业务标签属性 -->
+        <el-dialog
+          title="添加标签属性"
+          :visible.sync="modelTagRule"
+          width="30%"
+        >
+          <el-form ref="mRForm" :model="mRForm" status-icon :rules="rules" label-width="100px">
+            <el-form-item label="标签名称" prop="name">
+              <el-input v-model="mRForm.name" type="text" />
+            </el-form-item>
+            <el-form-item label="标签规则" prop="rule">
+              <el-input v-model="mRForm.rule" type="text" />
+            </el-form-item>
+            <el-form-item label="业务含义" prop="business">
+              <el-input v-model="mRForm.business" type="text" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitMrForm('mRForm')">提交</el-button>
+              <el-button @click="resetForm('mRForm')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -133,7 +157,11 @@
 import {
   listBasicTagTree,
   oneLevelTag,
-  createPrimaryTag
+  createPrimaryTag,
+  searchTag,
+  createModel,
+  createModelRule,
+  childTags
 } from '@/api/dw/profile'
 
 export default {
@@ -213,6 +241,14 @@ export default {
         oneLevel: '',
         towLevel: '',
         threeLevel: ''
+      },
+      modelTagRule: false,
+      mRForm: {
+        name: '',
+        industry: '属性',
+        business: '',
+        rule: '',
+        pid: ''
       }
     }
   },
@@ -239,6 +275,14 @@ export default {
       this.modelTag.oneLevel = stack[0] !== undefined ? stack[0].label : ''
       this.modelTag.towLevel = stack[1] !== undefined ? stack[1].label : ''
       this.modelTag.threeLevel = stack[2] !== undefined ? stack[2].label : ''
+      if (node.level === 3) {
+        this.modelTag.pid = node.data.id
+      }
+      if (node.level === 4) {
+        this.mRForm.pid = node.data.id
+      }
+      // 加载子标签列表
+      this.listChildTags(node.data.id)
     },
     loadOneLevelTree() {
       oneLevelTag().then(response => {
@@ -275,7 +319,11 @@ export default {
       this.$refs[formName].resetFields()
     },
     handleSearchTag() {
-      console.info(this.searchTagName)
+      searchTag(this.searchTagName).then(response => {
+        const { data: ret } = response.data
+        // todo 搜索tag
+        console.info(ret)
+      })
     },
     handleUploadSuccess(response) {
       if (response.errno === 0) {
@@ -287,8 +335,67 @@ export default {
         })
       }
     },
-    submitmodelForm() {
-      console.info(this.modelTag)
+    submitmodelForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          createModel(this.modelTag).then(response => {
+            const { data: ret } = response.data
+            if (ret) {
+              this.modelTagRule = false
+              this.modelTag = {
+                name: '',
+                schedule: 1,
+                starEnd: '',
+                business: '',
+                rule: '',
+                modelMain: '',
+                modelName: '',
+                modelJar: '',
+                modelArgs: '',
+                sparkOpts: ''
+              }
+            } else {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    submitMrForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          createModelRule(this.mRForm).then(response => {
+            const { data: ret } = response.data
+            if (ret) {
+              this.modelTagRule = false
+              this.mRForm = {
+                name: '',
+                industry: '属性',
+                business: '',
+                rule: ''
+              }
+            } else {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    listChildTags(pid) {
+      childTags({ pid: pid }).then(response => {
+        const { data: ret } = response.data
+        console.info(ret)
+      })
     }
   }
 }
