@@ -9,31 +9,6 @@
         :default-expanded-keys="[1]"
         @node-click="handleNodeClick"
       />
-      <el-row class="primary-tag-bt">
-        <el-button type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
-      </el-row>
-
-      <el-dialog
-        title="添加主分类标签"
-        :visible.sync="primaryTagdialogVisible"
-        width="30%"
-      >
-        <el-form ref="ptForm" :model="ptForm" status-icon :rules="rules" label-width="100px">
-          <el-form-item label="标签名称" prop="name">
-            <el-input v-model="ptForm.name" type="text" />
-          </el-form-item>
-          <el-form-item label="所属行业" prop="industry">
-            <el-input v-model="ptForm.industry" type="text" />
-          </el-form-item>
-          <el-form-item label="父级标签" prop="pid">
-            <el-cascader v-model="ptForm.pid" :options="oneLevelTree" :props="selectProps" clearable />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitPrimaryTagForm()">提交</el-button>
-            <el-button @click="resetForm('ptForm')">重置</el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
     </el-aside>
     <el-main class="right-warpper">
       <div class="nav">
@@ -47,7 +22,30 @@
             </el-input>
           </div>
           <el-button v-show="leftClickLevel===3" class="nav-addTag" type="primary" icon="el-icon-plus" size="medium" @click="modelTagDialog = true">新建业务标签</el-button>
+          <el-button v-show="leftClickLevel!==3" type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
         </div>
+
+        <el-dialog
+          title="添加主分类标签"
+          :visible.sync="primaryTagdialogVisible"
+          width="30%"
+        >
+          <el-form ref="ptForm" :model="ptForm" status-icon :rules="rules" label-width="100px">
+            <el-form-item label="标签名称" prop="name">
+              <el-input v-model="ptForm.name" type="text" />
+            </el-form-item>
+            <el-form-item label="所属行业" prop="industry">
+              <el-input v-model="ptForm.industry" type="text" />
+            </el-form-item>
+            <el-form-item label="父级标签" prop="pid">
+              <el-cascader v-model="ptForm.pid" :options="oneLevelTree" :props="selectProps" clearable />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitPrimaryTagForm()">提交</el-button>
+              <el-button @click="resetForm('ptForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
 
         <el-dialog
           title="添加业务标签"
@@ -58,20 +56,30 @@
             <el-form-item label="标签名称" prop="name">
               <el-input v-model="modelTag.name" type="text" />
             </el-form-item>
-            <el-form-item label="标签分类">
+            <el-form-item label="标签分类" prop="industry">
               <div style="display:flex">
-                <el-input v-model="modelTag.industry" readonly type="text" />
-                <el-input v-model="modelTag.industry" readonly style="margin:0 5px" type="text" />
-                <el-input v-model="modelTag.industry" readonly type="text" />
+                <el-input v-model="modelTag.oneLevel" readonly type="text" />
+                <el-input v-model="modelTag.towLevel" readonly style="margin:0 5px" type="text" />
+                <el-input v-model="modelTag.threeLevel" readonly type="text" />
               </div>
             </el-form-item>
-            <el-form-item label="更新周期" prop="schedule">
+            <el-form-item label="更新周期" prop="starEnd">
+              <el-select v-model="modelTag.schedule" placeholder="请选择" style="width:120px;margin-right: 8px;">
+                <el-option
+                  v-for="item in modelScheduleOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
               <el-date-picker
-                v-model="modelTag.schedule"
+                v-model="modelTag.starEnd"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
               />
             </el-form-item>
             <el-form-item label="业务含义" prop="business">
@@ -137,7 +145,7 @@ export default {
         industry: [
           { required: true, message: '请输入所属行业', trigger: 'blur' }
         ],
-        schedule: [
+        starEnd: [
           { required: true, message: '请输入更新周期', trigger: 'blur' }
         ],
         business: [
@@ -166,17 +174,38 @@ export default {
       leftClickLevel: 1, // 当前点击节点的层级
       searchTagName: undefined,
       modelTagDialog: false,
+      modelScheduleOptions: [
+        {
+          value: 1,
+          label: '每天'
+        },
+        {
+          value: 2,
+          label: '每周'
+        },
+        {
+          value: 3,
+          label: '每月'
+        },
+        {
+          value: 4,
+          label: '每年'
+        }
+      ],
       modelTag: {
         name: '',
-        industry: '',
-        schedule: '',
+        schedule: 1,
+        starEnd: '',
         business: '',
         rule: '',
         modelMain: '',
         modelName: '',
         modelJar: '',
         modelArgs: '',
-        pid: ''
+        pid: '',
+        oneLevel: '',
+        towLevel: '',
+        threeLevel: ''
       }
     }
   },
@@ -200,6 +229,9 @@ export default {
       // 3. 倒序
       stack.reverse()
       this.leftTagStack = stack
+      this.modelTag.oneLevel = stack[0] !== undefined ? stack[0].label : ''
+      this.modelTag.towLevel = stack[1] !== undefined ? stack[1].label : ''
+      this.modelTag.threeLevel = stack[2] !== undefined ? stack[2].label : ''
     },
     loadOneLevelTree() {
       oneLevelTag().then(response => {
@@ -240,6 +272,9 @@ export default {
     },
     handleUploadSuccess(response, file, fileList) {
       console.info(file)
+    },
+    submitmodelForm() {
+      console.info(this.modelTag)
     }
   }
 }
@@ -248,7 +283,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .app-container {
   width: 100%;
-  height: 90vh; // 和屏幕高度一致
+  height: 100vh; // 和屏幕高度一致
   padding: 2px;
 
   .left-warpper {
@@ -259,11 +294,6 @@ export default {
 
     .primary-tag-tree {
       flex-grow: 1;
-    }
-
-    .primary-tag-bt {
-      margin-top: 10px;
-      text-align: center;
     }
   }
 
