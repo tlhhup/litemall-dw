@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coordinator-app name="litemall-coord" frequency="${frequency}" start="${start}" end="${end}"
+                 timezone="Asia/Shanghai" xmlns="uri:oozie:coordinator:0.5">
+    <action>
+        <workflow>
+            <app-path>${wf_app_path}</app-path>
+        </workflow>
+    </action>
+</coordinator-app>

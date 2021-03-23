@@ -16,5 +16,6 @@ public class ModelTagDto extends BasicTagDto {
     private String modelName;//模型名称
     private String modelJar;//jar包在hdfs中的地址
     private String modelArgs;//模型参数
+    private String sparkOpts;//spark执行参数
 
 }

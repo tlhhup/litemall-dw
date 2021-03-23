@@ -13,8 +13,22 @@ spring:
     baseline-on-migrate: true
     locations:
       - classpath:db/migration/{vendor}
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
 
 profile:
   admin:
     host: http://localhost:8083
     auth-info: /admin/auth/info
+  hdfs:
+    url: hdfs://cdh-master:8020
+    model-path: /app/litemall/model
+    user: oozie
+  oozie:
+    url: http://cdh-master:11000/oozie
+    user: oozie
+    resource-manager: cdh-master:8032
+    name-node: hdfs://cdh-master:8020
+    spark-opts: --executor-memory 1G --num-executors 1

@@ -25,6 +25,7 @@
           <el-button v-show="leftClickLevel!==3" type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
         </div>
 
+        <!-- 主分类 -->
         <el-dialog
           title="添加主分类标签"
           :visible.sync="primaryTagdialogVisible"
@@ -47,6 +48,7 @@
           </el-form>
         </el-dialog>
 
+        <!-- 业务标签 -->
         <el-dialog
           title="添加业务标签"
           :visible.sync="modelTagDialog"
@@ -86,7 +88,7 @@
               <el-input v-model="modelTag.business" type="textarea" :rows="2" placeholder="最多可以输入400个字符" />
             </el-form-item>
             <el-form-item label="标签规则" prop="rule">
-              <el-input v-model="modelTag.rule" type="textarea" :rows="4" placeholder="key=value,例如：type=hive" />
+              <el-input v-model="modelTag.rule" type="textarea" :rows="3" placeholder="key=value,例如：type=hive" />
             </el-form-item>
             <el-form-item label="程序入口" prop="modelMain">
               <el-input v-model="modelTag.modelMain" type="text" />
@@ -99,9 +101,10 @@
                 <el-upload
                   slot="append"
                   class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="/tag/tagModel/uploadModel"
                   :multiple="false"
                   :show-file-list="false"
+                  accept=".jar"
                   :on-success="handleUploadSuccess"
                 >
                   <el-button size="small" type="primary">点击上传</el-button>
@@ -110,6 +113,9 @@
             </el-form-item>
             <el-form-item label="模型参数" prop="modelArgs">
               <el-input v-model="modelTag.modelArgs" type="textarea" :rows="2" placeholder="最多可以输入1000个字符" />
+            </el-form-item>
+            <el-form-item label="Spark参数" prop="sparkOpts">
+              <el-input v-model="modelTag.sparkOpts" type="textarea" :rows="2" placeholder="最多可以输入1000个字符" />
             </el-form-item>
             <el-form-item label-width="40%">
               <el-button type="primary" @click="submitmodelForm()">提交</el-button>
@@ -202,6 +208,7 @@ export default {
         modelName: '',
         modelJar: '',
         modelArgs: '',
+        sparkOpts: '',
         pid: '',
         oneLevel: '',
         towLevel: '',
@@ -270,8 +277,15 @@ export default {
     handleSearchTag() {
       console.info(this.searchTagName)
     },
-    handleUploadSuccess(response, file, fileList) {
-      console.info(file)
+    handleUploadSuccess(response) {
+      if (response.errno === 0) {
+        this.modelTag.modelJar = response.data
+      } else {
+        this.$notify.error({
+          title: '上传模型失败',
+          message: response.errmsg
+        })
+      }
     },
     submitmodelForm() {
       console.info(this.modelTag)

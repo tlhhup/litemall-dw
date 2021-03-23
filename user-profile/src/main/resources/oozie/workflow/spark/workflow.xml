@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app name="${app_name}" xmlns="uri:oozie:workflow:1.0">
+    <start to='sparkjob' />
+    <action name="sparkjob">
+        <spark xmlns="uri:oozie:spark-action:1.0">
+            <resource-manager>${resourceManager}</resource-manager>
+            <name-node>${nameNode}</name-node>
+            <!-- 执行hdfs命令  -->
+            <prepare>
+                <delete path="${output}"/>
+            </prepare>
+            <master>yarn-client</master>
+            <name>${app_name}</name>
+            <class>${app_mainClass}</class>
+            <jar>${app_jar}</jar>
+            <spark-opts>${spark_opts}</spark-opts>
+            <arg>${args}</arg>
+            <!-- 该参数格式，文件路径#文件名  -->
+            <file>${app_jar_path}/${app_jar}#${app_jar}</file>
+        </spark>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+    <kill name="fail">
+        <message>Job failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name='end' />
+</workflow-app>
