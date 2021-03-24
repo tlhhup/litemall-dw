@@ -29,4 +29,21 @@
     <select id="nextLevel" resultMap="children">
         select * from tb_basic_tag where pid=#{value} and level in (2,3,4)
     </select>
+
+    <select id="queryChildTagAndModelById" resultType="org.tlh.profile.vo.BasicTagListVo">
+        select
+            t.*,
+            m.schedule_rule as schedule
+        from tb_basic_tag t left join tb_tag_model m on t.id=m.tag_id
+        <where>
+            <choose>
+                <when test="id!=null">
+                    pid=#{value}
+                </when>
+                <otherwise>
+                    pid is null
+                </otherwise>
+            </choose>
+        </where>
+    </select>
 </mapper>

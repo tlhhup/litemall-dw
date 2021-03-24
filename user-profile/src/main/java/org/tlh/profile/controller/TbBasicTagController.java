@@ -7,6 +7,7 @@ import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.service.ITbBasicTagService;
 import org.tlh.profile.util.ResponseUtil;
+import org.tlh.profile.vo.BasicTagListVo;
 import org.tlh.profile.vo.ElementTreeVo;
 
 import java.util.List;
@@ -45,8 +46,8 @@ public class TbBasicTagController {
     }
 
     @GetMapping("/childTags")
-    public Object getChildren(@RequestParam("pid") long pId){
-        List<BasicTagDto> tags = this.basicTagService.childTags(pId);
+    public Object getChildren(@RequestParam("pid") Long pId){
+        List<BasicTagListVo> tags = this.basicTagService.childTags(pId);
         return ResponseUtil.ok(tags);
     }
 

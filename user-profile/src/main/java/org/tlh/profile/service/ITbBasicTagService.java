@@ -1,9 +1,10 @@
 package org.tlh.profile.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.entity.TbBasicTag;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.tlh.profile.vo.BasicTagListVo;
 import org.tlh.profile.vo.ElementTreeVo;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      * @param pid
      * @return
      */
-    List<BasicTagDto> childTags(long pid);
+    List<BasicTagListVo> childTags(Long pid);
 
     /**
      * 通过标签名查询

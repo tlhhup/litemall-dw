@@ -159,6 +159,37 @@
         </el-dialog>
       </div>
       <hr style="width: 100%; height: 2px; border: none; background-color: #74bcff">
+      <div class="tag-list">
+        <el-table
+          :data="tagListData"
+          style="width: 100%"
+        >
+          <el-table-column
+            prop="name"
+            label="名称"
+            width="180"
+          />
+          <el-table-column
+            prop="business"
+            label="业务描述"
+            width="180"
+          />
+          <el-table-column
+            prop="schedule"
+            label="调度"
+          />
+          <el-table-column
+            label="操作"
+            width="200"
+          >
+            <template slot-scope="scope">
+              <el-button type="success" icon="el-icon-video-play" size="small" circle @click="handleClick(scope.row)" />
+              <el-button type="primary" size="small" icon="el-icon-edit" circle />
+              <el-button type="danger" size="small" icon="el-icon-delete" circle />
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -214,7 +245,7 @@ export default {
         expandTrigger: 'hover'
       },
       oneLevelTree: [], // 主分类添加form
-      leftTagStack: [], // 面包屑
+      leftTagStack: [{ id: 0, label: '未选择' }], // 面包屑
       leftClickLevel: 1, // 当前点击节点的层级
       searchTagName: undefined,
       modelTagDialog: false,
@@ -261,7 +292,8 @@ export default {
         business: '',
         rule: '',
         pid: ''
-      }
+      },
+      tagListData: []
     }
   },
   created() {
@@ -415,7 +447,7 @@ export default {
     listChildTags(pid) {
       childTags({ pid: pid }).then(response => {
         const { data: ret } = response.data
-        console.info(ret)
+        this.tagListData = ret
       })
     }
   }
