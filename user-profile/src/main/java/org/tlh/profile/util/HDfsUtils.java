@@ -37,7 +37,7 @@ public final class HDfsUtils implements Closeable {
         try {
             Path target = new Path(targetPath);
             FSDataOutputStream fos = fs.create(target, (short) 3);
-            IOUtils.copyBytes(is, fos, 1024 * 10, true);
+            IOUtils.copyBytes(is, fos, 1024 * 100, true);
             return true;
         } catch (IOException e) {
             log.error("upload to hdfs error", e);

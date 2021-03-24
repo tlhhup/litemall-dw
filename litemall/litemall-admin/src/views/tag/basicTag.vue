@@ -55,11 +55,20 @@
           :visible.sync="modelTagDialog"
           width="40%"
         >
+          <el-dialog
+            width="30%"
+            title="模型上传中...."
+            :visible.sync="modelTagInnerVisible"
+            :close-on-click-modal="false"
+            :show-close="false"
+            :close-on-press-escape="false"
+            append-to-body
+          />
           <el-form ref="modelForm" :model="modelTag" status-icon :rules="rules" size="small" label-width="100px">
             <el-form-item label="标签名称" prop="name">
               <el-input v-model="modelTag.name" type="text" />
             </el-form-item>
-            <el-form-item label="标签分类">
+            <el-form-item label="标签分类" prop="industry">
               <div style="display:flex">
                 <el-input v-model="modelTag.oneLevel" readonly type="text" />
                 <el-input v-model="modelTag.towLevel" readonly style="margin:0 5px" type="text" />
@@ -106,6 +115,7 @@
                   :multiple="false"
                   :show-file-list="false"
                   accept=".jar"
+                  :before-upload="handleUploadBefore"
                   :on-success="handleUploadSuccess"
                 >
                   <el-button size="small" type="primary">点击上传</el-button>
@@ -208,6 +218,7 @@ export default {
       leftClickLevel: 1, // 当前点击节点的层级
       searchTagName: undefined,
       modelTagDialog: false,
+      modelTagInnerVisible: false,
       modelScheduleOptions: [
         {
           value: 1,
@@ -230,6 +241,7 @@ export default {
         name: '',
         schedule: 1,
         starEnd: '',
+        industry: '标签',
         business: '',
         rule: '',
         modelMain: '',
@@ -325,7 +337,13 @@ export default {
         console.info(ret)
       })
     },
+    handleUploadBefore() {
+      this.modelTagInnerVisible = true
+    },
     handleUploadSuccess(response) {
+      // 关闭提示框
+      this.modelTagInnerVisible = false
+      // 设置文件路径
       if (response.errno === 0) {
         this.modelTag.modelJar = response.data
       } else {
@@ -341,11 +359,12 @@ export default {
           createModel(this.modelTag).then(response => {
             const { data: ret } = response.data
             if (ret) {
-              this.modelTagRule = false
+              this.modelTagDialog = false
               this.modelTag = {
                 name: '',
                 schedule: 1,
                 starEnd: '',
+                industry: '标签',
                 business: '',
                 rule: '',
                 modelMain: '',
@@ -354,6 +373,8 @@ export default {
                 modelArgs: '',
                 sparkOpts: ''
               }
+              // 重新加载左侧标签
+              this.loadLeftTree()
             } else {
               this.$notify.error({
                 title: '失败',

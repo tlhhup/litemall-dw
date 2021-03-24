@@ -93,7 +93,6 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         //1.保存业务标签数据
         TbBasicTag target = new TbBasicTag();
         BeanUtils.copyProperties(modelTag, target);
-        target.setIndustry("标签");
         target.setLevel(4);
         boolean tag = this.save(target);
         //2.保存模型数据
