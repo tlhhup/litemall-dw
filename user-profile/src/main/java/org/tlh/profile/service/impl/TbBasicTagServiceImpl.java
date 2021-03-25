@@ -1,6 +1,7 @@
 package org.tlh.profile.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tlh.profile.dto.BasicTagDto;
+import org.tlh.profile.dto.DeleteTagDto;
 import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.entity.TbTagMetadata;
@@ -48,6 +50,7 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
     private ITbTagMetadataService metadataService;
 
     @Override
+    @Transactional
     public boolean createPrimaryTag(BasicTagDto basicTag) {
         int level = 1;
         //1.计算当前节点的level
@@ -159,5 +162,53 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
             log.error("save model rule error", e);
         }
         return false;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteTag(DeleteTagDto deleteTag) {
+        boolean flag = false;
+        //1.标签级别不同处理方式
+        switch (deleteTag.getLevel()) {
+            case 5:
+                //判断父级标签是否是运行状态
+                TbBasicTag parent = this.getById(deleteTag.getPId());
+                if (parent != null && ModelTaskState.convert(parent.getState()) == ModelTaskState.ONLINE) {
+                    throw new IllegalStateException("依赖的模型标签处于运行状态，请先停止模型:" + parent.getName());
+                }
+                flag = this.removeById(deleteTag.getId());
+                break;
+            case 4:
+                //判断状态
+                TbBasicTag tag = this.getById(deleteTag.getId());
+                if (tag != null && ModelTaskState.convert(tag.getState()) == ModelTaskState.ONLINE) {
+                    throw new IllegalStateException("依赖的模型标签处于运行状态，请先停止模型:" + tag.getName());
+                }
+                //删除子节点
+                UpdateWrapper<TbBasicTag> wrapper = new UpdateWrapper<>();
+                wrapper.eq("pid", deleteTag.getId());
+                this.remove(wrapper);
+                //删除元数据
+                UpdateWrapper<TbTagMetadata> wrapper1 = new UpdateWrapper<>();
+                wrapper1.eq("tag_id", deleteTag.getId());
+                this.metadataService.remove(wrapper1);
+                //删除模型数据
+                UpdateWrapper<TbTagModel> wrapper2 = new UpdateWrapper<>();
+                wrapper2.eq("tag_id", deleteTag.getId());
+                this.modelService.remove(wrapper2);
+                //删自己
+                this.removeById(deleteTag.getId());
+                flag = true;
+                break;
+            default:
+                //判断是否有子节点
+                int i = this.basicTagMapper.countChild(deleteTag.getId());
+                if (i > 0) {
+                    throw new IllegalStateException("当前节点非叶子节点!");
+                }
+                flag = this.removeById(deleteTag.getId());
+                break;
+        }
+        return flag;
     }
 }

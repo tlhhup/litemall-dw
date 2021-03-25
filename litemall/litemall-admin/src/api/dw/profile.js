@@ -59,3 +59,12 @@ export function childTags(query) {
     params: query
   })
 }
+
+const DeleteTag = '/tag/basicTag/deleteTag'
+export function deleteTag(data) {
+  return request({
+    url: DeleteTag,
+    method: 'delete',
+    data
+  })
+}

@@ -2,6 +2,7 @@ package org.tlh.profile.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.tlh.profile.dto.BasicTagDto;
+import org.tlh.profile.dto.DeleteTagDto;
 import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.vo.BasicTagListVo;
@@ -72,4 +73,11 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      * @return
      */
     boolean saveModelRule(BasicTagDto basicTag);
+
+    /**
+     * 删除标签
+     * @param deleteTag
+     * @return
+     */
+    boolean deleteTag(DeleteTagDto deleteTag);
 }

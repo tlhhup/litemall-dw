@@ -46,4 +46,8 @@
             </choose>
         </where>
     </select>
+
+    <select id="countChild" resultType="java.lang.Integer">
+        select count(1) from tb_basic_tag where pid=#{value}
+    </select>
 </mapper>

@@ -163,6 +163,7 @@
         <el-table
           :data="tagListData"
           style="width: 100%"
+          stripe
         >
           <el-table-column
             prop="name"
@@ -170,22 +171,30 @@
             width="180"
           />
           <el-table-column
-            prop="business"
-            label="业务描述"
-            width="180"
-          />
-          <el-table-column
             prop="schedule"
             label="调度"
+            width="180"
+            :formatter="formatSchedule"
+          />
+          <el-table-column
+            prop="business"
+            label="业务描述"
           />
           <el-table-column
             label="操作"
             width="200"
           >
             <template slot-scope="scope">
-              <el-button type="success" icon="el-icon-video-play" size="small" circle @click="handleClick(scope.row)" />
-              <el-button type="primary" size="small" icon="el-icon-edit" circle />
-              <el-button type="danger" size="small" icon="el-icon-delete" circle />
+              <el-button
+                v-show="scope.row.level===4"
+                type="success"
+                :icon="scope.row.state!==null &&scope.row.state.state===4?'el-icon-video-pause':'el-icon-video-play'"
+                size="small"
+                circle
+                @click="changeModelState(scope.row)"
+              />
+              <el-button type="primary" size="small" icon="el-icon-edit" circle @click="handleTagEdit(scope.row)" />
+              <el-button type="danger" size="small" icon="el-icon-delete" circle @click="handleTagDelete(scope.row)" />
             </template>
           </el-table-column>
         </el-table>
@@ -202,7 +211,8 @@ import {
   searchTag,
   createModel,
   createModelRule,
-  childTags
+  childTags,
+  deleteTag
 } from '@/api/dw/profile'
 
 export default {
@@ -293,12 +303,14 @@ export default {
         rule: '',
         pid: ''
       },
-      tagListData: []
+      tagListData: [],
+      currentPid: undefined // 当前显示列表
     }
   },
   created() {
     this.loadLeftTree()
     this.loadOneLevelTree()
+    this.listChildTags(this.currentPid)
   },
   methods: {
     handleNodeClick(data, node) {
@@ -327,6 +339,7 @@ export default {
       }
       // 加载子标签列表
       this.listChildTags(node.data.id)
+      this.currentPid = node.data.id
     },
     loadOneLevelTree() {
       oneLevelTag().then(response => {
@@ -351,6 +364,7 @@ export default {
             pid: ''
           }
           this.loadLeftTree()
+          this.listChildTags(this.currentPid)
         } else {
           this.$notify.error({
             title: '失败',
@@ -392,7 +406,7 @@ export default {
             const { data: ret } = response.data
             if (ret) {
               this.modelTagDialog = false
-              this.modelTag = {
+              Object.assign(this.modelTag, {
                 name: '',
                 schedule: 1,
                 starEnd: '',
@@ -404,9 +418,10 @@ export default {
                 modelJar: '',
                 modelArgs: '',
                 sparkOpts: ''
-              }
+              })
               // 重新加载左侧标签
               this.loadLeftTree()
+              this.listChildTags(this.modelTag.pid)
             } else {
               this.$notify.error({
                 title: '失败',
@@ -426,12 +441,14 @@ export default {
             const { data: ret } = response.data
             if (ret) {
               this.modelTagRule = false
-              this.mRForm = {
+              Object.assign(this.mRForm, {
                 name: '',
                 industry: '属性',
                 business: '',
                 rule: ''
-              }
+              })
+              // 重新加载列表数据
+              this.listChildTags(this.mRForm.pid)
             } else {
               this.$notify.error({
                 title: '失败',
@@ -448,6 +465,37 @@ export default {
       childTags({ pid: pid }).then(response => {
         const { data: ret } = response.data
         this.tagListData = ret
+      })
+    },
+    formatSchedule(row, column, cellValue) {
+      if (cellValue !== null && cellValue.length > 14) {
+        cellValue = cellValue.substring(0, 14) + '...'
+      }
+      return cellValue
+    },
+    changeModelState(row) {
+      console.info(row)
+    },
+    handleTagEdit(row) {
+      console.info(row)
+    },
+    handleTagDelete(row) {
+      const data = {
+        id: row.id,
+        level: row.level,
+        pId: row.pid
+      }
+      deleteTag(data).then(response => {
+        const { data: ret } = response.data
+        if (ret) {
+          this.loadLeftTree()
+          this.listChildTags(row.pid)
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+        }
       })
     }
   }

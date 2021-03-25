@@ -71,20 +71,28 @@ service.interceptors.response.use(
         type: 'error'
       })
       return Promise.reject('error')
+    } else if (res.errno === 507) {
+      MessageBox.alert(res.errmsg, '错误', {
+        confirmButtonText: '确定',
+        type: 'error'
+      })
+      return Promise.reject('error')
     } else if (res.errno !== 0) {
       // 非5xx的错误属于业务错误，留给具体页面处理
       return Promise.reject(response)
     } else {
       return response
     }
-  }, error => {
-    console.log('err' + error)// for debug
+  },
+  error => {
+    console.log('err' + error) // for debug
     Message({
       message: '登录连接超时（后台不能连接，请联系系统管理员）',
       type: 'error',
       duration: 5 * 1000
     })
     return Promise.reject(error)
-  })
+  }
+)
 
 export default service

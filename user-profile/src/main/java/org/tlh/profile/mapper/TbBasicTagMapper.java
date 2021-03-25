@@ -22,4 +22,6 @@ public interface TbBasicTagMapper extends BaseMapper<TbBasicTag> {
     List<ElementTreeVo> leftTree();
 
     List<BasicTagListVo> queryChildTagAndModelById(Long id);
+
+    int countChild(Long pid);
 }

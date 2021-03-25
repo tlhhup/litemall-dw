@@ -4,6 +4,7 @@ package org.tlh.profile.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tlh.profile.dto.BasicTagDto;
+import org.tlh.profile.dto.DeleteTagDto;
 import org.tlh.profile.dto.ModelTagDto;
 import org.tlh.profile.service.ITbBasicTagService;
 import org.tlh.profile.util.ResponseUtil;
@@ -46,7 +47,7 @@ public class TbBasicTagController {
     }
 
     @GetMapping("/childTags")
-    public Object getChildren(@RequestParam("pid") Long pId){
+    public Object getChildren(@RequestParam(name = "pid",required = false) Long pId){
         List<BasicTagListVo> tags = this.basicTagService.childTags(pId);
         return ResponseUtil.ok(tags);
     }
@@ -66,6 +67,12 @@ public class TbBasicTagController {
     @PostMapping("/saveModelRule")
     public Object saveModelRule(@RequestBody BasicTagDto basicTag){
         boolean flag=this.basicTagService.saveModelRule(basicTag);
+        return ResponseUtil.ok(flag);
+    }
+
+    @DeleteMapping("/deleteTag")
+    public Object deleteTag(@RequestBody DeleteTagDto deleteTag){
+        boolean flag=this.basicTagService.deleteTag(deleteTag);
         return ResponseUtil.ok(flag);
     }
 
