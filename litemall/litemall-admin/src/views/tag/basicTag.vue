@@ -21,9 +21,9 @@
               <el-button slot="append" icon="el-icon-search" @click="handleSearchTag" />
             </el-input>
           </div>
-          <el-button v-show="leftClickLevel===3" class="nav-addTag" type="primary" icon="el-icon-plus" size="medium" @click="modelTagDialog = true">新建业务标签</el-button>
-          <el-button v-show="[1,2].includes(leftClickLevel)" type="primary" icon="el-icon-plus" size="medium" @click="primaryTagdialogVisible = true">添加主分类标签</el-button>
-          <el-button v-show="leftClickLevel===4" type="primary" icon="el-icon-plus" size="medium" @click="modelTagRule = true">添加标签属性</el-button>
+          <el-button v-show="leftClickLevel===3" class="nav-addTag" type="primary" icon="el-icon-plus" size="medium" @click="showModelTagDialog">新建业务标签</el-button>
+          <el-button v-show="[1,2].includes(leftClickLevel)" type="primary" icon="el-icon-plus" size="medium" @click="showPrimaryTagDialog">添加主分类标签</el-button>
+          <el-button v-show="leftClickLevel===4" type="primary" icon="el-icon-plus" size="medium" @click="showModelTagRuleialog">添加标签属性</el-button>
         </div>
 
         <!-- 主分类 -->
@@ -106,8 +106,8 @@
             <el-form-item label="算法名称" prop="modelName">
               <el-input v-model="modelTag.modelName" type="text" />
             </el-form-item>
-            <el-form-item label="算法引擎" prop="modelJar">
-              <el-input v-model="modelTag.modelJar" type="text" :disabled="true">
+            <el-form-item label="算法引擎" prop="modelPath">
+              <el-input v-model="modelTag.modelPath" type="text" :disabled="true">
                 <el-upload
                   slot="append"
                   class="upload-demo"
@@ -171,7 +171,7 @@
             width="180"
           />
           <el-table-column
-            prop="schedule"
+            prop="scheduleRule"
             label="调度"
             width="180"
             :formatter="formatSchedule"
@@ -212,7 +212,10 @@ import {
   createModel,
   createModelRule,
   childTags,
-  deleteTag
+  deleteTag,
+  updatePrimaryTag,
+  updateModelTagRule,
+  updateModelTag
 } from '@/api/dw/profile'
 
 export default {
@@ -243,8 +246,8 @@ export default {
         modelName: [
           { required: true, message: '请输入算法名称', trigger: 'blur' }
         ],
-        modelJar: [
-          { required: true, message: '请输入算法引擎', trigger: 'blur' }
+        modelPath: [
+          { required: true, message: '请上传算法引擎', trigger: 'blur' }
         ]
       },
       leftTagTree: [],
@@ -287,7 +290,7 @@ export default {
         rule: '',
         modelMain: '',
         modelName: '',
-        modelJar: '',
+        modelPath: '',
         modelArgs: '',
         sparkOpts: '',
         pid: '',
@@ -354,24 +357,45 @@ export default {
       })
     },
     submitPrimaryTagForm() {
-      createPrimaryTag(this.ptForm).then(response => {
-        const { data: ret } = response.data
-        if (ret) {
-          this.primaryTagdialogVisible = false
-          this.ptForm = {
-            name: '',
-            industry: '',
-            pid: ''
+      if (this.ptForm.id === undefined) {
+        createPrimaryTag(this.ptForm).then(response => {
+          const { data: ret } = response.data
+          if (ret) {
+            this.primaryTagdialogVisible = false
+            this.ptForm = {
+              name: '',
+              industry: '',
+              pid: ''
+            }
+            this.loadLeftTree()
+            this.listChildTags(this.currentPid)
+          } else {
+            this.$notify.error({
+              title: '失败',
+              message: response.data.errmsg
+            })
           }
-          this.loadLeftTree()
-          this.listChildTags(this.currentPid)
-        } else {
-          this.$notify.error({
-            title: '失败',
-            message: response.data.errmsg
-          })
-        }
-      })
+        })
+      } else {
+        updatePrimaryTag(this.ptForm).then(response => {
+          const { data: ret } = response.data
+          if (ret) {
+            this.primaryTagdialogVisible = false
+            this.ptForm = {
+              name: '',
+              industry: '',
+              pid: ''
+            }
+            this.loadLeftTree()
+            this.listChildTags(this.currentPid)
+          } else {
+            this.$notify.error({
+              title: '失败',
+              message: response.data.errmsg
+            })
+          }
+        })
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -402,33 +426,63 @@ export default {
     submitmodelForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          createModel(this.modelTag).then(response => {
-            const { data: ret } = response.data
-            if (ret) {
-              this.modelTagDialog = false
-              Object.assign(this.modelTag, {
-                name: '',
-                schedule: 1,
-                starEnd: '',
-                industry: '标签',
-                business: '',
-                rule: '',
-                modelMain: '',
-                modelName: '',
-                modelJar: '',
-                modelArgs: '',
-                sparkOpts: ''
-              })
-              // 重新加载左侧标签
-              this.loadLeftTree()
-              this.listChildTags(this.modelTag.pid)
-            } else {
-              this.$notify.error({
-                title: '失败',
-                message: response.data.errmsg
-              })
-            }
-          })
+          if (this.modelTag.id === undefined) {
+            createModel(this.modelTag).then(response => {
+              const { data: ret } = response.data
+              if (ret) {
+                this.modelTagDialog = false
+                Object.assign(this.modelTag, {
+                  name: '',
+                  schedule: 1,
+                  starEnd: '',
+                  industry: '标签',
+                  business: '',
+                  rule: '',
+                  modelMain: '',
+                  modelName: '',
+                  modelPath: '',
+                  modelArgs: '',
+                  sparkOpts: ''
+                })
+                // 重新加载左侧标签
+                this.loadLeftTree()
+                this.listChildTags(this.modelTag.pid)
+              } else {
+                this.$notify.error({
+                  title: '失败',
+                  message: response.data.errmsg
+                })
+              }
+            })
+          } else {
+            updateModelTag(this.modelTag).then(response => {
+              const { data: ret } = response.data
+              if (ret) {
+                this.modelTagDialog = false
+                Object.assign(this.modelTag, {
+                  name: '',
+                  schedule: 1,
+                  starEnd: '',
+                  industry: '标签',
+                  business: '',
+                  rule: '',
+                  modelMain: '',
+                  modelName: '',
+                  modelPath: '',
+                  modelArgs: '',
+                  sparkOpts: ''
+                })
+                // 重新加载左侧标签
+                this.loadLeftTree()
+                this.listChildTags(this.modelTag.pid)
+              } else {
+                this.$notify.error({
+                  title: '失败',
+                  message: response.data.errmsg
+                })
+              }
+            })
+          }
         } else {
           return false
         }
@@ -437,25 +491,47 @@ export default {
     submitMrForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          createModelRule(this.mRForm).then(response => {
-            const { data: ret } = response.data
-            if (ret) {
-              this.modelTagRule = false
-              Object.assign(this.mRForm, {
-                name: '',
-                industry: '属性',
-                business: '',
-                rule: ''
-              })
-              // 重新加载列表数据
-              this.listChildTags(this.mRForm.pid)
-            } else {
-              this.$notify.error({
-                title: '失败',
-                message: response.data.errmsg
-              })
-            }
-          })
+          if (this.mRForm.id === undefined) {
+            createModelRule(this.mRForm).then(response => {
+              const { data: ret } = response.data
+              if (ret) {
+                this.modelTagRule = false
+                Object.assign(this.mRForm, {
+                  name: '',
+                  industry: '属性',
+                  business: '',
+                  rule: ''
+                })
+                // 重新加载列表数据
+                this.listChildTags(this.mRForm.pid)
+              } else {
+                this.$notify.error({
+                  title: '失败',
+                  message: response.data.errmsg
+                })
+              }
+            })
+          } else {
+            updateModelTagRule(this.mRForm).then(response => {
+              const { data: ret } = response.data
+              if (ret) {
+                this.modelTagRule = false
+                Object.assign(this.mRForm, {
+                  name: '',
+                  industry: '属性',
+                  business: '',
+                  rule: ''
+                })
+                // 重新加载列表数据
+                this.listChildTags(this.mRForm.pid)
+              } else {
+                this.$notify.error({
+                  title: '失败',
+                  message: response.data.errmsg
+                })
+              }
+            })
+          }
         } else {
           return false
         }
@@ -477,7 +553,20 @@ export default {
       console.info(row)
     },
     handleTagEdit(row) {
-      console.info(row)
+      switch (row.level) {
+        case 5:
+          Object.assign(this.mRForm, row)
+          this.modelTagRule = true
+          break
+        case 4:
+          Object.assign(this.modelTag, row)
+          this.modelTagDialog = true
+          break
+        default:
+          Object.assign(this.ptForm, row)
+          this.primaryTagdialogVisible = true
+          break
+      }
     },
     handleTagDelete(row) {
       const data = {
@@ -497,6 +586,44 @@ export default {
           })
         }
       })
+    },
+    showModelTagDialog() {
+      this.modelTag = {
+        name: '',
+        schedule: 1,
+        starEnd: '',
+        industry: '标签',
+        business: '',
+        rule: '',
+        modelMain: '',
+        modelName: '',
+        modelPath: '',
+        modelArgs: '',
+        sparkOpts: '',
+        pid: this.currentPid,
+        oneLevel: this.modelTag.oneLevel,
+        towLevel: this.modelTag.towLevel,
+        threeLevel: this.modelTag.threeLevel
+      }
+      this.modelTagDialog = true
+    },
+    showPrimaryTagDialog() {
+      this.ptForm = {
+        name: '',
+        industry: '',
+        pid: ''
+      }
+      this.primaryTagdialogVisible = true
+    },
+    showModelTagRuleialog() {
+      this.mRForm = {
+        name: '',
+        industry: '属性',
+        business: '',
+        rule: '',
+        pid: this.currentPid
+      }
+      this.modelTagRule = true
     }
   }
 }

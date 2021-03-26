@@ -699,6 +699,16 @@ export const asyncRoutes = [
           title: '基础标签',
           noCache: true
         }
+      },
+      {
+        path: 'mergeTag',
+        component: () => import('@/views/tag/mergeTag'),
+        name: 'mergeTag',
+        meta: {
+          perms: ['GET /tag/mergeTag/list'],
+          title: '组合标签',
+          noCache: true
+        }
       }
     ]
   },

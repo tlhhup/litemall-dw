@@ -33,8 +33,17 @@
     <select id="queryChildTagAndModelById" resultType="org.tlh.profile.vo.BasicTagListVo">
         select
             t.*,
-            m.schedule_rule as schedule
-        from tb_basic_tag t left join tb_tag_model m on t.id=m.tag_id
+            m.id as modelId,
+            m.model_name as modelName,
+            m.model_type as modelType,
+            m.model_main as modelMain,
+            m.model_path as modelPath,
+            m.model_args as modelArgs,
+            m.spark_opts as sparkOpts,
+            m.schedule_rule as scheduleRule
+        from tb_basic_tag t
+        left join
+            tb_tag_model m on t.id=m.tag_id
         <where>
             <choose>
                 <when test="id!=null">

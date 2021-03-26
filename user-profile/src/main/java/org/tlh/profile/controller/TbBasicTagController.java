@@ -41,38 +41,56 @@ public class TbBasicTagController {
     }
 
     @GetMapping("primaryTagTree")
-    public Object primaryTagTree(){
+    public Object primaryTagTree() {
         List<ElementTreeVo> treeVos = this.basicTagService.queryPrimaryTree();
         return ResponseUtil.ok(treeVos);
     }
 
     @GetMapping("/childTags")
-    public Object getChildren(@RequestParam(name = "pid",required = false) Long pId){
+    public Object getChildren(@RequestParam(name = "pid", required = false) Long pId) {
         List<BasicTagListVo> tags = this.basicTagService.childTags(pId);
         return ResponseUtil.ok(tags);
     }
 
     @GetMapping("/searchTag/{name}")
-    public Object searchTag(@PathVariable("name") String name){
+    public Object searchTag(@PathVariable("name") String name) {
         List<BasicTagDto> tags = this.basicTagService.queryByTagName(name);
         return ResponseUtil.ok(tags);
     }
 
     @PostMapping("/modelTag")
-    public Object createModelTag(@RequestBody ModelTagDto modelTag){
+    public Object createModelTag(@RequestBody ModelTagDto modelTag) {
         boolean flag = this.basicTagService.createModelTag(modelTag);
         return ResponseUtil.ok(flag);
     }
 
     @PostMapping("/saveModelRule")
-    public Object saveModelRule(@RequestBody BasicTagDto basicTag){
-        boolean flag=this.basicTagService.saveModelRule(basicTag);
+    public Object saveModelRule(@RequestBody BasicTagDto basicTag) {
+        boolean flag = this.basicTagService.saveModelRule(basicTag);
         return ResponseUtil.ok(flag);
     }
 
     @DeleteMapping("/deleteTag")
-    public Object deleteTag(@RequestBody DeleteTagDto deleteTag){
-        boolean flag=this.basicTagService.deleteTag(deleteTag);
+    public Object deleteTag(@RequestBody DeleteTagDto deleteTag) {
+        boolean flag = this.basicTagService.deleteTag(deleteTag);
+        return ResponseUtil.ok(flag);
+    }
+
+    @PutMapping("/updatePrimary")
+    public Object updatePrimaryTag(@RequestBody BasicTagDto basicTag) {
+        boolean flag = this.basicTagService.updatePrimaryTag(basicTag);
+        return ResponseUtil.ok(flag);
+    }
+
+    @PutMapping("/updateModelTagRule")
+    public Object updateModelTagRule(@RequestBody BasicTagDto basicTag){
+        boolean flag = this.basicTagService.updateModelTagRule(basicTag);
+        return ResponseUtil.ok(flag);
+    }
+
+    @PutMapping("/updateModelTag")
+    public Object updateModelTag(@RequestBody ModelTagDto modelTag){
+        boolean flag = this.basicTagService.updateModelTag(modelTag);
         return ResponseUtil.ok(flag);
     }
 

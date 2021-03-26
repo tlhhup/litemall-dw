@@ -80,16 +80,20 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
     public List<BasicTagListVo> childTags(Long pid) {
         List<BasicTagListVo> result = this.basicTagMapper.queryChildTagAndModelById(pid);
         result = result.stream().map(item -> {
-            String schedule = item.getSchedule();
-            if (StringUtils.isNotEmpty(schedule)) {
-                String[] rules = schedule.split(",");
+            String scheduleRule = item.getScheduleRule();
+            if (StringUtils.isNotEmpty(scheduleRule)) {
+                String[] rules = scheduleRule.split(",");
+                item.setSchedule(Integer.parseInt(rules[0]));
+                item.setStarEnd(new String[]{rules[1], rules[2]});
+
+                //重新格式化rule
                 StringBuilder builder = new StringBuilder();
                 builder.append(OozieScheduleType.convert(Integer.parseInt(rules[0])).getName())
                         .append("#")
                         .append(rules[1])
                         .append("~")
                         .append(rules[2]);
-                item.setSchedule(builder.toString());
+                item.setScheduleRule(builder.toString());
             }
             return item;
         }).collect(Collectors.toList());
@@ -123,7 +127,7 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         TbTagModel tagModel = new TbTagModel();
         tagModel.setTagId(target.getId());
         tagModel.setModelArgs(modelTag.getModelArgs());
-        String modelPath = modelTag.getModelJar();
+        String modelPath = modelTag.getModelPath();
         String modelJar = modelPath.substring(modelPath.lastIndexOf("/") + 1);
         tagModel.setModelJar(modelJar);
         tagModel.setModelMain(modelTag.getModelMain());
@@ -210,5 +214,41 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
                 break;
         }
         return flag;
+    }
+
+    @Override
+    @Transactional
+    public boolean updatePrimaryTag(BasicTagDto basicTag) {
+        TbBasicTag target = new TbBasicTag();
+        target.setId(basicTag.getId());
+        target.setName(basicTag.getName());
+        target.setIndustry(basicTag.getIndustry());
+        target.setPid(basicTag.getPid());
+        //处理level
+        if (basicTag.getPid() != null) {
+            TbBasicTag parent = this.getById(basicTag.getPid());
+            if (parent != null && parent.getLevel() != null) {
+                target.setLevel(parent.getLevel() + 1);
+            }
+        }
+        return this.updateById(target);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateModelTagRule(BasicTagDto basicTag) {
+        TbBasicTag target = new TbBasicTag();
+        target.setId(basicTag.getId());
+        target.setName(basicTag.getName());
+        target.setRule(basicTag.getRule());
+        target.setBusiness(basicTag.getBusiness());
+        return this.updateById(target);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateModelTag(ModelTagDto modelTag) {
+        // todo 更新模型标签
+        return false;
     }
 }

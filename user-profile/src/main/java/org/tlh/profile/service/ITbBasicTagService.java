@@ -80,4 +80,25 @@ public interface ITbBasicTagService extends IService<TbBasicTag> {
      * @return
      */
     boolean deleteTag(DeleteTagDto deleteTag);
+
+    /**
+     * 更新主分类标签
+     * @param basicTag
+     * @return
+     */
+    boolean updatePrimaryTag(BasicTagDto basicTag);
+
+    /**
+     * 更新模型标签属性
+     * @param basicTag
+     * @return
+     */
+    boolean updateModelTagRule(BasicTagDto basicTag);
+
+    /**
+     * 更新模型标签
+     * @param modelTag
+     * @return
+     */
+    boolean updateModelTag(ModelTagDto modelTag);
 }

@@ -68,3 +68,30 @@ export function deleteTag(data) {
     data
   })
 }
+
+const UpdatePrimaryTag = '/tag/basicTag/updatePrimary'
+export function updatePrimaryTag(data) {
+  return request({
+    url: UpdatePrimaryTag,
+    method: 'put',
+    data
+  })
+}
+
+const UpdateModelTagRule = '/tag/basicTag/updateModelTagRule'
+export function updateModelTagRule(data) {
+  return request({
+    url: UpdateModelTagRule,
+    method: 'put',
+    data
+  })
+}
+
+const UpdateModelTag = '/tag/basicTag/updateModelTag'
+export function updateModelTag(data) {
+  return request({
+    url: UpdateModelTag,
+    method: 'put',
+    data
+  })
+}
