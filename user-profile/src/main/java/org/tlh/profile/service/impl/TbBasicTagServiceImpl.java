@@ -9,6 +9,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tlh.profile.config.ProfileProperties;
 import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.dto.DeleteTagDto;
 import org.tlh.profile.dto.ModelTagDto;
@@ -25,6 +26,7 @@ import org.tlh.profile.util.ModelMetaDataParseUtil;
 import org.tlh.profile.vo.BasicTagListVo;
 import org.tlh.profile.vo.ElementTreeVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,9 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
 
     @Autowired
     private ITbTagMetadataService metadataService;
+
+    @Autowired
+    private ProfileProperties profileProperties;
 
     @Override
     @Transactional
@@ -136,21 +141,28 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         //设置定时规则
         String rule = modelTag.getSchedule() + "," + StringUtils.join(modelTag.getStarEnd(), ",");
         tagModel.setScheduleRule(rule);
+        //设置spark参数
+        if (StringUtils.isEmpty(modelTag.getSparkOpts())){
+            tagModel.setSparkOpts(this.profileProperties.getOozie().getSparkOpts());
+        }else{
+            tagModel.setSparkOpts(modelTag.getSparkOpts());
+        }
         boolean model = modelService.save(tagModel);
         //3.保存元数据
-        boolean metaData = this.saveTagMetaData(target.getId(), modelTag.getRule());
+        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
+        metadata.setTagId(target.getId());
+        boolean metaData = this.metadataService.save(metadata);
         return tag && model && metaData;
     }
 
-    private boolean saveTagMetaData(Long tagId, String metaData) {
+    private TbTagMetadata buildTagMetaData(String metaData) {
         //1.判断数据有效性
-        if (StringUtils.isEmpty(metaData) || tagId == null) {
-            throw new IllegalArgumentException("TagId or rule is null!");
+        if (StringUtils.isEmpty(metaData)) {
+            throw new IllegalArgumentException("rule is null!");
         }
         //2.解析数据
         TbTagMetadata metadata = ModelMetaDataParseUtil.parse(metaData);
-        metadata.setTagId(tagId);
-        return metadataService.save(metadata);
+        return metadata;
     }
 
 
@@ -224,6 +236,7 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         target.setName(basicTag.getName());
         target.setIndustry(basicTag.getIndustry());
         target.setPid(basicTag.getPid());
+        target.setUpdateTime(LocalDateTime.now());
         //处理level
         if (basicTag.getPid() != null) {
             TbBasicTag parent = this.getById(basicTag.getPid());
@@ -242,13 +255,47 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         target.setName(basicTag.getName());
         target.setRule(basicTag.getRule());
         target.setBusiness(basicTag.getBusiness());
+        target.setUpdateTime(LocalDateTime.now());
         return this.updateById(target);
     }
 
     @Override
     @Transactional
     public boolean updateModelTag(ModelTagDto modelTag) {
-        // todo 更新模型标签
-        return false;
+        //1.更新业务标签数据
+        TbBasicTag target = new TbBasicTag();
+        BeanUtils.copyProperties(modelTag, target);
+        target.setUpdateTime(LocalDateTime.now());
+        boolean tag = this.updateById(target);
+        //2.更新模型数据
+        TbTagModel tagModel = new TbTagModel();
+        tagModel.setId(modelTag.getModelId());
+        tagModel.setModelArgs(modelTag.getModelArgs());
+        String modelPath = modelTag.getModelPath();
+        String modelJar = modelPath.substring(modelPath.lastIndexOf("/") + 1);
+        tagModel.setModelJar(modelJar);
+        tagModel.setModelMain(modelTag.getModelMain());
+        tagModel.setModelName(modelTag.getModelName());
+        tagModel.setModelPath(modelPath);
+        tagModel.setUpdateTime(LocalDateTime.now());
+        //设置定时规则
+        String rule = modelTag.getSchedule() + "," + StringUtils.join(modelTag.getStarEnd(), ",");
+        tagModel.setScheduleRule(rule);
+        //设置spark参数
+        if (StringUtils.isEmpty(modelTag.getSparkOpts())){
+            tagModel.setSparkOpts(this.profileProperties.getOozie().getSparkOpts());
+        }else{
+            tagModel.setSparkOpts(modelTag.getSparkOpts());
+        }
+        boolean model = modelService.updateById(tagModel);
+        //3.更新元数据
+        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
+        metadata.setUpdateTime(LocalDateTime.now());
+        UpdateWrapper<TbTagMetadata> wrapper = new UpdateWrapper<>();
+        wrapper.eq("tag_id", modelTag.getId());
+        boolean metaData = this.metadataService.update(metadata, wrapper);
+        return tag && model && metaData;
     }
+
+
 }

@@ -6,7 +6,7 @@
         :data="leftTagTree"
         check-strictly
         node-key="id"
-        :default-expanded-keys="[1]"
+        default-expand-all
         @node-click="handleNodeClick"
       />
     </el-aside>
@@ -415,7 +415,7 @@ export default {
       this.modelTagInnerVisible = false
       // 设置文件路径
       if (response.errno === 0) {
-        this.modelTag.modelJar = response.data
+        this.modelTag.modelPath = response.data
       } else {
         this.$notify.error({
           title: '上传模型失败',
