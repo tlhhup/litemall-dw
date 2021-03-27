@@ -186,7 +186,7 @@
           >
             <template slot-scope="scope">
               <el-button
-                v-show="scope.row.level===4"
+                v-show="scope.row.level===4&&scope.row.state.state!==1"
                 type="success"
                 :icon="scope.row.state!==null &&scope.row.state.state===4?'el-icon-video-pause':'el-icon-video-play'"
                 size="small"
