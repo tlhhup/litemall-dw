@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tlh.profile.mapper.TbTagModelMapper">
 
+    <select id="querySubmitModel" resultType="org.tlh.profile.vo.BasicTagListVo">
+        select
+            t.*,
+            m.id as modelId,
+            m.model_name as modelName,
+            m.model_type as modelType,
+            m.model_main as modelMain,
+            m.model_path as modelPath,
+            m.model_args as modelArgs,
+            m.spark_opts as sparkOpts,
+            m.schedule_rule as scheduleRule
+        from tb_basic_tag t
+        inner join
+            tb_tag_model m on t.id=m.tag_id
+        where t.level=4
+    </select>
 </mapper>

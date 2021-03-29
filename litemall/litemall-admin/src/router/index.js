@@ -709,6 +709,16 @@ export const asyncRoutes = [
           title: '组合标签',
           noCache: true
         }
+      },
+      {
+        path: 'approveTag',
+        component: () => import('@/views/tag/approveTag'),
+        name: 'approveTag',
+        meta: {
+          perms: ['GET /tag/approveModel/list'],
+          title: '模型审核',
+          noCache: true
+        }
       }
     ]
   },

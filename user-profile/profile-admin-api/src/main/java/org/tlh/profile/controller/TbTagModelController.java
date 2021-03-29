@@ -2,13 +2,14 @@ package org.tlh.profile.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.tlh.profile.dto.ApproveModelDto;
 import org.tlh.profile.service.ITbTagModelService;
 import org.tlh.profile.util.ResponseUtil;
+import org.tlh.profile.vo.BasicTagListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +30,18 @@ public class TbTagModelController {
     public Object uploadModelFile(@RequestParam("file") MultipartFile jar) {
         String path = this.modelService.uploadFile(jar);
         return ResponseUtil.ok(path);
+    }
+
+    @GetMapping("/submitModelList")
+    public Object submitModelList(){
+        List<BasicTagListVo> models= this.modelService.querySubmitModel();
+        return ResponseUtil.ok(models);
+    }
+
+    @PutMapping("/approveModel")
+    public Object updateModelState(@RequestBody ApproveModelDto approveModel){
+        boolean flag=this.modelService.approveModel(approveModel);
+        return ResponseUtil.ok(flag);
     }
 
 }

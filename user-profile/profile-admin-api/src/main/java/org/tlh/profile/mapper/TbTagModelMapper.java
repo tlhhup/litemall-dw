@@ -1,7 +1,10 @@
 package org.tlh.profile.mapper;
 
-import org.tlh.profile.entity.TbTagModel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.tlh.profile.entity.TbTagModel;
+import org.tlh.profile.vo.BasicTagListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-03-20
  */
 public interface TbTagModelMapper extends BaseMapper<TbTagModel> {
+
+    List<BasicTagListVo> querySubmitModel();
 
 }

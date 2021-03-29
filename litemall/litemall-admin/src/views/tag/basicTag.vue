@@ -195,6 +195,13 @@
               />
               <el-button type="primary" size="small" icon="el-icon-edit" circle @click="handleTagEdit(scope.row)" />
               <el-button type="danger" size="small" icon="el-icon-delete" circle @click="handleTagDelete(scope.row)" />
+              <el-button
+                v-show="scope.row.level===4&&scope.row.state.state===2"
+                type="success"
+                size="small"
+                icon="el-icon-check"
+                circle
+              />
             </template>
           </el-table-column>
         </el-table>

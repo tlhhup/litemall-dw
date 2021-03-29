@@ -20,7 +20,8 @@ public enum ModelTaskState {
     DEVELOPED(3, "开发完成"),
     ONLINE(4, "已上线"),
     OFFLINE(5, "已下线"),
-    DISABLED(6, "已禁用");
+    DISABLED(6, "已禁用"),
+    REJECT(7, "不通过");
 
     private int state;
     private String desc;

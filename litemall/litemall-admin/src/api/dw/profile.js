@@ -95,3 +95,20 @@ export function updateModelTag(data) {
     data
   })
 }
+
+const SubmitModelList = '/tag/tagModel/submitModelList'
+export function listSubmitModel() {
+  return request({
+    url: SubmitModelList,
+    method: 'get'
+  })
+}
+
+const ApproveModel = '/tag/tagModel/approveModel'
+export function approveModel(data) {
+  return request({
+    url: ApproveModel,
+    method: 'put',
+    data
+  })
+}
