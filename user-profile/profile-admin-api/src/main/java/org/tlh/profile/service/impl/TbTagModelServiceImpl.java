@@ -65,8 +65,8 @@ public class TbTagModelServiceImpl extends ServiceImpl<TbTagModelMapper, TbTagMo
     }
 
     @Override
-    public List<BasicTagListVo> querySubmitModel() {
-        List<BasicTagListVo> result = this.modelMapper.querySubmitModel();
+    public List<BasicTagListVo> querySubmitModel(String modelName) {
+        List<BasicTagListVo> result = this.modelMapper.querySubmitModel(modelName);
         result = result.stream().map(item -> {
             String scheduleRule = item.getScheduleRule();
             if (StringUtils.isNotEmpty(scheduleRule)) {

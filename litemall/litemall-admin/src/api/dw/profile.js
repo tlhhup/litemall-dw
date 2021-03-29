@@ -97,10 +97,11 @@ export function updateModelTag(data) {
 }
 
 const SubmitModelList = '/tag/tagModel/submitModelList'
-export function listSubmitModel() {
+export function listSubmitModel(query) {
   return request({
     url: SubmitModelList,
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

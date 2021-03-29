@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface TbTagModelMapper extends BaseMapper<TbTagModel> {
 
-    List<BasicTagListVo> querySubmitModel();
+    List<BasicTagListVo> querySubmitModel(String modelName);
 
 }

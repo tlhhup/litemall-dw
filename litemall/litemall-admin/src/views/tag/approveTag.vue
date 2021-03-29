@@ -132,14 +132,17 @@ export default {
   },
   methods: {
     getList() {
-      listSubmitModel().then(response => {
+      listSubmitModel(this.listQuery).then(response => {
         const { data: ret } = response.data
         this.list = ret
         this.total = ret.length
         this.listLoading = false
       })
     },
-    handleFilter() {},
+    handleFilter() {
+      this.listLoading = true
+      this.getList()
+    },
     handleDetail(data) {
       Object.assign(this.modelTag, data)
       this.modelTagDialog = true

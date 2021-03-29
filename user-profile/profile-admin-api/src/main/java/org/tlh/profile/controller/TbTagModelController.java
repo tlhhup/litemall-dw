@@ -33,8 +33,8 @@ public class TbTagModelController {
     }
 
     @GetMapping("/submitModelList")
-    public Object submitModelList(){
-        List<BasicTagListVo> models= this.modelService.querySubmitModel();
+    public Object submitModelList(@RequestParam(name = "modelName",required = false) String modelName){
+        List<BasicTagListVo> models= this.modelService.querySubmitModel(modelName);
         return ResponseUtil.ok(models);
     }
 

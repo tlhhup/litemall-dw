@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tlh.profile.mapper.TbTagModelMapper">
 
-    <select id="querySubmitModel" resultType="org.tlh.profile.vo.BasicTagListVo">
+    <select id="querySubmitModel" resultType="org.tlh.profile.vo.BasicTagListVo" parameterType="string">
         select
             t.*,
             m.id as modelId,
@@ -16,6 +16,11 @@
         from tb_basic_tag t
         inner join
             tb_tag_model m on t.id=m.tag_id
-        where t.level=4
+        <where>
+           t.level=4
+            <if test="modelName!=null and modelName!=''">
+                and m.model_name=#{value}
+            </if>
+        </where>
     </select>
 </mapper>

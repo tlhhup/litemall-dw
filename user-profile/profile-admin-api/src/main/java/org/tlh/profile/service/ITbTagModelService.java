@@ -31,7 +31,7 @@ public interface ITbTagModelService extends IService<TbTagModel> {
      *
      * @return
      */
-    List<BasicTagListVo> querySubmitModel();
+    List<BasicTagListVo> querySubmitModel(String modelName);
 
     /**
      * 模型审批
