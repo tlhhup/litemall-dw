@@ -113,3 +113,38 @@ export function approveModel(data) {
     data
   })
 }
+
+const FinishModel = '/tag/tagModel/finishModel/'
+export function finishModel(tagId) {
+  return request({
+    url: FinishModel + tagId,
+    method: 'put'
+  })
+}
+
+const PublishModel = '/tag/tagModel/publishModel'
+export function publishModel(data) {
+  return request({
+    url: PublishModel,
+    method: 'put',
+    data
+  })
+}
+
+const OfflineModel = '/tag/tagModel/offlineModel'
+export function offlineModel(data) {
+  return request({
+    url: OfflineModel,
+    method: 'put',
+    data
+  })
+}
+
+const RunOrStopModel = '/tag/tagModel/runOrStopModel'
+export function runOrStopModel(data) {
+  return request({
+    url: RunOrStopModel,
+    method: 'put',
+    data
+  })
+}

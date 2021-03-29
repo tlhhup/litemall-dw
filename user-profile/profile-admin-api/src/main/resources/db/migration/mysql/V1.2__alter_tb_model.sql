@@ -1,0 +1,1 @@
+alter table tb_tag_model add column oozie_task_id varchar(200) comment 'oozie调度任务ID';

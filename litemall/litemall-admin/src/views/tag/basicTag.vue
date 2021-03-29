@@ -193,15 +193,16 @@
                 circle
                 @click="changeModelState(scope.row)"
               />
-              <el-button type="primary" size="small" icon="el-icon-edit" circle @click="handleTagEdit(scope.row)" />
-              <el-button type="danger" size="small" icon="el-icon-delete" circle @click="handleTagDelete(scope.row)" />
               <el-button
                 v-show="scope.row.level===4&&scope.row.state.state===2"
                 type="success"
                 size="small"
                 icon="el-icon-check"
                 circle
+                @click="handleFinish(scope.row)"
               />
+              <el-button type="primary" size="small" icon="el-icon-edit" circle @click="handleTagEdit(scope.row)" />
+              <el-button type="danger" size="small" icon="el-icon-delete" circle @click="handleTagDelete(scope.row)" />
             </template>
           </el-table-column>
         </el-table>
@@ -222,7 +223,8 @@ import {
   deleteTag,
   updatePrimaryTag,
   updateModelTagRule,
-  updateModelTag
+  updateModelTag,
+  finishModel
 } from '@/api/dw/profile'
 
 export default {
@@ -631,6 +633,19 @@ export default {
         pid: this.currentPid
       }
       this.modelTagRule = true
+    },
+    handleFinish(row) {
+      finishModel(row.id).then(response => {
+        const { data: ret } = response.data
+        if (ret) {
+          this.listChildTags(row.pid)
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+        }
+      })
     }
   }
 }

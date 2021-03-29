@@ -1,5 +1,6 @@
 package org.tlh.profile.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -103,6 +104,103 @@ public class TbTagModelServiceImpl extends ServiceImpl<TbTagModelMapper, TbTagMo
         tagModel.setState(taskState.getState());
         tagModel.setUpdateTime(LocalDateTime.now());
         boolean c2 = this.updateById(tagModel);
+        return c1 && c2;
+    }
+
+    @Override
+    public boolean finishModelTag(long tagId) {
+        //1.更新标签状态
+        TbBasicTag tag = new TbBasicTag();
+        tag.setId(tagId);
+        tag.setState(ModelTaskState.DEVELOPED.getState());
+        tag.setUpdateTime(LocalDateTime.now());
+        boolean c1 = this.basicTagService.updateById(tag);
+        //2.更新模型状态
+        TbTagModel tagModel = new TbTagModel();
+        tagModel.setState(ModelTaskState.DEVELOPED.getState());
+        tagModel.setUpdateTime(LocalDateTime.now());
+        UpdateWrapper<TbTagModel> wrapper = new UpdateWrapper<>();
+        wrapper.eq("tag_id", tagId);
+        boolean c2 = this.update(tagModel, wrapper);
+        return c1 && c2;
+    }
+
+    @Override
+    public boolean publishModel(long tagId, long modelId) {
+        //1.提交任务到oozie todo
+        //2.解析task id
+        String taskId = "";
+        //3.更新模型表，存储task id
+        TbTagModel tagModel = new TbTagModel();
+        tagModel.setId(modelId);
+        tagModel.setState(ModelTaskState.ONLINE.getState());
+        tagModel.setUpdateTime(LocalDateTime.now());
+        tagModel.setOozieTaskId(taskId);
+        boolean c1 = this.updateById(tagModel);
+        //4.更新tag表状态
+        TbBasicTag tag = new TbBasicTag();
+        tag.setId(tagId);
+        tag.setState(ModelTaskState.ONLINE.getState());
+        tag.setUpdateTime(LocalDateTime.now());
+        boolean c2 = this.basicTagService.updateById(tag);
+        return c1 && c2;
+    }
+
+    @Override
+    public boolean offlineModel(long tagId, long modelId) {
+        //1.查询详细
+        TbTagModel tagModel = this.getById(modelId);
+        //2.校验状态
+        if (tagModel == null
+                || ModelTaskState.ONLINE == ModelTaskState.convert(tagModel.getState())
+                || StringUtils.isEmpty(tagModel.getOozieTaskId())) {
+            throw new IllegalStateException("模型状态错误！");
+        }
+        //3.删除oozie中的任务 todo
+
+        //4.更新状态
+        tagModel.setState(ModelTaskState.OFFLINE.getState());
+        tagModel.setUpdateTime(LocalDateTime.now());
+        boolean c1 = this.updateById(tagModel);
+
+        TbBasicTag tag = new TbBasicTag();
+        tag.setId(tagId);
+        tag.setState(ModelTaskState.OFFLINE.getState());
+        tag.setUpdateTime(LocalDateTime.now());
+        boolean c2 = this.basicTagService.updateById(tag);
+        return c1 && c2;
+    }
+
+    @Override
+    public boolean runOrStopModel(long tagId, long modelId, ModelTaskState taskState) {
+        //1.查询详细
+        TbTagModel tagModel = this.getById(modelId);
+        //2.校验状态
+        if (tagModel == null
+                || ModelTaskState.ONLINE == ModelTaskState.convert(tagModel.getState())
+                || StringUtils.isEmpty(tagModel.getOozieTaskId())) {
+            throw new IllegalStateException("模型状态错误！");
+        }
+        //3.切换oozie中的任务 todo
+        switch (taskState) {
+            case ONLINE:
+                break;
+            case STOPPED:
+                break;
+            default:
+                throw new IllegalArgumentException("不支持的操作！");
+        }
+
+        //4.更新状态
+        tagModel.setState(taskState.getState());
+        tagModel.setUpdateTime(LocalDateTime.now());
+        boolean c1 = this.updateById(tagModel);
+
+        TbBasicTag tag = new TbBasicTag();
+        tag.setId(tagId);
+        tag.setState(taskState.getState());
+        tag.setUpdateTime(LocalDateTime.now());
+        boolean c2 = this.basicTagService.updateById(tag);
         return c1 && c2;
     }
 }
