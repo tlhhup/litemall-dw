@@ -290,6 +290,10 @@
         <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
         <Cm>oozie的调度规则</Cm>
       </Cl>
+      <Cl au="0" df="" nm="oozie_task_id" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
+        <Cm>oozie调度任务ID</Cm>
+      </Cl>
       <Cl au="0" df="" nm="operator" nu="1">
         <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
         <Cm>操作人</Cm>
@@ -344,7 +348,7 @@
     </DiaProps>
     <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_basic_tag" x="676" y="446"/>
     <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_tag_metadata" x="1125" y="330"/>
-    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_tag_model" x="192" y="422"/>
+    <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_tag_model" x="191" y="422"/>
     <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_merge_tag" x="234" y="839"/>
     <TbGl bkCl="ff4c78ff" sch="user_profile" tbl="tb_merge_tag_detail" x="693" y="855"/>
     <FkGl bkCl="ff000000" childEdge="NORTH" nm="user_profile.tb_merge_tag_detail.fk_tb_merge_tag_detail_tb_basic_tag" parentEdge="SOUTH" positioner="OneLineUserLinkPositioner">
@@ -364,7 +368,7 @@
     </FkGl>
     <FkGl bkCl="ff000000" childEdge="EAST" nm="user_profile.tb_tag_model.fk_tb_tag_model_tb_basic_tag" parentEdge="WEST" positioner="OneLineUserLinkPositioner">
       <positionableLines>
-        <positionableLine lineRole="SINGLE_LINE" x1="676" x2="446" y1="570" y2="570"/>
+        <positionableLine lineRole="SINGLE_LINE" x1="676" x2="445" y1="570" y2="570"/>
       </positionableLines>
     </FkGl>
     <Notes/>
