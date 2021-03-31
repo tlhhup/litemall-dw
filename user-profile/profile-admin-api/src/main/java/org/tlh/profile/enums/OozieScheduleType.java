@@ -13,10 +13,10 @@ import java.util.Optional;
 @Getter
 public enum OozieScheduleType {
 
-    DAILY(1, "每天","${coord:endOfDays(1)}"),
-    WEEKLY(2, "每周","${coord:endOfWeeks(1)}"),
-    MONTHLY(3, "每月","${coord:endOfMonths(1)}"),
-    YEARLY(4, "每年","${coord:endOfMonths(12)}");
+    DAILY(1, "每天","0 0 * * ?"),
+    WEEKLY(2, "每周","0 0 ? 1-12 7"),
+    MONTHLY(3, "每月","0 0 1 * ?"),
+    YEARLY(4, "每年","0 0 1 1 ?");
 
     private int type;
     private String name;

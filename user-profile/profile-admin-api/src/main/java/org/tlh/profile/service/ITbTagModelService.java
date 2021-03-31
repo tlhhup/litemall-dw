@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 import org.tlh.profile.dto.ApproveModelDto;
 import org.tlh.profile.entity.TbTagModel;
-import org.tlh.profile.enums.ModelTaskState;
 import org.tlh.profile.vo.BasicTagListVo;
 
 import java.util.List;
@@ -73,8 +72,7 @@ public interface ITbTagModelService extends IService<TbTagModel> {
      *
      * @param tagId
      * @param modelId
-     * @param taskState
      * @return
      */
-    boolean runOrStopModel(long tagId, long modelId, ModelTaskState taskState);
+    boolean runOrStopModel(long tagId, long modelId);
 }

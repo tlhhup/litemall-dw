@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.tlh.profile.dto.ApproveModelDto;
-import org.tlh.profile.enums.ModelTaskState;
 import org.tlh.profile.service.ITbTagModelService;
 import org.tlh.profile.util.ResponseUtil;
 import org.tlh.profile.vo.BasicTagListVo;
@@ -65,7 +64,7 @@ public class TbTagModelController {
 
     @PutMapping("/runOrStopModel")
     public Object runOrStopModel(@RequestBody ApproveModelDto model) {
-        boolean flag = this.modelService.runOrStopModel(model.getTagId(), model.getModelId(), ModelTaskState.convert(model.getState()));
+        boolean flag = this.modelService.runOrStopModel(model.getTagId(), model.getModelId());
         return ResponseUtil.ok(flag);
     }
 

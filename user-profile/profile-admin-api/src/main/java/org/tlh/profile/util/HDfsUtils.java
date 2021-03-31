@@ -45,6 +45,18 @@ public final class HDfsUtils implements Closeable {
         return false;
     }
 
+    public boolean copyFileFromLocal(String sourcePath, String targetPath) {
+        try {
+            Path source = new Path(sourcePath);
+            Path target = new Path(targetPath);
+            fs.copyFromLocalFile(source, target);
+            return true;
+        } catch (IOException e) {
+            log.error("upload to hdfs error", e);
+        }
+        return false;
+    }
+
     public boolean deleteFile(String path) {
         try {
             Path target = new Path(path);

@@ -25,6 +25,7 @@ profile:
   hdfs:
     url: hdfs://cdh-master:8020
     model-path: /app/litemall/model
+    oozie-path: /app/litemall/oozie
     user: oozie
   oozie:
     url: http://cdh-master:11000/oozie

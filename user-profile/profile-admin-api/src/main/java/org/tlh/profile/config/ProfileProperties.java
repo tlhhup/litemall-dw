@@ -30,6 +30,7 @@ public class ProfileProperties {
     public static class HDfs {
         private String url;
         private String modelPath;
+        private String ooziePath;
         private String user;
     }
 

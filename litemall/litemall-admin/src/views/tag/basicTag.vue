@@ -90,7 +90,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                value-format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-ddTHH:mm+0800"
                 format="yyyy-MM-dd HH:mm"
               />
             </el-form-item>
