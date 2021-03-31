@@ -224,7 +224,8 @@ import {
   updatePrimaryTag,
   updateModelTagRule,
   updateModelTag,
-  finishModel
+  finishModel,
+  runOrStopModel
 } from '@/api/dw/profile'
 
 export default {
@@ -559,7 +560,21 @@ export default {
       return cellValue
     },
     changeModelState(row) {
-      console.info(row)
+      const params = {
+        tagId: row.id,
+        modelId: row.modelId
+      }
+      runOrStopModel(params).then(response => {
+        const { data: ret } = response.data
+        if (ret) {
+          this.listChildTags(row.pid)
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+        }
+      })
     },
     handleTagEdit(row) {
       switch (row.level) {

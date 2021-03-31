@@ -196,6 +196,7 @@ export default {
   },
   methods: {
     getList() {
+      this.listLoading = true
       listSubmitModel(this.listQuery).then(response => {
         const { data: ret } = response.data
         this.list = ret
@@ -204,7 +205,6 @@ export default {
       })
     },
     handleFilter() {
-      this.listLoading = true
       this.getList()
     },
     handleDetail(data) {
@@ -225,6 +225,8 @@ export default {
             title: '失败',
             message: response.data.errmsg
           })
+        } else {
+          this.getList()
         }
       })
     },
@@ -242,6 +244,8 @@ export default {
             title: '失败',
             message: response.data.errmsg
           })
+        } else {
+          this.getList()
         }
       })
     },
@@ -262,6 +266,8 @@ export default {
             title: '失败',
             message: response.data.errmsg
           })
+        } else {
+          this.getList()
         }
       })
     },
@@ -278,6 +284,8 @@ export default {
             title: '失败',
             message: response.data.errmsg
           })
+        } else {
+          this.getList()
         }
       })
     }

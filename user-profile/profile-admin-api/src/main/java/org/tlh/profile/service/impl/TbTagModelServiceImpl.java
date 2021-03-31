@@ -143,10 +143,11 @@ public class TbTagModelServiceImpl extends ServiceImpl<TbTagModelMapper, TbTagMo
         if (StringUtils.isEmpty(scheduleRule)) {
             throw new IllegalStateException("The model don't has any scheduleRule");
         }
-        //1.提交任务到oozie todo
+        //1.提交任务到oozie
         //1.1复制workflow 和 coordinator 配置到hdfs中
         String modelName = PinyinUtil.toPingYin(tagModel.getModelName());
         String target = this.profileProperties.getHdfs().getOoziePath() + "/" + modelName;
+        this.hDfsUtils.removeDir(target);
         String[] sources = {"oozie/coordinator/spark", "oozie/workflow/spark"};
         for (String source : sources) {
             URL resource = this.getClass().getClassLoader().getResource(source);
@@ -205,6 +206,7 @@ public class TbTagModelServiceImpl extends ServiceImpl<TbTagModelMapper, TbTagMo
             //4.更新状态
             tagModel.setState(ModelTaskState.OFFLINE.getState());
             tagModel.setUpdateTime(LocalDateTime.now());
+            tagModel.setOozieTaskId("");
             boolean c1 = this.updateById(tagModel);
 
             TbBasicTag tag = new TbBasicTag();

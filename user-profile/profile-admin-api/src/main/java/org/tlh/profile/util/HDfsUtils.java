@@ -67,6 +67,16 @@ public final class HDfsUtils implements Closeable {
         return false;
     }
 
+    public boolean removeDir(String dir){
+        try {
+            Path target = new Path(dir);
+            return fs.delete(target,true);
+        } catch (IOException e) {
+            log.error("delete file error", e);
+        }
+        return false;
+    }
+
 
     @Override
     public void close() throws IOException {
