@@ -172,6 +172,9 @@ public class TbTagModelServiceImpl extends ServiceImpl<TbTagModelMapper, TbTagMo
         conf.setProperty("spark_opts", tagModel.getSparkOpts());
         conf.setProperty("app_jar_path", tagModel.getModelPath());
         conf.setProperty("args", tagModel.getModelArgs());
+        //设置资源管理器信息
+        conf.setProperty("resourceManager",this.profileProperties.getOozie().getResourceManager());
+        conf.setProperty("nameNode",this.profileProperties.getOozie().getNameNode());
         //1.3提交任务
         //2.解析task id
         String taskId = this.oozieUtil.submitAndRunTask(conf);
