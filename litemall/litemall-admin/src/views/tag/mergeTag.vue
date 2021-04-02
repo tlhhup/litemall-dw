@@ -12,7 +12,11 @@
       :visible.sync="dialogVisible"
       width="65%"
     >
-      <CreateMergeTag @create-cancel="dialogVisible=false" />
+      <CreateMergeTag
+        :merge-tag-id="mergeTagId"
+        @create-cancel="dialogVisible=false"
+        @reload-list="handleReload"
+      />
     </el-dialog>
 
     <!-- 列表 -->
@@ -52,7 +56,8 @@ export default {
         page: 1,
         limit: 20,
         name: ''
-      }
+      },
+      mergeTagId: undefined
     }
   },
   created() {
@@ -64,7 +69,11 @@ export default {
     },
     handleFilter() {},
     handleUpdate(row) {},
-    handleDelete(row) {}
+    handleDelete(row) {},
+    handleReload() {
+      this.dialogVisible = false
+      this.getList()
+    }
   }
 }
 </script>

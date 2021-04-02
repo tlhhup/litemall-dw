@@ -42,11 +42,30 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane name="1" class="basic-info">填写基本信息</el-tab-pane>
+        <el-tab-pane name="1" class="basic-info">
+          <el-form ref="mergeTagForm" :model="mergeTag" status-icon :rules="rules" label-width="100px" size="small">
+            <el-form-item label="标签名称" prop="name">
+              <el-input v-model="mergeTag.name" type="text" />
+            </el-form-item>
+            <el-form-item label="标签条件" prop="condition">
+              <el-input v-model="mergeTag.condition" type="text" />
+            </el-form-item>
+            <el-form-item label="标签含义" prop="intro">
+              <el-input v-model="mergeTag.intro" type="text" />
+            </el-form-item>
+            <el-form-item label="组合用途" prop="purpose">
+              <el-input v-model="mergeTag.purpose" type="text" />
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
         <el-tab-pane name="2" class="review">确认信息</el-tab-pane>
       </el-tabs>
-      <el-button type="primary" style="position: absolute;bottom: 10px; right: 50%;" @click="next">下一步</el-button>
-      <el-button style="position: absolute;bottom: 10px; right: 40%;" @click="cancel">取消</el-button>
+      <el-row style="position: absolute;bottom: 10px; left:40%;">
+        <el-button v-show="active!==0" type="primary" @click="prev">上一步</el-button>
+        <el-button v-show="active!==2" type="primary" @click="next">下一步</el-button>
+        <el-button v-show="active===2" type="primary" @click="handleSubmit">提交</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </el-row>
     </el-main>
   </div>
 </template>
@@ -55,6 +74,13 @@
 import { listBasicTagTree, childTags } from '@/api/dw/profile'
 
 export default {
+  props: {
+    mergeTagId: {
+      type: Number,
+      required: false,
+      default: undefined
+    }
+  },
   data() {
     return {
       leftTagTree: [],
@@ -71,6 +97,20 @@ export default {
           label: '或'
         }
       ],
+      rules: {
+        name: [
+          { required: true, message: '请输入组合标签名称', trigger: 'blur' }
+        ],
+        condition: [
+          { required: true, message: '请输入组合标签条件', trigger: 'blur' }
+        ],
+        intro: [
+          { required: true, message: '请输入组合标签含义', trigger: 'blur' }
+        ],
+        purpose: [
+          { required: true, message: '请输入组合标签用途', trigger: 'blur' }
+        ]
+      },
       conditionTitle: '',
       mergeTag: {
         tags: [],
@@ -111,10 +151,38 @@ export default {
         })
       }
     },
+    prev() {
+      if (this.active-- < 0) this.active = 0
+    },
     next() {
-      if (this.active++ >= 2) this.active = 0
+      var flag = true
+      switch (this.active) {
+        case 0:
+          if (this.mergeTag.tags.length === 0) {
+            flag = false
+            this.$notify.error({
+              title: '提示',
+              message: '组合条件不能为空!'
+            })
+          }
+          break
+
+        case 1:
+          this.$refs['mergeTagForm'].validate(valid => {
+            flag = valid
+          })
+          break
+      }
+      if (!flag) {
+        return
+      }
+      if (this.active++ > 2) this.active = 0
     },
     cancel() {
+      this.resetForm()
+      this.$emit('create-cancel')
+    },
+    resetForm() {
       this.mergeTag = {
         tags: [],
         name: '',
@@ -124,7 +192,7 @@ export default {
         remark: ''
       }
       this.ruleTags = []
-      this.$emit('create-cancel')
+      this.active = 0
     },
     clearAll() {
       this.mergeTag.tags = []
@@ -154,6 +222,12 @@ export default {
           item.checked = false
         }
       })
+    },
+    handleSubmit() {
+      // 添加组合标签
+      this.resetForm()
+      // 发送重新刷新事件
+      this.$emit('reload-list')
     }
   }
 }
