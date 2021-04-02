@@ -72,20 +72,21 @@
             <el-form-item label="组合用途" prop="purpose">
               <el-input v-model="mergeTag.purpose" type="text" readonly />
             </el-form-item>
-            <el-form-item label="组合条件">
-              <div v-for="(tag,index) in mergeTag.tags" :key="tag.tagId" class="choosed-tag-item">
-                <span class="indicator">{{ index+1 }}</span>
-                <el-input v-model="tag.name" class="tag-label" size="mini" readonly />
-                <el-select v-model="tag.condition" size="mini" disabled>
-                  <el-option
-                    v-for="c in conditions"
-                    :key="c.value"
-                    :label="c.label"
-                    :value="c.value"
-                  />
-                </el-select>
-              </div>
-            </el-form-item>
+            <el-row>
+              <span style="font-size: 14px;color: #606266;font-weight: 700;">组合条件</span>
+            </el-row>
+            <div v-for="(tag,index) in mergeTag.tags" :key="tag.tagId" class="choosed-tag-item">
+              <span class="indicator">{{ index+1 }}</span>
+              <el-input v-model="tag.name" class="tag-label" size="mini" readonly />
+              <el-select v-model="tag.condition" size="mini" disabled>
+                <el-option
+                  v-for="c in conditions"
+                  :key="c.value"
+                  :label="c.label"
+                  :value="c.value"
+                />
+              </el-select>
+            </div>
           </el-form>
         </el-tab-pane>
       </el-tabs>
