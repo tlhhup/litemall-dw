@@ -20,6 +20,7 @@ import org.tlh.profile.enums.ModelTaskState;
 import org.tlh.profile.enums.OozieScheduleType;
 import org.tlh.profile.mapper.TbBasicTagMapper;
 import org.tlh.profile.service.ITbBasicTagService;
+import org.tlh.profile.service.ITbMergeTagService;
 import org.tlh.profile.service.ITbTagMetadataService;
 import org.tlh.profile.service.ITbTagModelService;
 import org.tlh.profile.util.ModelMetaDataParseUtil;
@@ -53,6 +54,9 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
 
     @Autowired
     private ProfileProperties profileProperties;
+
+    @Autowired
+    private ITbMergeTagService mergeTagService;
 
     @Override
     @Transactional
@@ -142,9 +146,9 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         String rule = modelTag.getSchedule() + "," + StringUtils.join(modelTag.getStarEnd(), ",");
         tagModel.setScheduleRule(rule);
         //设置spark参数
-        if (StringUtils.isEmpty(modelTag.getSparkOpts())){
+        if (StringUtils.isEmpty(modelTag.getSparkOpts())) {
             tagModel.setSparkOpts(this.profileProperties.getOozie().getSparkOpts());
-        }else{
+        } else {
             tagModel.setSparkOpts(modelTag.getSparkOpts());
         }
         boolean model = modelService.save(tagModel);
@@ -192,7 +196,15 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
                 if (parent != null && ModelTaskState.convert(parent.getState()) == ModelTaskState.ONLINE) {
                     throw new IllegalStateException("依赖的模型标签处于运行状态，请先停止模型:" + parent.getName());
                 }
-                flag = this.removeById(deleteTag.getId());
+                // 判断是否有组合标签使用，且其状态为 上线
+                if (!this.mergeTagService.checkUsingStatus(deleteTag.getId())) {
+                    //删除组合标签引用
+                    this.mergeTagService.removeMergeDetail(deleteTag.getId());
+                    //删除自己
+                    flag = this.removeById(deleteTag.getId());
+                } else {
+                    throw new IllegalStateException("有依赖该标签的组合标签处于运行状态，请先停止移除！");
+                }
                 break;
             case 4:
                 //判断状态
@@ -282,9 +294,9 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         String rule = modelTag.getSchedule() + "," + StringUtils.join(modelTag.getStarEnd(), ",");
         tagModel.setScheduleRule(rule);
         //设置spark参数
-        if (StringUtils.isEmpty(modelTag.getSparkOpts())){
+        if (StringUtils.isEmpty(modelTag.getSparkOpts())) {
             tagModel.setSparkOpts(this.profileProperties.getOozie().getSparkOpts());
-        }else{
+        } else {
             tagModel.setSparkOpts(modelTag.getSparkOpts());
         }
         boolean model = modelService.updateById(tagModel);

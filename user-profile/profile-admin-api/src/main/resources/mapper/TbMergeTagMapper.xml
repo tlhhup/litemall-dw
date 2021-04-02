@@ -33,4 +33,13 @@
         on m.id=d.merge_tag_id
         where m.id=#{value}
     </select>
+
+    <select id="queryMergeTagsByBasicTagId" resultType="org.tlh.profile.entity.TbMergeTag">
+        select
+            m.*
+        from tb_merge_tag m
+        inner join tb_merge_tag_detail d
+        on m.id=d.merge_tag_id
+        where d.basic_tag_id=#{value}
+    </select>
 </mapper>

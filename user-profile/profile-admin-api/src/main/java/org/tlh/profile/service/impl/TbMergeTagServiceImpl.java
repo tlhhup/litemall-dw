@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.tlh.profile.dto.MergeTagDetailDto;
 import org.tlh.profile.dto.MergeTagDto;
@@ -51,7 +52,7 @@ public class TbMergeTagServiceImpl extends ServiceImpl<TbMergeTagMapper, TbMerge
             //1.保存基本信息
             TbMergeTag target = new TbMergeTag();
             BeanUtils.copyProperties(mergeTag, target);
-            target.setState(ModelTaskState.DEVELOPED.getState());
+            target.setState(ModelTaskState.ONLINE.getState());
             boolean c1 = this.save(target);
             //2.保存规则信息
             List<TbMergeTagDetail> details = new ArrayList<>();
@@ -144,5 +145,27 @@ public class TbMergeTagServiceImpl extends ServiceImpl<TbMergeTagMapper, TbMerge
             log.error("create mergeTag error", e);
         }
         return false;
+    }
+
+    @Override
+    public boolean checkUsingStatus(long basicTagId) {
+        List<TbMergeTag> tags = this.mergeTagMapper.queryMergeTagsByBasicTagId(basicTagId);
+        //1.没有使用
+        if (ObjectUtils.isEmpty(tags)) {
+            return false;
+        }
+        //2.检查使用的是否有上线的状态
+        long count = tags.stream().filter(item -> ModelTaskState.convert(item.getState()) == ModelTaskState.ONLINE).count();
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void removeMergeDetail(long basicTagId) {
+        QueryWrapper<TbMergeTagDetail> wrapper = new QueryWrapper<>();
+        wrapper.eq("basic_tag_id", basicTagId);
+        this.mergeTagDetailService.remove(wrapper);
     }
 }
