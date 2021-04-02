@@ -26,7 +26,7 @@ public class QueryCondition {
 
     @Getter
     public enum Operator {
-        AND(1,"AND"), OR(2,"OR"), NONE(3,"");
+        AND(1, "AND"), OR(2, "OR"), NONE(3, "");
 
         private int type;
         private String operator;
@@ -36,12 +36,12 @@ public class QueryCondition {
             this.operator = operator;
         }
 
-        public static Operator convert(String operator){
-            Optional<Operator> first = Arrays.stream(values()).filter(item -> item.operator.equalsIgnoreCase(operator)).findFirst();
+        public static Operator convert(int type) {
+            Optional<Operator> first = Arrays.stream(values()).filter(item -> item.type == type).findFirst();
             if (first.isPresent()) {
                 return first.get();
             } else {
-                throw new IllegalArgumentException("Not Support Operator:" + operator);
+                throw new IllegalArgumentException("Not Support Operator:" + type);
             }
         }
     }

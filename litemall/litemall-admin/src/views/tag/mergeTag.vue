@@ -74,8 +74,13 @@ export default {
         this.listLoading = false
       })
     },
-    handleFilter() {},
-    handleUpdate(row) {},
+    handleFilter() {
+      this.getList()
+    },
+    handleUpdate(row) {
+      this.dialogVisible = true
+      this.mergeTagId = row.id
+    },
     handleDelete(row) {
       removeMergeTag(row.id).then(response => {
         const { data: ret } = response.data

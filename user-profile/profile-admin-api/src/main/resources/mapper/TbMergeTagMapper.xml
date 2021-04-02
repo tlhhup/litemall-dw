@@ -2,4 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tlh.profile.mapper.TbMergeTagMapper">
 
+    <resultMap id="basicTag" type="org.tlh.profile.dto.MergeTagDetailDto">
+        <id property="tagId" column="tagId"/>
+        <result property="name" column="tName"/>
+        <result property="condition" column="tCondition"/>
+    </resultMap>
+
+    <resultMap id="detail" type="org.tlh.profile.vo.MergeTagListVo">
+        <id property="id" column="id"/>
+        <result property="condition" column="condition"/>
+        <result property="intro" column="intro"/>
+        <result property="name" column="name"/>
+        <result property="purpose" column="purpose"/>
+        <!-- 关联集合    -->
+        <collection property="tags" resultMap="basicTag"/>
+    </resultMap>
+
+    <select id="queryDetailById" resultMap="detail">
+        select
+            m.*,
+            d.basic_tag_id as tagId,
+            d.condition as tCondition,
+            (
+                select
+                    concat_ws('\t',p.name,t.name)
+                from tb_basic_tag t inner join tb_basic_tag p on t.pid=p.id where t.id=tagId
+            ) as tName
+        from tb_merge_tag m
+        inner join tb_merge_tag_detail d
+        on m.id=d.merge_tag_id
+        where m.id=#{value}
+    </select>
 </mapper>

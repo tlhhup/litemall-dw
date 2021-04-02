@@ -100,7 +100,13 @@
 </template>
 
 <script>
-import { listBasicTagTree, childTags, createMergeTag } from '@/api/dw/profile'
+import {
+  listBasicTagTree,
+  childTags,
+  createMergeTag,
+  mergeTagDetail,
+  updateMergeTag
+} from '@/api/dw/profile'
 
 export default {
   props: {
@@ -118,11 +124,11 @@ export default {
       ruleTags: [],
       conditions: [
         {
-          value: 'AND',
+          value: 1,
           label: '且'
         },
         {
-          value: 'OR',
+          value: 2,
           label: '或'
         }
       ],
@@ -154,6 +160,18 @@ export default {
   watch: {
     active: function(val) {
       this.activeName = val + ''
+    },
+    mergeTagId: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        if (val !== undefined) {
+          mergeTagDetail(val).then(response => {
+            const { data: ret } = response.data
+            this.mergeTag = ret
+          })
+        }
+      }
     }
   },
   created() {
@@ -228,13 +246,13 @@ export default {
       this.ruleTags.forEach(item => (item.checked = false))
     },
     handleRuleCheck(tag, event) {
-      const index = this.mergeTag.tags.findIndex(item => item.id === tag.tagId)
+      const index = this.mergeTag.tags.findIndex(item => item.tagId === tag.id)
       if (event) {
         if (index === -1) {
           const choosedTag = {
             tagId: tag.id,
             name: this.conditionTitle + '\t' + tag.name,
-            condition: 'AND'
+            condition: 1
           }
           this.mergeTag.tags.push(choosedTag)
         }
@@ -243,7 +261,9 @@ export default {
       }
     },
     handleDelete(tag) {
-      const index = this.mergeTag.tags.findIndex(item => item.id === tag.tagId)
+      const index = this.mergeTag.tags.findIndex(
+        item => item.tagId === tag.tagId
+      )
       this.mergeTag.tags.splice(index, 1)
       // 移除选中
       this.ruleTags.forEach(item => {
@@ -253,11 +273,19 @@ export default {
       })
     },
     handleSubmit() {
-      // 添加组合标签
-      createMergeTag(this.mergeTag).then(response => {
-        const { data: ret } = response.data
-        console.info(ret)
-      })
+      if (this.mergeTag.id !== undefined) {
+        // 更新
+        updateMergeTag(this.mergeTag).then(response => {
+          const { data: ret } = response.data
+          console.info(ret)
+        })
+      } else {
+        // 添加组合标签
+        createMergeTag(this.mergeTag).then(response => {
+          const { data: ret } = response.data
+          console.info(ret)
+        })
+      }
       this.resetForm()
       // 发送重新刷新事件
       this.$emit('reload-list')

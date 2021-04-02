@@ -158,6 +158,14 @@ export function mergeTagList(query) {
   })
 }
 
+const MergeTagDetail = '/tag/mergeTag/detail'
+export function mergeTagDetail(id) {
+  return request({
+    url: MergeTagDetail + '/' + id,
+    method: 'get'
+  })
+}
+
 const CreateMergeTag = '/tag/mergeTag/create'
 export function createMergeTag(data) {
   return request({
@@ -172,5 +180,14 @@ export function removeMergeTag(id) {
   return request({
     url: RemoveMergeTag + '/' + id,
     method: 'delete'
+  })
+}
+
+const UpdateMergeTag = '/tag/mergeTag/update'
+export function updateMergeTag(data) {
+  return request({
+    url: UpdateMergeTag,
+    method: 'put',
+    data
   })
 }

@@ -2,6 +2,7 @@ package org.tlh.profile.mapper;
 
 import org.tlh.profile.entity.TbMergeTag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.tlh.profile.vo.MergeTagListVo;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TbMergeTagMapper extends BaseMapper<TbMergeTag> {
 
+    MergeTagListVo queryDetailById(long id);
 }

@@ -44,6 +44,18 @@ public class TbMergeTagController {
         return ResponseUtil.ok(flag);
     }
 
+    @GetMapping("/detail/{id}")
+    public Object detail(@PathVariable("id") long id){
+        MergeTagListVo result=this.mergeTagService.getMergeTagDetail(id);
+        return ResponseUtil.ok(result);
+    }
+
+    @PutMapping("/update")
+    public Object update(@RequestBody MergeTagListVo mergeTag){
+        boolean flag=this.mergeTagService.updateMergeTag(mergeTag);
+        return ResponseUtil.ok(flag);
+    }
+
 
 }
 

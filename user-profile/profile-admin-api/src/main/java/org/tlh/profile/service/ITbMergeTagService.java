@@ -40,4 +40,20 @@ public interface ITbMergeTagService extends IService<TbMergeTag> {
      * @return
      */
     boolean removeMergeTag(long id);
+
+    /**
+     * 获取详情
+     *
+     * @param id
+     * @return
+     */
+    MergeTagListVo getMergeTagDetail(long id);
+
+    /**
+     * 更新组合标签
+     *
+     * @param mergeTag
+     * @return
+     */
+    boolean updateMergeTag(MergeTagListVo mergeTag);
 }

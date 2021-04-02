@@ -11,6 +11,7 @@ import lombok.Data;
 public class MergeTagDetailDto {
 
     private long tagId;
-    private String condition;
+    private int condition;
+    private String name;
 
 }
