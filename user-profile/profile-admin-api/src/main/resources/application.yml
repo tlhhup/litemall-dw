@@ -17,6 +17,9 @@ spring:
     multipart:
       max-file-size: 300MB
       max-request-size: 300MB
+  data:
+    solr:
+      host: http://cdh-master:8983/solr
 
 profile:
   admin:

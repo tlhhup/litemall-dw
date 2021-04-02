@@ -1,9 +1,15 @@
 package org.tlh.profile.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.tlh.profile.dto.MergeTagDto;
+import org.tlh.profile.service.ITbMergeTagService;
+import org.tlh.profile.util.ResponseUtil;
+import org.tlh.profile.vo.MergeTagListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,8 +20,30 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-03-20
  */
 @RestController
-@RequestMapping("/tbMergeTag")
+@RequestMapping("/mergeTag")
 public class TbMergeTagController {
+
+    @Autowired
+    private ITbMergeTagService mergeTagService;
+
+    @GetMapping("/list")
+    public Object list(@RequestParam(name = "name", required = false) String name) {
+        List<MergeTagListVo> result = this.mergeTagService.queryTags(name);
+        return ResponseUtil.ok(result);
+    }
+
+    @PostMapping("/create")
+    public Object saveMergeTag(@RequestBody MergeTagDto mergeTag) {
+        boolean flag = this.mergeTagService.createMergeTag(mergeTag);
+        return ResponseUtil.ok(flag);
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public Object removeMergeTag(@PathVariable("id") long id){
+        boolean flag=this.mergeTagService.removeMergeTag(id);
+        return ResponseUtil.ok(flag);
+    }
+
 
 }
 

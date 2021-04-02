@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { mergeTagList, removeMergeTag } from '@/api/dw/profile'
+
 import CreateMergeTag from './components/CreateMergeTag'
 import Pagination from '@/components/Pagination'
 
@@ -65,14 +67,33 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = false
+      this.listLoading = true
+      mergeTagList(this.listQuery).then(response => {
+        const { data: ret } = response.data
+        this.list = ret
+        this.listLoading = false
+      })
     },
     handleFilter() {},
     handleUpdate(row) {},
-    handleDelete(row) {},
+    handleDelete(row) {
+      removeMergeTag(row.id).then(response => {
+        const { data: ret } = response.data
+        if (ret) {
+          this.getList()
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+        }
+      })
+    },
     handleReload() {
-      this.dialogVisible = false
-      this.getList()
+      setTimeout(() => {
+        this.dialogVisible = false
+        this.getList()
+      }, 200)
     }
   }
 }

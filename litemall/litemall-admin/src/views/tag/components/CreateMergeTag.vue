@@ -26,7 +26,7 @@
               <p>已选条件</p>
               <a href="javascript:void(0)" @click="clearAll">清空</a>
             </div>
-            <div v-for="(tag,index) in mergeTag.tags" :key="tag.id" class="choosed-tag-item">
+            <div v-for="(tag,index) in mergeTag.tags" :key="tag.tagId" class="choosed-tag-item">
               <span class="indicator">{{ index+1 }}</span>
               <el-input v-model="tag.name" class="tag-label" size="mini" readonly>
                 <el-button slot="append" icon="el-icon-delete" @click="handleDelete(tag)" />
@@ -58,7 +58,36 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane name="2" class="review">确认信息</el-tab-pane>
+        <el-tab-pane name="2" class="review">
+          <el-form :inline="true" :model="mergeTag" status-icon label-width="100px" size="small">
+            <el-form-item label="标签名称" prop="name">
+              <el-input v-model="mergeTag.name" type="text" readonly />
+            </el-form-item>
+            <el-form-item label="标签条件" prop="condition">
+              <el-input v-model="mergeTag.condition" type="text" readonly />
+            </el-form-item>
+            <el-form-item label="标签含义" prop="intro">
+              <el-input v-model="mergeTag.intro" type="text" readonly />
+            </el-form-item>
+            <el-form-item label="组合用途" prop="purpose">
+              <el-input v-model="mergeTag.purpose" type="text" readonly />
+            </el-form-item>
+            <el-form-item label="组合条件">
+              <div v-for="(tag,index) in mergeTag.tags" :key="tag.tagId" class="choosed-tag-item">
+                <span class="indicator">{{ index+1 }}</span>
+                <el-input v-model="tag.name" class="tag-label" size="mini" readonly />
+                <el-select v-model="tag.condition" size="mini" disabled>
+                  <el-option
+                    v-for="c in conditions"
+                    :key="c.value"
+                    :label="c.label"
+                    :value="c.value"
+                  />
+                </el-select>
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
       </el-tabs>
       <el-row style="position: absolute;bottom: 10px; left:40%;">
         <el-button v-show="active!==0" type="primary" @click="prev">上一步</el-button>
@@ -71,7 +100,7 @@
 </template>
 
 <script>
-import { listBasicTagTree, childTags } from '@/api/dw/profile'
+import { listBasicTagTree, childTags, createMergeTag } from '@/api/dw/profile'
 
 export default {
   props: {
@@ -199,11 +228,11 @@ export default {
       this.ruleTags.forEach(item => (item.checked = false))
     },
     handleRuleCheck(tag, event) {
-      const index = this.mergeTag.tags.findIndex(item => item.id === tag.id)
+      const index = this.mergeTag.tags.findIndex(item => item.id === tag.tagId)
       if (event) {
         if (index === -1) {
           const choosedTag = {
-            id: tag.id,
+            tagId: tag.id,
             name: this.conditionTitle + '\t' + tag.name,
             condition: 'AND'
           }
@@ -214,17 +243,21 @@ export default {
       }
     },
     handleDelete(tag) {
-      const index = this.mergeTag.tags.findIndex(item => item.id === tag.id)
+      const index = this.mergeTag.tags.findIndex(item => item.id === tag.tagId)
       this.mergeTag.tags.splice(index, 1)
       // 移除选中
       this.ruleTags.forEach(item => {
-        if (item.id === tag.id) {
+        if (item.id === tag.tagId) {
           item.checked = false
         }
       })
     },
     handleSubmit() {
       // 添加组合标签
+      createMergeTag(this.mergeTag).then(response => {
+        const { data: ret } = response.data
+        console.info(ret)
+      })
       this.resetForm()
       // 发送重新刷新事件
       this.$emit('reload-list')
@@ -265,37 +298,37 @@ export default {
               background-color: #409eff;
             }
           }
-          .choosed-tag-item {
-            width: 45%;
-            display: inline-flex;
-            line-height: 28px;
-            margin-top: 10px;
-            margin-right: 30px;
-            .indicator {
-              display: block;
-              box-sizing: content-box;
-              text-align: center;
-              background: cornflowerblue;
-              width: 72px;
-              position: relative;
-              z-index: 999;
+        }
+      }
+      .choosed-tag-item {
+        width: 45%;
+        display: inline-flex;
+        line-height: 28px;
+        margin-top: 10px;
+        margin-right: 30px;
+        .indicator {
+          display: block;
+          box-sizing: content-box;
+          text-align: center;
+          background: cornflowerblue;
+          width: 72px;
+          position: relative;
+          z-index: 999;
 
-              &:after {
-                border-left: 8px solid cornflowerblue;
-                border-bottom: 8px solid transparent;
-                border-top: 8px solid transparent;
-                border-right: 8px solid transparent;
-                content: '';
-                position: absolute;
-                right: -16px;
-                top: 20%;
-              }
-            }
-            .tag-label {
-              margin-right: 5px;
-              margin-left: -2px;
-            }
+          &:after {
+            border-left: 8px solid cornflowerblue;
+            border-bottom: 8px solid transparent;
+            border-top: 8px solid transparent;
+            border-right: 8px solid transparent;
+            content: '';
+            position: absolute;
+            right: -16px;
+            top: 20%;
           }
+        }
+        .tag-label {
+          margin-right: 5px;
+          margin-left: -2px;
         }
       }
     }

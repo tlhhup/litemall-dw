@@ -148,3 +148,29 @@ export function runOrStopModel(data) {
     data
   })
 }
+
+const MergeTagList = '/tag/mergeTag/list'
+export function mergeTagList(query) {
+  return request({
+    url: MergeTagList,
+    method: 'get',
+    params: query
+  })
+}
+
+const CreateMergeTag = '/tag/mergeTag/create'
+export function createMergeTag(data) {
+  return request({
+    url: CreateMergeTag,
+    method: 'post',
+    data
+  })
+}
+
+const RemoveMergeTag = '/tag/mergeTag/remove'
+export function removeMergeTag(id) {
+  return request({
+    url: RemoveMergeTag + '/' + id,
+    method: 'delete'
+  })
+}
