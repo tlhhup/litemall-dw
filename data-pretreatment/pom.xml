@@ -14,6 +14,7 @@
     <modules>
         <module>flume-interceptor</module>
         <module>kafka-extractor</module>
+        <module>profile-hbase-bulkload</module>
     </modules>
     <packaging>pom</packaging>
 
