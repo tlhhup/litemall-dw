@@ -72,7 +72,7 @@ object HBaseBulkLoad {
     * @return HFile存储路径
     */
   def hive2HFile(sourceDB: String, sourceTable: String, filedId: String, hadoopConfig: Configuration, hFilePath: String): Unit = {
-    // 导出的hfile 需要保证 rowkey+family+Qualifier是有序的-->hbase中存储的数据是有序的
+    // 导出的hfile 需要保证 rowkey+family+Qualifier是有序的-->hbase中存储的数据是有序的(字典顺序)
     val fs = FileSystem.get(hadoopConfig)
     val hFile = new Path(hFilePath)
     if (fs.exists(hFile)) {

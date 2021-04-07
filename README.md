@@ -228,6 +228,28 @@
 
 				git clone git@github.com:twitter/hadoop-lzo.git
 				mvn clean package install -DskipTests
+				
+### 注意事项
+1. CDH中使用lzo压缩，本地读取数据问题(报`No LZO codec found, cannot run.`错误)
+	1. 原因：在`hadoop-common`包中使用的是**SPI**来加载解压缩方式，默认配置中并不包含`lzo`的配置
+	2. 解决：添加`core-site.xml`文件，并添加lzo解压缩配置
+
+			<?xml version="1.0" encoding="UTF-8"?>
+			<configuration>
+			    <property>
+			        <name>io.compression.codecs</name>
+			        <value>
+			            org.apache.hadoop.io.compress.DefaultCodec,
+			            org.apache.hadoop.io.compress.GzipCodec,
+			            org.apache.hadoop.io.compress.BZip2Codec,
+			            org.apache.hadoop.io.compress.DeflateCodec,
+			            org.apache.hadoop.io.compress.SnappyCodec,
+			            org.apache.hadoop.io.compress.Lz4Codec,
+			            com.hadoop.compression.lzo.LzoCodec,
+			            com.hadoop.compression.lzo.LzopCodec
+			        </value>
+			    </property>
+			</configuration>	 	
 
 ##术语
 1. 支付转换率：所选时间内，支付买家数除以访客数（支付买家数/访客数），即访客转化为支付买家的比例

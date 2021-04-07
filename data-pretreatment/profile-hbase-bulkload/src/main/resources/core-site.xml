@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>io.compression.codecs</name>
+        <value>
+            org.apache.hadoop.io.compress.DefaultCodec,
+            org.apache.hadoop.io.compress.GzipCodec,
+            org.apache.hadoop.io.compress.BZip2Codec,
+            org.apache.hadoop.io.compress.DeflateCodec,
+            org.apache.hadoop.io.compress.SnappyCodec,
+            org.apache.hadoop.io.compress.Lz4Codec,
+            com.hadoop.compression.lzo.LzoCodec,
+            com.hadoop.compression.lzo.LzopCodec
+        </value>
+    </property>
+</configuration>
