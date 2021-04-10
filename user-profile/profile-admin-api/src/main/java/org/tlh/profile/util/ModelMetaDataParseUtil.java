@@ -26,7 +26,9 @@ public final class ModelMetaDataParseUtil {
     private static final String OUT_PATH = "outPath";
     // hbase
     private static final String ZK_HOSTS = "zkHosts";
+    private static final String HBASE_NAMESPACE = "hbaseNamespace";
     private static final String HBASE_TABLE = "hbaseTable";
+    private static final String ROW_KEY = "rowKey";
     private static final String FAMILY = "family";
     // commons
     private static final String SELECT_FIELD_NAMES = "selectFieldNames";
@@ -61,7 +63,9 @@ public final class ModelMetaDataParseUtil {
                 break;
             case HBASE:
                 result.setZkHosts(ruleMap.get(ZK_HOSTS));
+                result.setHbaseNamespace(ruleMap.get(HBASE_NAMESPACE));
                 result.setHbaseTable(ruleMap.get(HBASE_TABLE));
+                result.setRowKey(ruleMap.get(ROW_KEY));
                 result.setFamily(ruleMap.get(FAMILY));
                 break;
             case HIVE:
