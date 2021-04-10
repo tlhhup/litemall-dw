@@ -199,9 +199,17 @@
         <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
         <Cm>zookeeper主机地址, 格式：  host:port</Cm>
       </Cl>
+      <Cl au="0" df="" nm="hbase_namespace" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>hBase 表的 namespace</Cm>
+      </Cl>
       <Cl au="0" df="" nm="hbase_table" nu="1">
         <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
         <Cm>Hbase数据源中的表名</Cm>
+      </Cl>
+      <Cl au="0" df="" nm="row_key" nu="1">
+        <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
+        <Cm>hBase 的rowkey</Cm>
       </Cl>
       <Cl au="0" df="" nm="family" nu="1">
         <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
