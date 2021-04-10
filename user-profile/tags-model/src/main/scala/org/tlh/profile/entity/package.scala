@@ -44,7 +44,7 @@ package object entity {
                         name: String)
 
   case class HBaseColumn(cf: String,
-                         clo: String,
+                         col: String,
                          `type`: String)
 
 }
