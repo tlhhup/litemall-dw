@@ -2,6 +2,7 @@ package org.tlh.profile.model
 
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.StringUtils
+import org.apache.spark.SparkConf
 import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.tlh.profile.entity.{CommonMeta, HBaseCatalog, HBaseColumn, HBaseTable, MetaData, Tag}
@@ -20,11 +21,47 @@ trait BaseModel {
 
   private[this] val config = ConfigFactory.load()
 
-  protected[this] val spark = SparkSession.builder()
-    .appName(getAppName())
-    .master("local[*]")
-    .getOrCreate()
+  protected[this] val spark = init()
 
+  /**
+    * 初始化spark
+    *
+    * @return
+    */
+  private[this] def init(): SparkSession = {
+    // 1.加载spark环境配置信息
+    def loadSparkConf(): SparkConf = {
+
+      val conf = new SparkConf()
+      conf.setAppName(getAppName())
+
+      val config = ConfigFactory.load("spark.conf")
+
+      import scala.collection.JavaConverters._
+
+      config.entrySet().asScala.foreach(item => {
+        val resource = item.getValue.origin().resource()
+        if ("spark.conf".equals(resource)) {
+          conf.set(item.getKey, item.getValue.unwrapped().toString)
+        }
+      })
+
+      conf
+    }
+
+    val conf = loadSparkConf()
+
+    // 2.构建sparkSession
+    val builder = SparkSession.builder()
+    // 2.1通用信息
+    builder.config(conf)
+    // 2.2hive信息
+    if (hiveEnable) {
+      builder.enableHiveSupport()
+    }
+
+    builder.getOrCreate()
+  }
 
   /**
     * 启动模型
@@ -181,8 +218,9 @@ trait BaseModel {
     * @return
     */
   protected[this] def createHiveSource(metaData: MetaData): (CommonMeta, DataFrame) = {
-    // todo 创建hive数据源
-    null
+    val hive = metaData.toHiveMeta()
+    val sourceDf = spark.read.table(hive.dbTable)
+    (hive.commonMeta, sourceDf)
   }
 
   /**
@@ -235,6 +273,13 @@ trait BaseModel {
     * @return
     */
   def getTagName(): String
+
+  /**
+    * 是否使用hive数据源
+    *
+    * @return
+    */
+  def hiveEnable(): Boolean = false
 
   /**
     * 业务逻辑处理
