@@ -229,6 +229,12 @@
 				git clone git@github.com:twitter/hadoop-lzo.git
 				mvn clean package install -DskipTests
 				
+### 用户画像
+#### 环境准备
+1. 创建画像`namespace`
+
+		create_namespace 'litemall_profile'	
+				
 ### 注意事项
 1. CDH中使用lzo压缩，本地读取数据问题(报`No LZO codec found, cannot run.`错误)
 	1. 原因：在`hadoop-common`包中使用的是**SPI**来加载解压缩方式，默认配置中并不包含`lzo`的配置

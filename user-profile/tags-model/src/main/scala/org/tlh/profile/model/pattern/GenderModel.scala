@@ -1,6 +1,6 @@
 package org.tlh.profile.model.pattern
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{Column, DataFrame}
 import org.tlh.profile.entity
 import org.tlh.profile.entity.CommonMeta
 import org.tlh.profile.model.SingleMetaModel
@@ -35,14 +35,31 @@ object GenderModel extends SingleMetaModel {
   /**
     * 业务逻辑处理
     *
-    * @param model
     * @param rules
     * @param commonMeta
     * @param source
     * @return
     */
-  override def processDetail(model: entity.Tag, rules: Array[entity.Tag], commonMeta: CommonMeta, source: DataFrame): DataFrame = {
+  override def processDetail(rules: Array[entity.Tag], commonMeta: CommonMeta, source: DataFrame): DataFrame = {
+    import source.sparkSession.implicits._
+    import org.apache.spark.sql.functions._
 
-    null
+    //1. 构建condition  ==> case when
+    var condition: Column = null
+    rules.foreach(item => {
+      condition = if (condition == null) {
+        when('gender === item.rule, item.name)
+      } else {
+        condition.when('gender === item.rule, item.name)
+      }
+    })
+
+    //2. 别名
+    condition = condition.as("gender")
+
+    //3. 执行计算查询
+    val result = source.select('id, condition)
+
+    result
   }
 }

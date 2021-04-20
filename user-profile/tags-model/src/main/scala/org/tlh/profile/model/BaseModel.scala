@@ -65,22 +65,25 @@ trait BaseModel {
     * 启动模型
     */
   def start() = {
-    //1. 加载标签规则
-    val (model, rules) = this.loadTagRules()
+    try {
+      //1. 加载标签规则
+      val (model, rules) = this.loadTagRules()
 
-    //2. 加载标签元数据
-    val metaData = this.loadTagMetaData(model)
+      //2. 加载标签元数据
+      val metaData = this.loadTagMetaData(model)
 
-    //3. 创建数据源
-    val sources = this.createDataSources(metaData)
+      //3. 创建数据源
+      val sources = this.createDataSources(metaData)
 
-    //4. 标签规则 业务逻辑 处理
-    this.processDetail(rules, sources)
+      //4. 标签规则 业务逻辑 处理
+      val result = this.processDetail(rules, sources)
 
-    //5. 存储数据到hBase
-
-    //6. 释放资源
-    this.release()
+      //5. 存储数据到hBase
+      this.save(result)
+    } finally {
+      //6. 释放资源
+      this.release()
+    }
   }
 
   /**
@@ -242,7 +245,43 @@ trait BaseModel {
     (hBase.commonMeta, sourceDf)
   }
 
-  def release() = {
+  /**
+    * 保存数据，默认保存到hBase
+    *
+    * @param result
+    */
+  protected[this] def save(result: DataFrame) = {
+    if (result != null) {
+      //1. 解析配置
+      val quorum = config.getString("profile.zk.quorum")
+      val port = config.getInt("profile.zk.port")
+      val namespace = config.getString("profile.namespace")
+      val table = config.getString("profile.table.name")
+      val family = config.getString("profile.table.cf")
+      val rowKey = config.getString("profile.table.rowKey")
+
+      //2. 校验schema中是否包含rowKey列
+      val flag = result.schema.fieldNames.contains(rowKey)
+      if (!flag) {
+        throw new IllegalArgumentException(s"The result DataFrame must contain the $rowKey filed!")
+      }
+
+      //3. 保存数据
+      result.write
+        .format("hbase")
+        .option("zkHosts", quorum)
+        .option("zkPort", port)
+        .option("hBaseTable", s"$namespace:$table")
+        .option("family", family)
+        .option("rowKey", rowKey)
+        .save()
+    }
+  }
+
+  /**
+    * 释放资源
+    */
+  private[this] def release() = {
     if (spark != null) {
       spark.close()
     }
