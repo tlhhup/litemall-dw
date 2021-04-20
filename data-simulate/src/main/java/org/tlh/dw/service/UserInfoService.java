@@ -85,7 +85,7 @@ public class UserInfoService extends Observable {
         user.setMobile("13" + RandomNumString.getRandNumString(1, 9, 9, ""));
         user.setWeixinOpenid(UUID.randomUUID().toString());
         user.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
-        user.setGender((byte) (new RandomOptionGroup(new RanOpt[]{new RanOpt(0, maleRateWeight.intValue()), new RanOpt(1, 100 - maleRateWeight.intValue())})).getRandIntValue());
+        user.setGender((byte) (new RandomOptionGroup(new RanOpt[]{new RanOpt(2, maleRateWeight.intValue()), new RanOpt(1, 100 - maleRateWeight.intValue())})).getRandIntValue());
         String lastName = RandomName.insideLastName(user.getGender());
         user.setNickname(RandomName.getNickName(user.getGender(), lastName));
         user.setUserLevel((byte) (new RandomOptionGroup(new RanOpt[]{new RanOpt(1, 7), new RanOpt(2, 2), new RanOpt(3, 1)})).getRandIntValue());
