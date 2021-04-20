@@ -18,6 +18,8 @@
         <mysql.version>5.1.48</mysql.version>
         <config.version>1.4.1</config.version>
         <shc.version>1.1.3-2.4-s_2.11</shc.version>
+        <spark.hbase.version>1.0.0</spark.hbase.version>
+        <hbase.version>2.1.0-cdh6.3.2</hbase.version>
         <json.version>3.6.11</json.version>
         <scala.xml.version>2.11.0-M4</scala.xml.version>
     </properties>
@@ -34,9 +36,14 @@
             <version>${spark.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hortonworks</groupId>
-            <artifactId>shc-core</artifactId>
-            <version>${shc.version}</version>
+            <groupId>org.tlh</groupId>
+            <artifactId>spark-hbase</artifactId>
+            <version>${spark.hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-mapreduce</artifactId>
+            <version>${hbase.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

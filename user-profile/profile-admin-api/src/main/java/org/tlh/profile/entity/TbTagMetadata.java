@@ -83,9 +83,10 @@ public class TbTagMetadata implements Serializable {
     private String outPath;
 
     /**
-     * zookeeper主机地址, 格式： host:port
+     * zookeeper主机地址
      */
     private String zkHosts;
+    private Integer zkPort;
 
     private String hbaseNamespace;
     private String rowKey;

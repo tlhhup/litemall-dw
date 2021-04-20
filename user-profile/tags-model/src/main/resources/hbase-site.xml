@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <property>
-        <name>hbase.zookeeper.quorum</name>
-        <value>cdh-master,cdh-slave-2,cdh-slave-3,cdh-slave-1</value>
-    </property>
-</configuration>

@@ -13,21 +13,20 @@ import org.tlh.profile.entity.{CommonMeta, Tag}
   */
 trait SingleMetaModel extends BaseModel {
 
-  override def processDetail(model: entity.Tag, rules: Array[entity.Tag], sources: Array[(CommonMeta, DataFrame)]): DataFrame = {
+  override def processDetail(rules: Array[entity.Tag], sources: Array[(CommonMeta, DataFrame)]): DataFrame = {
     //1. 解析第一个数据源
     val (commonMeta, source) = sources(0)
-    this.processDetail(model, rules, commonMeta, source)
+    this.processDetail(rules, commonMeta, source)
   }
 
   /**
     * 业务逻辑处理
     *
-    * @param model
     * @param rules
     * @param commonMeta
     * @param source
     * @return
     */
-  def processDetail(model: Tag, rules: Array[Tag], commonMeta: CommonMeta, source: DataFrame): DataFrame
+  def processDetail(rules: Array[Tag], commonMeta: CommonMeta, source: DataFrame): DataFrame
 
 }

@@ -3,12 +3,10 @@ package org.tlh.profile.model
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.tlh.profile.entity.{CommonMeta, HBaseCatalog, HBaseColumn, HBaseTable, MetaData, Tag}
+import org.tlh.profile.entity.{CommonMeta, MetaData, Tag}
 import org.tlh.profile.enums.MetaDataTypeEnum._
 
-import scala.collection.mutable
 
 /**
   * 模型基类
@@ -77,7 +75,7 @@ trait BaseModel {
     val sources = this.createDataSources(metaData)
 
     //4. 标签规则 业务逻辑 处理
-    this.processDetail(model, rules, sources)
+    this.processDetail(rules, sources)
 
     //5. 存储数据到hBase
 
@@ -231,23 +229,14 @@ trait BaseModel {
     */
   protected[this] def createHBaseSource(metaData: MetaData): (CommonMeta, DataFrame) = {
     val hBase = metaData.toHBaseMeta()
-    //1. 构建HBaseCatalog信息
-    //1.1 表
-    val table = HBaseTable(hBase.namespace, hBase.table)
-    // 1.2 处理列
-    val columns = new mutable.HashMap[String, HBaseColumn]()
-    // 1.2.1 处理rowKey
-    columns.put(hBase.rowKey, HBaseColumn("rowkey", hBase.rowKey, "string"))
-    // 1.2.2 处理普通列
-    val fields = hBase.commonMeta.selectFieldNames.split(",")
-    fields.foreach(field => {
-      columns.put(field, HBaseColumn(hBase.family, field, "string"))
-    })
-    val hBaseCatalog = HBaseCatalog(table, hBase.rowKey, columns)
-    //2. 构建数据源
+
     val sourceDf = spark.read
-      .options(Map(HBaseTableCatalog.tableCatalog -> hBaseCatalog.toJson()))
-      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .format("hbase")
+      .option("zkHosts", hBase.zkHosts)
+      .option("zkPort", hBase.zkPort)
+      .option("hBaseTable", s"${hBase.namespace}:${hBase.table}")
+      .option("family", hBase.family)
+      .option("selectFields", hBase.commonMeta.selectFieldNames)
       .load()
 
     (hBase.commonMeta, sourceDf)
@@ -284,11 +273,10 @@ trait BaseModel {
   /**
     * 业务逻辑处理
     *
-    * @param model
     * @param rules
     * @param sources
     * @return
     */
-  def processDetail(model: Tag, rules: Array[Tag], sources: Array[(CommonMeta, DataFrame)]): DataFrame
+  def processDetail(rules: Array[Tag], sources: Array[(CommonMeta, DataFrame)]): DataFrame
 
 }

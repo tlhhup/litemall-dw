@@ -199,6 +199,10 @@
         <DT arr="0" ds="VarChar" en="" id="12" ln="200" sc="null" sg="1" un="0"/>
         <Cm>zookeeper主机地址, 格式：  host:port</Cm>
       </Cl>
+      <Cl au="0" df="" nm="zk_port" nu="1">
+        <DT arr="0" ds="Integer" en="" id="4" ln="null" sc="null" sg="1" un="0"/>
+        <Cm>zookeeper主机端口号</Cm>
+      </Cl>
       <Cl au="0" df="" nm="hbase_namespace" nu="1">
         <DT arr="0" ds="VarChar" en="" id="12" ln="100" sc="null" sg="1" un="0"/>
         <Cm>hBase 表的 namespace</Cm>

@@ -20,6 +20,7 @@ case class MetaData(in_type: Int,
                     sperator: String,
                     out_path: String,
                     zk_hosts: String,
+                    zk_port: Int,
                     hbase_namespace: String,
                     hbase_table: String,
                     row_key: String,
@@ -53,7 +54,7 @@ case class MetaData(in_type: Int,
 
   def toHBaseMeta(): HBASEMetaData = {
     val commonMeta = CommonMeta(select_field_names, where_field_names, where_field_values, out_fields)
-    HBASEMetaData(commonMeta, zk_hosts, hbase_namespace, hbase_table, row_key, family)
+    HBASEMetaData(commonMeta, zk_hosts, zk_port, hbase_namespace, hbase_table, row_key, family)
   }
 
   def toHiveMeta(): HiveMetaData = {
@@ -84,6 +85,7 @@ case class HDFSMetaData(commonMeta: CommonMeta,
 
 case class HBASEMetaData(commonMeta: CommonMeta,
                          zkHosts: String,
+                         zkPort: Int,
                          namespace: String,
                          table: String,
                          rowKey: String,
