@@ -13,4 +13,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITbTagMetadataService extends IService<TbTagMetadata> {
 
+    /**
+     * 更新元数据
+     *
+     * @param metadata
+     * @return
+     */
+    boolean updateByTagId(TbTagMetadata metadata);
+
 }

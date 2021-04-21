@@ -302,10 +302,8 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         boolean model = modelService.updateById(tagModel);
         //3.更新元数据
         TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
-        metadata.setUpdateTime(LocalDateTime.now());
-        UpdateWrapper<TbTagMetadata> wrapper = new UpdateWrapper<>();
-        wrapper.eq("tag_id", modelTag.getId());
-        boolean metaData = this.metadataService.update(metadata, wrapper);
+        metadata.setTagId(modelTag.getId());
+        boolean metaData = this.metadataService.updateByTagId(metadata);
         return tag && model && metaData;
     }
 

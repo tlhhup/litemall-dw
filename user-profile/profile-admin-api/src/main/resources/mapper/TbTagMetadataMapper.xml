@@ -2,4 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tlh.profile.mapper.TbTagMetadataMapper">
 
+    <update id="updateByTagId" parameterType="org.tlh.profile.entity.TbTagMetadata">
+        update tb_tag_metadata
+        <set>
+            in_type=#{inType},
+            driver=#{driver},
+            url=#{url},
+            user=#{user},
+            password=#{password},
+            db_table=#{dbTable},
+            query_sql=#{querySql},
+            in_path=#{inPath},
+            sperator=#{sperator},
+            out_path=#{outPath},
+            zk_hosts=#{zkHosts},
+            zk_port=#{zkPort},
+            hbase_namespace=#{hbaseNamespace},
+            hbase_table=#{hbaseTable},
+            row_key=#{rowKey},
+            family=#{family},
+            select_field_names=#{selectFieldNames},
+            where_field_names=#{whereFieldNames},
+            where_field_values=#{whereFieldValues},
+            out_fields=#{outFields},
+            update_time=#{updateTime},
+            <if test="state!=null and state!=''">
+                state=#{state},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+        </set>
+        <where>
+            tag_id=#{tagId}
+        </where>
+    </update>
 </mapper>

@@ -1,5 +1,6 @@
 package org.tlh.profile.util;
 
+import org.springframework.util.StringUtils;
 import org.tlh.profile.entity.TbTagMetadata;
 import org.tlh.profile.enums.MetaDataType;
 
@@ -86,6 +87,12 @@ public final class ModelMetaDataParseUtil {
         result.setWhereFieldNames(ruleMap.get(WHERE_FIELD_NAMES));
         result.setWhereFieldValues(ruleMap.get(WHERE_FIELD_VALUES));
         result.setOutFields(ruleMap.get(OUT_FIELDS));
+        //4.校验是否是mysql类型
+        if (convert == MetaDataType.MYSQL
+                && StringUtils.hasText(result.getDbTable())
+                && StringUtils.hasText(result.getQuerySql())) {
+            throw new IllegalArgumentException("RDBMS source dbTable or querySql just only have one set!");
+        }
         return result;
     }
 

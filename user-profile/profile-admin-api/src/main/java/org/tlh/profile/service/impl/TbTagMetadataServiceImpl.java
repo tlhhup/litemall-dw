@@ -1,10 +1,13 @@
 package org.tlh.profile.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.tlh.profile.entity.TbTagMetadata;
 import org.tlh.profile.mapper.TbTagMetadataMapper;
 import org.tlh.profile.service.ITbTagMetadataService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,4 +20,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TbTagMetadataServiceImpl extends ServiceImpl<TbTagMetadataMapper, TbTagMetadata> implements ITbTagMetadataService {
 
+    @Autowired
+    private TbTagMetadataMapper metadataMapper;
+
+    @Override
+    public boolean updateByTagId(TbTagMetadata metadata) {
+        //1.设置更新时间
+        metadata.setUpdateTime(LocalDateTime.now());
+        //2.更新数据
+        return this.metadataMapper.updateByTagId(metadata)>0;
+    }
 }
