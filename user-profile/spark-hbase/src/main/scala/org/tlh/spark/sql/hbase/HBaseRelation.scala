@@ -2,6 +2,7 @@ package org.tlh.spark.sql.hbase
 
 import java.util.Base64
 
+import org.apache.commons.lang3.StringUtils
 import org.apache.hadoop.hbase.{CompareOperator, HBaseConfiguration, TableName}
 import org.apache.hadoop.hbase.client.{ColumnFamilyDescriptorBuilder, Connection, ConnectionFactory, Put, Result, Scan, TableDescriptorBuilder}
 import org.apache.hadoop.hbase.filter.{FilterList, SingleColumnValueFilter}
@@ -58,34 +59,32 @@ class HBaseRelation(sc: SQLContext,
     })
 
     //3.2 构建时间过滤 字段#单位(day,month,year)#duration
-    params.get(WHERE_FIELD_NAMES) match {
-      case Some(x) => {
-        val filters = new FilterList()
+    val filterCondition = params(WHERE_FIELD_NAMES)
+    if (StringUtils.isNotBlank(filterCondition)) {
+      val filters = new FilterList()
 
-        x.split(FILED_SEPARATOR).foreach(condition => {
-          val dateFilter = DateFilter(condition)
+      filterCondition.split(FILED_SEPARATOR).foreach(condition => {
+        val dateFilter = DateFilter(condition)
 
-          //3.2.1 设置过滤器
-          // 起始值
-          val startFilter = new SingleColumnValueFilter(cfBytes,
-            Bytes.toBytes(dateFilter.filed),
-            CompareOperator.GREATER,
-            Bytes.toBytes(dateFilter.start()))
-          filters.addFilter(startFilter)
-          // 终止值
-          val endFilter = new SingleColumnValueFilter(cfBytes,
-            Bytes.toBytes(dateFilter.filed),
-            CompareOperator.LESS,
-            Bytes.toBytes(dateFilter.end()))
-          filters.addFilter(endFilter)
+        //3.2.1 设置过滤器
+        // 起始值
+        val startFilter = new SingleColumnValueFilter(cfBytes,
+          Bytes.toBytes(dateFilter.filed),
+          CompareOperator.GREATER,
+          Bytes.toBytes(dateFilter.start()))
+        filters.addFilter(startFilter)
+        // 终止值
+        val endFilter = new SingleColumnValueFilter(cfBytes,
+          Bytes.toBytes(dateFilter.filed),
+          CompareOperator.LESS,
+          Bytes.toBytes(dateFilter.end()))
+        filters.addFilter(endFilter)
 
-          //3.2.1 设置过滤的列(必须添加)
-          scan.addColumn(cfBytes,Bytes.toBytes(dateFilter.filed))
-        })
+        //3.2.1 设置过滤的列(必须添加)
+        scan.addColumn(cfBytes, Bytes.toBytes(dateFilter.filed))
+      })
 
-        scan.setFilter(filters)
-      }
-      case None =>
+      scan.setFilter(filters)
     }
 
     //3.3 设置到conf中

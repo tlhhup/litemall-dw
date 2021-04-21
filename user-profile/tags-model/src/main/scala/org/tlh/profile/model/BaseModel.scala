@@ -240,6 +240,7 @@ trait BaseModel {
       .option("hBaseTable", s"${hBase.namespace}:${hBase.table}")
       .option("family", hBase.family)
       .option("selectFields", hBase.commonMeta.selectFieldNames)
+      .option("whereFieldNames",hBase.commonMeta.whereFieldNames)
       .load()
 
     (hBase.commonMeta, sourceDf)
