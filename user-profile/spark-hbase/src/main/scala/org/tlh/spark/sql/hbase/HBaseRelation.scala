@@ -2,8 +2,9 @@ package org.tlh.spark.sql.hbase
 
 import java.util.Base64
 
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
+import org.apache.hadoop.hbase.{CompareOperator, HBaseConfiguration, TableName}
 import org.apache.hadoop.hbase.client.{ColumnFamilyDescriptorBuilder, Connection, ConnectionFactory, Put, Result, Scan, TableDescriptorBuilder}
+import org.apache.hadoop.hbase.filter.{FilterList, SingleColumnValueFilter}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.mapreduce.{TableInputFormat, TableOutputFormat}
 import org.apache.hadoop.hbase.shaded.protobuf.ProtobufUtil
@@ -13,6 +14,7 @@ import org.apache.spark.sql.{DataFrame, Row, SQLContext}
 import org.apache.spark.sql.sources.{BaseRelation, InsertableRelation, TableScan}
 import org.apache.spark.sql.types.StructType
 import org.tlh.spark.sql.hbase.ReadConfig._
+import org.tlh.spark.sql.hbase.filter.DateFilter
 
 /**
   * @author 离歌笑
@@ -54,7 +56,39 @@ class HBaseRelation(sc: SQLContext,
     fields.split(FILED_SEPARATOR).foreach(filed => {
       scan.addColumn(cfBytes, Bytes.toBytes(filed))
     })
-    //3.2 设置到conf中
+
+    //3.2 构建时间过滤 字段#单位(day,month,year)#duration
+    params.get(WHERE_FIELD_NAMES) match {
+      case Some(x) => {
+        val filters = new FilterList()
+
+        x.split(FILED_SEPARATOR).foreach(condition => {
+          val dateFilter = DateFilter(condition)
+
+          //3.2.1 设置过滤器
+          // 起始值
+          val startFilter = new SingleColumnValueFilter(cfBytes,
+            Bytes.toBytes(dateFilter.filed),
+            CompareOperator.GREATER,
+            Bytes.toBytes(dateFilter.start()))
+          filters.addFilter(startFilter)
+          // 终止值
+          val endFilter = new SingleColumnValueFilter(cfBytes,
+            Bytes.toBytes(dateFilter.filed),
+            CompareOperator.LESS,
+            Bytes.toBytes(dateFilter.end()))
+          filters.addFilter(endFilter)
+
+          //3.2.1 设置过滤的列(必须添加)
+          scan.addColumn(cfBytes,Bytes.toBytes(dateFilter.filed))
+        })
+
+        scan.setFilter(filters)
+      }
+      case None =>
+    }
+
+    //3.3 设置到conf中
     conf.set(INPUT_TABLE, table)
     conf.set(SCAN, Bytes.toString(Base64.getEncoder.encode(ProtobufUtil.toScan(scan).toByteArray)))
 
@@ -101,7 +135,7 @@ class HBaseRelation(sc: SQLContext,
     conf.set(HBASE_ZOOKEEPER_QUORUM, quorum)
     conf.set(HBASE_ZOOKEEPER_PROPERTY_CLIENT_PORT, port)
     // 设置输出的表
-    conf.set(OUTPUT_TABLE,table)
+    conf.set(OUTPUT_TABLE, table)
 
     //3. 检查表是否存在
     var connection: Connection = null

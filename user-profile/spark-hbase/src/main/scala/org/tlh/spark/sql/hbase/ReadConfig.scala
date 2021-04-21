@@ -16,6 +16,7 @@ object ReadConfig {
   val HBASE_FAMILY = "family"
   val SELECT_FIELDS = "selectFields"
   val ROW_KEY = "rowKey"
+  val WHERE_FIELD_NAMES = "whereFieldNames"
 
 
   // hBase 配置信息
