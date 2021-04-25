@@ -234,6 +234,188 @@
 1. 创建画像`namespace`
 
 		create_namespace 'litemall_profile'	
+
+#### 将用户标签导入solr
+1.  开启hbase表的复制功能
+
+		# 禁用表
+		disable 'litemall_profile:user_profile'
+		# 开启表复制
+		alter 'litemall_profile:user_profile',{NAME=>'cf',REPLICATION_SCOPE =>1}
+		# 启用表
+		enable 'litemall_profile:user_profile'
+2. 创建`solr`的collection
+	1. 生成配置
+
+			solrctl instancedir --generate $HOME/hbase_indexer/litemall
+	2. 定义schema
+
+			cd $HOME/hbase_indexer/litemall/conf
+			# 修改managed-schema配置,添加如下内容
+			vim managed-schema
+			
+			<field name="gender" type="string" indexed="true" stored="true"/>
+			<field name="age" type="string" indexed="true" stored="true"/>
+			<field name="consumptionAbility" type="string" indexed="true" stored="true"/>
+			<field name="consumption" type="string" indexed="true" stored="true"/>
+			<field name="coupon" type="string" indexed="true" stored="true"/>
+			<field name="discountRate" type="string" indexed="true" stored="true"/>
+			<field name="singleOrderMax" type="string" indexed="true" stored="true"/>
+			<field name="orderFrequency" type="string" indexed="true" stored="true"/>
+			<field name="pct" type="string" indexed="true" stored="true"/>
+			<field name="refundRate" type="string" indexed="true" stored="true"/>
+			<field name="rfm" type="string" indexed="true" stored="true"/>
+			<field name="brandFavor" type="string" indexed="true" stored="true"/>
+	3. 创建solr的collection并上传配置
+
+			# 上传配置
+			solrctl instancedir --create litemall $HOME/hbase_indexer/litemall
+			# 创建collection
+			solrctl collection --create litemall -s 3 -r 3 -m 9
+3. 创建`Lily HBase Indexer` 配置
+	1. 定义`morphline 和 hbase`的映射配置
+
+			cd $HOME/hbase_indexer/litemall
+			vim morphline-hbase-mapper.xml
+			
+			<?xml version="1.0"?>
+			<!--
+			         table: hbase中表名
+			-->
+			<indexer table="litemall_profile:user_profile" mapper="com.ngdata.hbaseindexer.morphline.MorphlineResultToSolrMapper">
+			   <!-- 设置morphlines文件的路径：绝对路径或相对路径 -->
+			   <param name="morphlineFile" value="morphlines.conf"/>
+			
+			   <!-- 设置使用的是那个ETL -->
+			   <param name="morphlineId" value="userProfile"/>
+			</indexer>
+	2. 创建`Morphline`配置文件，定义ETL(hbase-solr的转换关系)
+
+			cd $HOME/hbase_indexer/litemall
+			vim morphlines.conf
+			
+			# 内容如下
+			SOLR_LOCATOR : {
+				  # Name of solr collection
+				  collection : collection
+				
+				  # ZooKeeper ensemble
+				  zkHost : "$ZK_HOST"
+				}
+				
+				
+				morphlines : [
+				{
+				id : userProfile
+				importCommands : ["org.kitesdk.**", "com.ngdata.**"]
+				
+				commands : [
+				  {
+				    extractHBaseCells {
+				      mappings : [
+				        {
+				          inputColumn : "cf:gender"
+				          outputField : "gender"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:age"
+				          outputField : "age"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:consumptionAbility"
+				          outputField : "consumptionAbility"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:consumption"
+				          outputField : "consumption"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:coupon"
+				          outputField : "coupon"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:discountRate"
+				          outputField : "discountRate"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:singleOrderMax"
+				          outputField : "singleOrderMax"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:orderFrequency"
+				          outputField : "orderFrequency"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:pct"
+				          outputField : "pct"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:refundRate"
+				          outputField : "refundRate"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:rfm"
+				          outputField : "rfm"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:brandFavor"
+				          outputField : "brandFavor"
+				          type : string
+				          source : value
+				        }
+				      ]
+				    }
+				  }
+				
+				
+				  { logDebug { format : "output record: {}", args : ["@{}"] } }
+				]
+			}
+			]
+	3. 注册`Lily HBase Indexer Configuration` 和 `Lily HBase Indexer Service`
+
+			hbase-indexer add-indexer \
+			--name litemallIndexer \
+			--indexer-conf $HOME/hbase_indexer/litemall/morphline-hbase-mapper.xml \
+			--connection-param solr.zk=cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181/solr \
+			--connection-param solr.collection=litemall \
+			--zookeeper cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181
+	4. 查看Indexer
+
+			hbase-indexer list-indexers
+4. 导入历史数据	
+
+		hadoop --config /etc/hadoop/conf \
+		jar /opt/cloudera/parcels/CDH/lib/hbase-solr/tools/hbase-indexer-mr-*-job.jar \
+		--conf /etc/hbase/conf/hbase-site.xml -Dmapreduce.map.java.opts="-Xmx512m" \
+		-Dmapreduce.reduce.java.opts="-Xmx512m" \
+		--morphline-file $HOME/hbase_indexer/litemall/morphlines.conf \
+		--hbase-indexer-file $HOME/hbase_indexer/litemall/morphline-hbase-mapper.xml \
+		--zk-host cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181/solr \
+		--collection litemall \
+		--go-live
 				
 ### 注意事项
 1. CDH中使用lzo压缩，本地读取数据问题(报`No LZO codec found, cannot run.`错误)
