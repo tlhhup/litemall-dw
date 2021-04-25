@@ -191,3 +191,12 @@ export function updateMergeTag(data) {
     data
   })
 }
+
+const UserTagSearch = '/tag/userTag/search'
+export function searchUserTag(query) {
+  return request({
+    url: UserTagSearch,
+    method: 'get',
+    params: query
+  })
+}

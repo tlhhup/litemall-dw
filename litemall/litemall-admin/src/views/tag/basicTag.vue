@@ -255,10 +255,11 @@ export default {
         ],
         modelName: [
           { required: true, message: '请输入算法名称', trigger: 'blur' }
-        ],
-        modelPath: [
-          { required: true, message: '请上传算法引擎', trigger: 'blur' }
         ]
+        // ,
+        // modelPath: [
+        //   { required: true, message: '请上传算法引擎', trigger: 'blur' }
+        // ]
       },
       leftTagTree: [],
       selectProps: {

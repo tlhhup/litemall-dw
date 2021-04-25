@@ -719,6 +719,16 @@ export const asyncRoutes = [
           title: '模型审核',
           noCache: true
         }
+      },
+      {
+        path: 'miniProfile',
+        component: () => import('@/views/tag/miniProfile'),
+        name: 'miniProfile',
+        meta: {
+          perms: ['GET /tag/miniProfile/index'],
+          title: '微观画像',
+          noCache: true
+        }
       }
     ]
   },
