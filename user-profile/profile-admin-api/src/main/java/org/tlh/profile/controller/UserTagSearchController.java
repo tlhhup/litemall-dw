@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
 import org.tlh.profile.service.IUserTagSearchService;
 import org.tlh.profile.util.ResponseUtil;
 import org.tlh.profile.vo.EChartsGraphVo;
@@ -14,7 +14,7 @@ import org.tlh.profile.vo.EChartsGraphVo;
  * @desc
  * @date 2021-04-25
  */
-@RestControllerAdvice
+@RestController
 @RequestMapping("/userTag")
 public class UserTagSearchController {
 
