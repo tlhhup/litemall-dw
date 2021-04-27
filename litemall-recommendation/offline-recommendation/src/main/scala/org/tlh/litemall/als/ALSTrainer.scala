@@ -2,6 +2,7 @@ package org.tlh.litemall.als
 
 import org.apache.spark.SparkConf
 import org.apache.spark.ml.evaluation.RegressionEvaluator
+import org.apache.spark.ml.param.{ParamMap, Params}
 import org.apache.spark.ml.recommendation.ALS
 import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import org.apache.spark.sql.{Row, SparkSession}
@@ -38,7 +39,7 @@ object ALSTrainer {
         |	value_id as spu_id,
         |	star
         |from litemall.dwd_fact_comment_info
-        |where dt<date_sub(current_date,1) and type=0
+        |where dt=date_sub(current_date,1) and type=0
         |order by add_time
       """.stripMargin
     val commentDf = spark.sql(sql)
@@ -53,6 +54,8 @@ object ALSTrainer {
       .setUserCol("userId")
       .setItemCol("itemId")
       .setRatingCol("rating")
+      .setColdStartStrategy("drop")
+
     //2.2 参数
     val paramGrid = new ParamGridBuilder()
       .addGrid(als.rank, Array(5, 10, 20))
@@ -79,10 +82,27 @@ object ALSTrainer {
     //3.2 使用最好的模型，测试模型
     cvModel.transform(test)
       .select("prediction")
+      .as[Float]
       .collect()
-      .foreach { row =>
-        println(s"(prediction=${row.getFloat(0)}")
+      .foreach { prediction => println(s"(prediction=$prediction") }
+
+    // 模型的参数
+    val adjustParams = Array(als.rank, als.maxIter, als.regParam)
+    // 鉴别器参数集合
+    val avgMetrics = cvModel.avgMetrics
+    val paramMaps: Array[ParamMap] = cvModel.getEstimatorParamMaps
+    for (i <- 0 until paramGrid.length) {
+      println(s"@@@ ModelGrid[$i]:")
+      println("@@@ Params:")
+      for (param <- adjustParams) {
+        println(s"@@@  ${param.name} : ${paramMaps(i).apply(param)}")
       }
+      println(s"@@@ [${i}]'s metric=${avgMetrics(i)}")
+    }
+
+    // 保存模型
+    val bestModel:ALS = (ALS) (cvModel.bestModel)
+    bestModel.save("model/user-cf")
 
     spark.close()
   }

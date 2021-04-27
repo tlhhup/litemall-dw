@@ -10,6 +10,89 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>online-recommendation</artifactId>
+    <properties>
+        <jedis.version>2.9.0</jedis.version>
+        <mongodb.version>4.1.1</mongodb.version>
+        <spark.version>3.0.0</spark.version>
+        <spark.mongo.version>3.0.0</spark.mongo.version>
+        <hadoop.lzo.version>0.4.21</hadoop.lzo.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.12</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb.scala</groupId>
+            <artifactId>mongo-scala-driver_2.12</artifactId>
+            <version>${mongodb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_2.12</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hadoop.gplcompression</groupId>
+            <artifactId>hadoop-lzo</artifactId>
+            <version>${hadoop.lzo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb.spark</groupId>
+            <artifactId>mongo-spark-connector_2.12</artifactId>
+            <version>${spark.mongo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tlh</groupId>
+            <artifactId>spark-commons</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!--  定义环境  -->
+    <profiles>
+        <profile>
+            <id>linux</id>
+            <properties>
+                <hadoop.lzo.version>0.4.21</hadoop.lzo.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac</id>
+            <properties>
+                <hadoop.lzo.version>0.4.22</hadoop.lzo.version>
+            </properties>
+            <!-- 默认启用  -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
