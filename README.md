@@ -291,7 +291,7 @@
 			   <!-- 设置使用的是那个ETL -->
 			   <param name="morphlineId" value="userProfile"/>
 			</indexer>
-	2. 创建`Morphline`配置文件，定义ETL(hbase-solr的转换关系)
+	2. 创建`Morphline`配置文件(主要用于导入历史数据)，定义ETL(hbase-solr的转换关系)，同时将`userProfile`的配置信息通过CDH控制台页面进行添加(`Lily HBase Indexer`->`配置`->`Morphlines 文件`)，注册一个新的ETL
 
 			cd $HOME/hbase_indexer/litemall
 			vim morphlines.conf
