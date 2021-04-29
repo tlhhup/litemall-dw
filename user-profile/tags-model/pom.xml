@@ -73,14 +73,9 @@
             <version>${config.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.json4s</groupId>
-            <artifactId>json4s-jackson_2.11</artifactId>
-            <version>${json.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-xml</artifactId>
-            <version>${scala.xml.version}</version>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_${scala.mario.verion}</artifactId>
+            <version>${spark.version}</version>
         </dependency>
     </dependencies>
 
