@@ -117,9 +117,9 @@ object RFMModel extends SingleMetaModel with MLBase {
     var condition: Column = null
     final_rules.foreach(item => {
       condition = if (condition == null) {
-        when('prediction === item._1, item._2._2)
+        when('prediction === item._1, item._2._1.toString)
       } else {
-        condition.when('prediction === item._1, item._2._2)
+        condition.when('prediction === item._1, item._2._1.toString)
       }
     })
 

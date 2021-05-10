@@ -55,9 +55,9 @@ object DiscountModel extends SingleMetaModel {
     rules.foreach(item => {
       val Array(start, end) = item.rule.split("-")
       condition = if (condition == null) {
-        when('discountRate.between(start, end), item.name)
+        when('discountRate.between(start, end), item.id.toString)
       } else {
-        condition.when('discountRate.between(start, end), item.name)
+        condition.when('discountRate.between(start, end), item.id.toString)
       }
     })
 

@@ -54,9 +54,9 @@ object OrderFrequencyModel extends SingleMetaModel {
     rules.foreach(item => {
       val Array(start, end) = item.rule.split("-")
       condition = if (condition == null) {
-        when('orderFrequency.between(start, end), item.name)
+        when('orderFrequency.between(start, end), item.id.toString)
       } else {
-        condition.when('orderFrequency.between(start, end), item.name)
+        condition.when('orderFrequency.between(start, end), item.id.toString)
       }
     })
 

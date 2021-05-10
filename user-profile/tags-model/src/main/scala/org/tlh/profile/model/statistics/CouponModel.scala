@@ -75,9 +75,9 @@ object CouponModel extends SingleMetaModel {
     var condition: Column = null
     rules.foreach(item => {
       condition = if (condition == null) {
-        when('coupon_id === item.rule, item.name)
+        when('coupon_id === item.rule, item.id.toString)
       } else {
-        condition.when('coupon_id === item.rule, item.name)
+        condition.when('coupon_id === item.rule, item.id.toString)
       }
     })
 

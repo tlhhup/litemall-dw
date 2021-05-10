@@ -57,9 +57,9 @@ object HighSingleModel extends SingleMetaModel {
     rules.foreach(item => {
       val Array(start, end) = item.rule.split("-")
       condition = if (condition == null) {
-        when('orderMax.between(start, end), item.name)
+        when('orderMax.between(start, end), item.id.toString)
       } else {
-        condition.when('orderMax.between(start, end), item.name)
+        condition.when('orderMax.between(start, end), item.id.toString)
       }
     })
 

@@ -267,6 +267,7 @@
 			<field name="pct" type="string" indexed="true" stored="true"/>
 			<field name="refundRate" type="string" indexed="true" stored="true"/>
 			<field name="rfm" type="string" indexed="true" stored="true"/>
+			<field name="psm" type="string" indexed="true" stored="true"/>
 			<field name="brandFavor" type="string" indexed="true" stored="true"/>
 	3. 创建solr的collection并上传配置
 
@@ -378,6 +379,12 @@
 				        {
 				          inputColumn : "cf:rfm"
 				          outputField : "rfm"
+				          type : string
+				          source : value
+				        }
+				        {
+				          inputColumn : "cf:psm"
+				          outputField : "psm"
 				          type : string
 				          source : value
 				        }

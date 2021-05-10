@@ -58,9 +58,9 @@ object PCTModel extends SingleMetaModel {
     rules.foreach(item => {
       val Array(start, end) = item.rule.split("-")
       condition = if (condition == null) {
-        when('pct.between(start, end), item.name)
+        when('pct.between(start, end), item.id.toString)
       } else {
-        condition.when('pct.between(start, end), item.name)
+        condition.when('pct.between(start, end), item.id.toString)
       }
     })
 

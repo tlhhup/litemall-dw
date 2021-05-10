@@ -80,9 +80,9 @@ object PSMModel extends SingleMetaModel with MLBase {
 
       //5.2 创建或添加条件
       condition = if (condition == null) {
-        when(buildWhen(rule), item.name)
+        when(buildWhen(rule), item.id.toString)
       } else {
-        condition.when(buildWhen(rule), item.name)
+        condition.when(buildWhen(rule), item.id.toString)
       }
     })
 

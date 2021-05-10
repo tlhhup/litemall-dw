@@ -56,9 +56,9 @@ object AgeModel extends SingleMetaModel {
       val end = attrs(1)
       //2.2 构建 case when
       condition = if (condition == null) {
-        when(formatBirthday('birthday).between(start, end), item.name)
+        when(formatBirthday('birthday).between(start, end), item.id.toString)
       } else {
-        condition.when(formatBirthday('birthday).between(start, end), item.name)
+        condition.when(formatBirthday('birthday).between(start, end), item.id.toString)
       }
     })
 

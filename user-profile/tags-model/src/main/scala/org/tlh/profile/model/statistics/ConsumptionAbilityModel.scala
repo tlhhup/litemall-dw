@@ -58,9 +58,9 @@ object ConsumptionAbilityModel extends SingleMetaModel {
       val end = attrs(1)
 
       condition = if (condition == null) {
-        when('amount.between(start, end), item.name)
+        when('amount.between(start, end), item.id.toString)
       } else {
-        condition.when('amount.between(start, end), item.name)
+        condition.when('amount.between(start, end), item.id.toString)
       }
     })
 

@@ -48,9 +48,9 @@ object GenderModel extends SingleMetaModel {
     var condition: Column = null
     rules.foreach(item => {
       condition = if (condition == null) {
-        when('gender === item.rule, item.name)
+        when('gender === item.rule, item.id.toString)
       } else {
-        condition.when('gender === item.rule, item.name)
+        condition.when('gender === item.rule, item.id.toString)
       }
     })
 

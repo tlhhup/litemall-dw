@@ -8,7 +8,6 @@ import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.tlh.profile.dto.BasicTagDto;
 import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.entity.UserTag;
 import org.tlh.profile.service.ITbBasicTagService;
@@ -17,7 +16,6 @@ import org.tlh.profile.vo.EChartsGraphVo;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -52,12 +50,11 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
             //2.1 删除ID
             tags.remove("id");
             //2.2 处理标签
-            for (String tagName : tags.values()) {
-                if (StringUtils.hasText(tagName)) {
-                    List<BasicTagDto> tagDtos = this.tagService.queryByTagName(tagName);
-                    if (!ObjectUtils.isEmpty(tagDtos)) {
-                        BasicTagDto basicTagDto = tagDtos.get(0);
-                        buildThisGraphNodeAndParent("用户", basicTagDto.getId().intValue(), graphVo);
+            for (String tagId : tags.values()) {
+                if (StringUtils.hasText(tagId)) {
+                    TbBasicTag basicTag = this.tagService.getById(tagId);
+                    if (!ObjectUtils.isEmpty(basicTag)) {
+                        buildThisGraphNodeAndParent("用户", basicTag.getId().intValue(), graphVo);
                     }
                 }
             }
