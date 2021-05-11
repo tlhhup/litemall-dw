@@ -69,20 +69,20 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
         TbBasicTag basicTag = this.tagService.getById(sourceId);
         if (basicTag != null) {
             // 添加node
-            EChartsGraphVo.GraphNode thisNode = new EChartsGraphVo.GraphNode(sourceId, basicTag.getName());
+            EChartsGraphVo.GraphNode thisNode = new EChartsGraphVo.GraphNode(sourceId, buildNodeName(basicTag));
             graph.getNodes().add(thisNode);
             // 处理父级节点
             if (basicTag.getPid() != null) {
                 int pId = basicTag.getPid().intValue();
                 TbBasicTag parent = this.tagService.getById(pId);
                 // 链接父节点
-                EChartsGraphVo.GraphLink thisLink = new EChartsGraphVo.GraphLink(basicTag.getName(), parent.getName());
+                EChartsGraphVo.GraphLink thisLink = new EChartsGraphVo.GraphLink(buildNodeName(basicTag), buildNodeName(parent));
                 graph.getLinks().add(thisLink);
 
                 buildThisGraphNodeAndParent(userName, pId, graph);
             } else {
                 // 添加关系,顶层节点
-                EChartsGraphVo.GraphLink thisLink = new EChartsGraphVo.GraphLink(basicTag.getName(), userName);
+                EChartsGraphVo.GraphLink thisLink = new EChartsGraphVo.GraphLink(buildNodeName(basicTag), userName);
                 graph.getLinks().add(thisLink);
             }
         }
@@ -106,6 +106,16 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
             }
         }
         return result;
+    }
+
+
+    private String buildNodeName(TbBasicTag basicTag){
+        StringBuilder builder = new StringBuilder();
+        builder.append(basicTag.getName())
+                .append(":")
+                .append(basicTag.getId());
+
+        return builder.toString();
     }
 
 }

@@ -47,7 +47,11 @@ export default {
             roam: true,
             label: {
               show: true,
-              position: 'right'
+              position: 'right',
+              formatter: function(param) {
+                const attrs = param.name.split(':')
+                return attrs[0]
+              }
             },
             force: {
               repulsion: 200,
