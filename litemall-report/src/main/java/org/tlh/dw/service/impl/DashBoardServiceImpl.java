@@ -50,8 +50,8 @@ public class DashBoardServiceImpl implements DashBoardService {
                 calendar.add(Calendar.WEEK_OF_YEAR, -1);
                 lastYear = calendar.get(Calendar.YEAR);
                 lastValue = calendar.get(Calendar.WEEK_OF_YEAR);
-                if (lastYear<calendar.getWeekYear()){
-                    lastValue=1 + calendar.getWeeksInWeekYear();
+                if (lastYear < calendar.getWeekYear()) {
+                    lastValue = 1 + calendar.getWeeksInWeekYear();
                 }
                 break;
             case 2://月
@@ -149,7 +149,7 @@ public class DashBoardServiceImpl implements DashBoardService {
                         BigDecimal.ROUND_HALF_UP));
             }
             //4.计算支付转化率
-            if (adsDateTopic.getPaymentUserCount() != 0) {
+            if (adsDateTopic.getPaymentUserCount() != 0 && adsDateTopic.getUvCount() != 0) {
                 result.setPayConvertRate(((double) adsDateTopic.getPaymentUserCount()) * 100 / adsDateTopic.getUvCount());
             }
             return result;

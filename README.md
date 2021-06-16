@@ -425,6 +425,39 @@
 		--zk-host cdh-master:2181,cdh-slave-3:2181,cdh-slave-2:2181/solr \
 		--collection litemall \
 		--go-live
+		
+5. [solr数据备份与恢复(将其他集群中的数据导入)](https://docs.cloudera.com/documentation/enterprise/latest/topics/search_backup_restore.html)
+	1.  备份其他集群的数据
+		1. 创建快照
+
+				solrctl collection --create-snapshot litemall_bk -c litemall
+		2. 创建备份目录
+
+				hdfs dfs -mkdir -p /backup/litemall_16
+				# 修改权限
+				sudo -u hdfs hdfs dfs -chown solr:solr /backup/litemall_16
+		3. 准备导出(目的导出元数据合索引数据)
+
+				solrctl collection --prepare-snapshot-export litemall_bk -c litemall -d /backup/litemall_16
+		4. 导出
+
+				solrctl collection --export-snapshot litemall_bk -s /backup/litemall_16 -d hdfs://cdh-master:8020/backup/bk
+		5. 复制到本地 
+
+				hdfs dfs -copyToLocal /backup/bk litemall
+				tar -zcvf litemall.tar.gz litemall/
+		
+	2. 恢复到当前集群	
+		1. 创建目录上传到出的数据
+
+				hdfs dfs -mkdir -p /path/to/restore-staging
+				hdfs dfs -copyFromLocal litemall /path/to/restore-staging
+		2.  数据恢复
+
+				solrctl collection --restore litemall -l /path/to/restore-staging/litemall -b litemall_bk -i restore-litemall
+		3.  查看状态
+
+				solrctl collection --request-status restore-litemall
 				
 ### 注意事项
 1. CDH中使用lzo压缩，本地读取数据问题(报`No LZO codec found, cannot run.`错误)
@@ -448,7 +481,7 @@
 			    </property>
 			</configuration>	 	
 
-##术语
+## 术语
 1. 支付转换率：所选时间内，支付买家数除以访客数（支付买家数/访客数），即访客转化为支付买家的比例
 	$$
 		支付转换率={支付买家数 \over 访客数}
