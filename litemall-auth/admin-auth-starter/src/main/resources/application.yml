@@ -1,0 +1,5 @@
+auth:
+  admin:
+    enable: true
+    host: http://localhost:8083
+    auth-info: /admin/auth/info

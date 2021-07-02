@@ -18,6 +18,7 @@
         <module>spark-commons</module>
         <module>litemall-recommendation</module>
         <module>user-profile</module>
+        <module>litemall-auth</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -111,6 +112,12 @@
             <dependency>
                 <groupId>org.tlh</groupId>
                 <artifactId>spark-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tlh</groupId>
+                <artifactId>admin-auth-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
