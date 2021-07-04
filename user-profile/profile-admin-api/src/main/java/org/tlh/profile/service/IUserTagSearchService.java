@@ -1,6 +1,9 @@
 package org.tlh.profile.service;
 
+import org.tlh.profile.vo.BasicTagFacetVo;
 import org.tlh.profile.vo.EChartsGraphVo;
+
+import java.util.List;
 
 /**
  * @author 离歌笑
@@ -16,5 +19,13 @@ public interface IUserTagSearchService {
      * @return
      */
     EChartsGraphVo searchUserTagById(int id);
+
+    /**
+     * 查询标签统计信息
+     *
+     * @param filed
+     * @return
+     */
+    List<BasicTagFacetVo> basicTagFacet(String filed);
 
 }

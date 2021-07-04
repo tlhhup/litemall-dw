@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tlh.profile.UserProfileApplication;
+import org.tlh.profile.vo.BasicTagFacetVo;
 import org.tlh.profile.vo.EChartsGraphVo;
+
+import java.util.List;
 
 /**
  * @author 离歌笑
@@ -22,7 +25,14 @@ public class IUserTagSearchServiceTest {
 
     @Test
     public void searchUserTagById() {
-        EChartsGraphVo graphVo = this.userTagSearchService.searchUserTagById(10);
+        EChartsGraphVo graphVo = this.userTagSearchService.searchUserTagById(1);
         System.out.println(graphVo);
     }
+
+    @Test
+    public void basicTagFacet(){
+        List<BasicTagFacetVo> facetVos = this.userTagSearchService.basicTagFacet("age");
+        System.out.println(facetVos);
+    }
+
 }

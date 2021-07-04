@@ -1,4 +1,4 @@
-package org.tlh.profile.entity;
+package org.tlh.profile.entity.solr;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
