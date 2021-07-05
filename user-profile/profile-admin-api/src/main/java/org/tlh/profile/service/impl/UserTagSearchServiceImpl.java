@@ -53,6 +53,9 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
             //2.1 删除ID
             tags.remove("id");
             tags.remove("_version_");
+            if (tags.containsKey("catchall")){
+                tags.remove("catchall");
+            }
             //2.2 处理标签
             for (String tagId : tags.values()) {
                 if (StringUtils.hasText(tagId)) {
