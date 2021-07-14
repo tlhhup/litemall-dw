@@ -36,3 +36,9 @@ profile:
     resource-manager: cdh-master:8032
     name-node: hdfs://cdh-master:8020
     spark-opts: --executor-memory 1G --num-executors 1
+
+auth:
+  admin:
+    enable: true
+    host: http://localhost:8083
+    auth-info: /admin/auth/info

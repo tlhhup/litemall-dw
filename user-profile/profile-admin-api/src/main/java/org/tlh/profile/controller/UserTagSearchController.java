@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tlh.profile.service.IUserTagSearchService;
 import org.tlh.profile.util.ResponseUtil;
+import org.tlh.profile.vo.BasicTagFacetVo;
 import org.tlh.profile.vo.EChartsGraphVo;
+
+import java.util.List;
 
 /**
  * @author 离歌笑
@@ -25,6 +28,12 @@ public class UserTagSearchController {
     public Object searchTag(@RequestParam("userId") int userId) {
         EChartsGraphVo graphVo = this.userTagSearchService.searchUserTagById(userId);
         return ResponseUtil.ok(graphVo);
+    }
+
+    @GetMapping("/basicFacet")
+    public Object basicFacet(int id){
+        List<BasicTagFacetVo> basicTagFacetVos = this.userTagSearchService.basicTagFacet(id);
+        return ResponseUtil.ok(basicTagFacetVos);
     }
 
 }

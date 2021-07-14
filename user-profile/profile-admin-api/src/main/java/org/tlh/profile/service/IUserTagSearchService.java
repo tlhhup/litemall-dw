@@ -23,9 +23,9 @@ public interface IUserTagSearchService {
     /**
      * 查询标签统计信息
      *
-     * @param filed
+     * @param id
      * @return
      */
-    List<BasicTagFacetVo> basicTagFacet(String filed);
+    List<BasicTagFacetVo> basicTagFacet(int id);
 
 }

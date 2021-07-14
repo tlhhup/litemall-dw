@@ -125,12 +125,20 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
     @Override
     @Transactional
     public boolean createModelTag(ModelTagDto modelTag) {
+        //0.解析元数据信息及校验合法性
+        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
+        if (StringUtils.isEmpty(metadata.getOutFields())){
+            throw new IllegalArgumentException(("outFields must not be null"));
+        }
+
         //1.保存业务标签数据
         TbBasicTag target = new TbBasicTag();
         BeanUtils.copyProperties(modelTag, target);
         target.setLevel(4);
         //设置标签状态
         target.setState(ModelTaskState.SUBMIT.getState());
+        //设置标签最后的输出
+        target.setHbaseFields(metadata.getOutFields());
         boolean tag = this.save(target);
         //2.保存模型数据
         TbTagModel tagModel = new TbTagModel();
@@ -153,7 +161,6 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         }
         boolean model = modelService.save(tagModel);
         //3.保存元数据
-        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
         metadata.setTagId(target.getId());
         boolean metaData = this.metadataService.save(metadata);
         return tag && model && metaData;
@@ -274,10 +281,17 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
     @Override
     @Transactional
     public boolean updateModelTag(ModelTagDto modelTag) {
+        //0.解析元数据及校验合法性
+        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
+        if (StringUtils.isEmpty(metadata.getOutFields())){
+            throw new IllegalArgumentException(("outFields must not be null"));
+        }
         //1.更新业务标签数据
         TbBasicTag target = new TbBasicTag();
         BeanUtils.copyProperties(modelTag, target);
         target.setUpdateTime(LocalDateTime.now());
+        //设置输出字段名
+        target.setHbaseFields(metadata.getOutFields());
         boolean tag = this.updateById(target);
         //2.更新模型数据
         TbTagModel tagModel = new TbTagModel();
@@ -301,7 +315,6 @@ public class TbBasicTagServiceImpl extends ServiceImpl<TbBasicTagMapper, TbBasic
         }
         boolean model = modelService.updateById(tagModel);
         //3.更新元数据
-        TbTagMetadata metadata = this.buildTagMetaData(modelTag.getRule());
         metadata.setTagId(modelTag.getId());
         boolean metaData = this.metadataService.updateByTagId(metadata);
         return tag && model && metaData;

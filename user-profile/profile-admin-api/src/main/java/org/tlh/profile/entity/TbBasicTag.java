@@ -84,5 +84,9 @@ public class TbBasicTag implements Serializable {
      */
     private String remark;
 
+    /**
+     * hbase 中字段名
+     */
+    private String hbaseFields;
 
 }

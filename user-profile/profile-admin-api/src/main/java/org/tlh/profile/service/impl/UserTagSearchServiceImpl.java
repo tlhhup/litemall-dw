@@ -53,9 +53,6 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
             //2.1 删除ID
             tags.remove("id");
             tags.remove("_version_");
-            if (tags.containsKey("catchall")){
-                tags.remove("catchall");
-            }
             //2.2 处理标签
             for (String tagId : tags.values()) {
                 if (StringUtils.hasText(tagId)) {
@@ -72,7 +69,14 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
     }
 
     @Override
-    public List<BasicTagFacetVo> basicTagFacet(String filed) {
+    public List<BasicTagFacetVo> basicTagFacet(int id) {
+        //0. 获取标签对应的hbase中的字段名
+        TbBasicTag basicTag = this.tagService.getById(id);
+        String filed = basicTag.getHbaseFields();
+        if (StringUtils.isEmpty(filed)) {
+            throw new IllegalStateException("This tag does not have any filed!");
+        }
+
         //1. 查询统计信息
         FacetQuery query = new SimpleFacetQuery();
         query.addCriteria(new Criteria(Criteria.WILDCARD).expression(Criteria.WILDCARD));
