@@ -40,17 +40,6 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-hive_${scala.mario.verion}</artifactId>
             <version>${spark.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hive-exec</artifactId>
-                    <groupId>org.apache.hive</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-exec</artifactId>
-            <version>2.1.1-cdh6.3.2</version>
         </dependency>
 
         <dependency>
@@ -83,12 +72,6 @@
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
             <version>${config.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hadoop.gplcompression</groupId>
-            <artifactId>hadoop-lzo</artifactId>
-            <version>${hadoop.lzo.version}</version>
         </dependency>
     </dependencies>
 
