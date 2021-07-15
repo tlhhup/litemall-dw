@@ -673,8 +673,8 @@ export default {
     },
     handleMacro(row) {
       this.$router.push({
-        path: '/tag/macroProfile',
-        query: { id: row.id, name: row.name }
+        name: 'macroProfile',
+        params: { id: row.id, name: row.name }
       })
     }
   }

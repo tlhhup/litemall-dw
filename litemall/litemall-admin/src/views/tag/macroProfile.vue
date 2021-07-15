@@ -24,7 +24,7 @@ export default {
   methods: {
     initChart() {
       this.chartInstance = echarts.init(this.$refs.macro_ref, this.theme)
-      const name = this.$route.query.name
+      const name = this.$route.params.name
       const option = {
         title: {
           text: name,
@@ -100,10 +100,10 @@ export default {
     },
     loadData() {
       // 获取请求参数
-      if (this.$route.query.id == null) {
+      if (this.$route.params.id == null) {
         return
       }
-      const tagId = this.$route.query.id
+      const tagId = this.$route.params.id
       basicFacet({ id: tagId }).then(response => {
         const { data: ret } = response.data
         this.allData = ret
