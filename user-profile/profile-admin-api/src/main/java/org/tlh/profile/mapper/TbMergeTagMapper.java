@@ -1,5 +1,6 @@
 package org.tlh.profile.mapper;
 
+import org.tlh.profile.dto.MergeTagSolrDto;
 import org.tlh.profile.entity.TbMergeTag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.tlh.profile.vo.MergeTagListVo;
@@ -19,4 +20,6 @@ public interface TbMergeTagMapper extends BaseMapper<TbMergeTag> {
     MergeTagListVo queryDetailById(long id);
 
     List<TbMergeTag> queryMergeTagsByBasicTagId(long basicTagId);
+
+    List<MergeTagSolrDto> queryMergeTagSolr(int mergeTagId);
 }

@@ -42,4 +42,19 @@
         on m.id=d.merge_tag_id
         where d.basic_tag_id=#{value}
     </select>
+
+    <select id="queryMergeTagSolr" resultType="org.tlh.profile.dto.MergeTagSolrDto">
+        select
+            m.merge_tag_id as id,
+            m.basic_tag_id as filedTagId,
+            b.name as tagName,
+            m.condition as 'condition',
+            m.condition_order as 'order',
+            (select hbase_fields from tb_basic_tag where id=b.pid) as filedName
+        from tb_merge_tag_detail m
+        inner join tb_basic_tag b
+        on m.basic_tag_id=b.id
+        where m.merge_tag_id=#{value}
+        order by m.condition_order
+    </select>
 </mapper>

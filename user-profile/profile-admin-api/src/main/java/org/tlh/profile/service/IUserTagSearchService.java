@@ -28,4 +28,10 @@ public interface IUserTagSearchService {
      */
     List<BasicTagFacetVo> basicTagFacet(int id);
 
+    /**
+     * 组合标签统计信息
+     * @param id
+     */
+    List<BasicTagFacetVo> mergeTagFact(int id,Integer page, Integer limit);
+
 }

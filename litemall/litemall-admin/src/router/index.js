@@ -729,6 +729,17 @@ export const asyncRoutes = [
           title: '微观画像',
           noCache: true
         }
+      },
+      {
+        path: 'macroProfile',
+        component: () => import('@/views/tag/macroProfile'),
+        name: 'macroProfile',
+        meta: {
+          perms: ['GET /tag/macroProfile/index'],
+          title: '宏观画像',
+          noCache: true
+        },
+        hidden: true
       }
     ]
   },

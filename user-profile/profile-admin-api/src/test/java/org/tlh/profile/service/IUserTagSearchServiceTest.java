@@ -30,9 +30,14 @@ public class IUserTagSearchServiceTest {
     }
 
     @Test
-    public void basicTagFacet(){
-        List<BasicTagFacetVo> facetVos = this.userTagSearchService.basicTagFacet("age");
+    public void basicTagFacet() {
+        List<BasicTagFacetVo> facetVos = this.userTagSearchService.basicTagFacet(8);
         System.out.println(facetVos);
+    }
+
+    @Test
+    public void mergeTagTest() {
+        this.userTagSearchService.mergeTagFact(1, 1, 1);
     }
 
 }

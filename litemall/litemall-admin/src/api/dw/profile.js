@@ -200,3 +200,21 @@ export function searchUserTag(query) {
     params: query
   })
 }
+
+const BasicFacet = '/tag/userTag/basicFacet'
+export function basicFacet(query) {
+  return request({
+    url: BasicFacet,
+    method: 'get',
+    params: query
+  })
+}
+
+const MergeFacet = '/tag/userTag/mergeFacet'
+export function mergeFacet(query) {
+  return request({
+    url: MergeFacet,
+    method: 'get',
+    params: query
+  })
+}

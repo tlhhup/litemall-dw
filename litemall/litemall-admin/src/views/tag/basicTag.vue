@@ -182,7 +182,7 @@
           />
           <el-table-column
             label="操作"
-            width="200"
+            width="260"
           >
             <template slot-scope="scope">
               <el-button
@@ -200,6 +200,14 @@
                 icon="el-icon-check"
                 circle
                 @click="handleFinish(scope.row)"
+              />
+              <el-button
+                v-show="scope.row.level===4&&scope.row.state.state===4"
+                type="info"
+                size="small"
+                icon="el-icon-monitor"
+                circle
+                @click="handleMacro(scope.row)"
               />
               <el-button type="primary" size="small" icon="el-icon-edit" circle @click="handleTagEdit(scope.row)" />
               <el-button type="danger" size="small" icon="el-icon-delete" circle @click="handleTagDelete(scope.row)" />
@@ -661,6 +669,12 @@ export default {
             message: response.data.errmsg
           })
         }
+      })
+    },
+    handleMacro(row) {
+      this.$router.push({
+        path: '/tag/macroProfile',
+        query: { id: row.id, name: row.name }
       })
     }
   }

@@ -6,11 +6,16 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.FacetFieldEntry;
 import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.data.solr.core.query.result.FacetPivotFieldEntry;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.tlh.profile.dto.MergeTagSolrDto;
 import org.tlh.profile.entity.TbBasicTag;
 import org.tlh.profile.entity.solr.FacetEntity;
+import org.tlh.profile.entity.solr.UserTag;
+import org.tlh.profile.enums.QueryCondition;
+import org.tlh.profile.mapper.TbMergeTagMapper;
 import org.tlh.profile.service.ITbBasicTagService;
 import org.tlh.profile.service.IUserTagSearchService;
 import org.tlh.profile.vo.BasicTagFacetVo;
@@ -35,6 +40,9 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
 
     @Autowired
     private ITbBasicTagService tagService;
+
+    @Autowired
+    private TbMergeTagMapper mergeTagMapper;
 
     @Override
     public EChartsGraphVo searchUserTagById(int id) {
@@ -102,6 +110,59 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
         return null;
     }
 
+    @Override
+    public List<BasicTagFacetVo> mergeTagFact(int id, Integer page, Integer limit) {
+        //1. 查询solr的条件列表
+        List<MergeTagSolrDto> conditions = this.mergeTagMapper.queryMergeTagSolr(id);
+        if (ObjectUtils.isEmpty(conditions)) {
+            throw new IllegalStateException("This tag does not have any merge tags!");
+        }
+
+        //2. 构建solr查询条件 及 facet信息
+        List<String> pivots = new ArrayList<>();
+        List<QueryCondition> queryConditions = new ArrayList<>();
+        conditions.forEach(item -> {
+            queryConditions.add(new QueryCondition(
+                    item.getFiledName(),
+                    item.getFiledTagId(),
+                    QueryCondition.Operator.convert(item.getCondition())));
+            pivots.add(item.getFiledName());
+        });
+
+        // 设置条件
+        Criteria criteria = QueryCondition.buildCriteria(queryConditions);
+        FacetQuery query = new SimpleFacetQuery();
+        query.addCriteria(criteria);
+        // 设置pivot
+        FacetOptions facetOptions = new FacetOptions();
+        facetOptions.addFacetOnPivot(pivots.toArray(new String[conditions.size()]));
+        query.setFacetOptions(facetOptions);
+        // 设置分页参数
+        query.setOffset((page - 1L) * limit);
+        query.setRows(limit);
+        // 设置之返回用户ID
+        query.addProjectionOnField(new SimpleField("id"));
+
+        //3. 查询数据
+        FacetPage<UserTag> result = this.solrTemplate.queryForFacetPage(COLLECTION, query, UserTag.class);
+
+        //4. 组合数据
+        //4.1 解析pivot信息
+        List<FacetPivotFieldEntry> pivot = result.getPivot(String.join(",", pivots));
+        // 得到所有的tagId
+        List<Long> tagIds = new ArrayList<>();
+        this.parsePivotTagId(tagIds, pivot);
+        // 查询得到标签信息
+        Collection<TbBasicTag> tags = this.tagService.listByIds(tagIds);
+        Map<Long, String> idWithName = new HashMap<>();
+        tags.forEach(item -> idWithName.put(item.getId(), item.getName()));
+        List<BasicTagFacetVo> pivotInfo = this.parsePivotInfo(pivot, idWithName);
+
+        return pivotInfo;
+    }
+
+    /************************************/
+
     private void buildThisGraphNodeAndParent(String userName, int sourceId, EChartsGraphVo graph) {
         // 处理自己
         TbBasicTag basicTag = this.tagService.getById(sourceId);
@@ -135,4 +196,31 @@ public class UserTagSearchServiceImpl implements IUserTagSearchService {
         return builder.toString();
     }
 
+    private void parsePivotTagId(List<Long> tagIds, List<FacetPivotFieldEntry> pivot) {
+        pivot.forEach(item -> {
+            tagIds.add(Long.parseLong(item.getValue()));
+            //处理子节点
+            List<FacetPivotFieldEntry> child = item.getPivot();
+            if (!ObjectUtils.isEmpty(child)) {
+                parsePivotTagId(tagIds, child);
+            }
+        });
+    }
+
+    private List<BasicTagFacetVo> parsePivotInfo(List<FacetPivotFieldEntry> pivots, Map<Long, String> tagIdWithMap) {
+        List<BasicTagFacetVo> result = new ArrayList<>();
+        pivots.forEach(item -> {
+            long tagId = Long.parseLong(item.getValue());
+            BasicTagFacetVo i = new BasicTagFacetVo(tagId, tagIdWithMap.get(tagId), item.getValueCount());
+            result.add(i);
+
+            //处理子节点
+            List<FacetPivotFieldEntry> child = item.getPivot();
+            if (!ObjectUtils.isEmpty(child)) {
+                List<BasicTagFacetVo> children = parsePivotInfo(child, tagIdWithMap);
+                i.setChild(children);
+            }
+        });
+        return result;
+    }
 }

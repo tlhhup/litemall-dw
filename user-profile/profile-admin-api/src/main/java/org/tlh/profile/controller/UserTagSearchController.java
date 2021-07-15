@@ -31,8 +31,17 @@ public class UserTagSearchController {
     }
 
     @GetMapping("/basicFacet")
-    public Object basicFacet(int id){
+    public Object basicFacet(int id) {
         List<BasicTagFacetVo> basicTagFacetVos = this.userTagSearchService.basicTagFacet(id);
+        return ResponseUtil.ok(basicTagFacetVos);
+    }
+
+
+    @GetMapping("/mergeFacet")
+    public Object mergeFacet(int id,
+                             @RequestParam(defaultValue = "1") Integer page,
+                             @RequestParam(defaultValue = "10") Integer limit) {
+        List<BasicTagFacetVo> basicTagFacetVos = this.userTagSearchService.mergeTagFact(id, page, limit);
         return ResponseUtil.ok(basicTagFacetVos);
     }
 
