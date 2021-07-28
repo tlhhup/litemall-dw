@@ -15,4 +15,9 @@ object DateUtil {
     format.format(new Date())
   }
 
+  def parse(date: String, pattern: String): Date = {
+    val format = new SimpleDateFormat(pattern)
+    format.parse(date)
+  }
+
 }

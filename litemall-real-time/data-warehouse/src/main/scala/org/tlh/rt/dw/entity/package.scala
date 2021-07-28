@@ -16,7 +16,7 @@ package object entity {
   case class RegionInfo(
                          id: Long,
                          name: String, //名称
-                         code: String //编号
+                         code: Int //编号
                        )
 
   /**
@@ -61,5 +61,38 @@ package object entity {
     }
 
   }
+
+  /**
+    * 商品品牌
+    *
+    * @param id
+    * @param name
+    */
+  case class GoodsBrand(id: Int, name: String)
+
+  /**
+    * 商品分类
+    *
+    * @param id
+    * @param name
+    */
+  case class GoodsCategory(id: Int, name: String)
+
+  /**
+    * 商品信息
+    *
+    * @param id
+    * @param name
+    * @param category_id
+    * @param brand_id
+    */
+  case class GoodsSku(id: Int,
+                      name: String,
+                      category_id: Int,
+                      brand_id: Int,
+
+                      var category_name: String,
+                      var brand_name: String
+                     )
 
 }

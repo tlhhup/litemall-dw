@@ -13,6 +13,8 @@
     <properties>
         <phoenix.version>5.1.1</phoenix.version>
         <jedis.version>2.9.0</jedis.version>
+        <phoenix.spark.version>5.0.0-HBase-2.0</phoenix.spark.version>
+        <javax.el.version>3.0.1-b06</javax.el.version>
     </properties>
 
     <dependencies>
@@ -32,6 +34,22 @@
             <groupId>org.apache.phoenix</groupId>
             <artifactId>phoenix-client-hbase-2.3</artifactId>
             <version>${phoenix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-spark</artifactId>
+            <version>${phoenix.spark.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>javax.el</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>${javax.el.version}</version>
         </dependency>
 
         <dependency>
