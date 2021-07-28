@@ -2,6 +2,8 @@ package org.tlh.rt.dw
 
 import java.util.Date
 
+import org.joda.time.DateTime
+
 /**
   * @author 离歌笑
   * @desc
@@ -48,16 +50,18 @@ package object entity {
     }
 
     def ageGroup(): String = {
-      this.birthday match {
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "50后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "60后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "70后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "80后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "90后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "00后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "10后"
-        case x: Date if x.before(new Date()) && x.after(new Date()) => "20后"
-      }
+      val x = this.birthday
+      val ageGroup =
+        if (x.after(new DateTime("1950-01-01").toDate) && x.before(new DateTime("1959-12-31").toDate)) "50后"
+        else if (x.after(new DateTime("1960-01-01").toDate) && x.before(new DateTime("1969-12-31").toDate)) "60后"
+        else if (x.after(new DateTime("1970-01-01").toDate) && x.before(new DateTime("1979-12-31").toDate)) "70后"
+        else if (x.after(new DateTime("1980-01-01").toDate) && x.before(new DateTime("1989-12-31").toDate)) "80后"
+        else if (x.after(new DateTime("1990-01-01").toDate) && x.before(new DateTime("1999-12-31").toDate)) "90后"
+        else if (x.after(new DateTime("2000-01-01").toDate) && x.before(new DateTime("2009-12-31").toDate)) "00后"
+        else if (x.after(new DateTime("2010-01-01").toDate) && x.before(new DateTime("2019-12-31").toDate)) "10后"
+        else if (x.after(new DateTime("2020-01-01").toDate) && x.before(new DateTime("2029-12-31").toDate)) "20后"
+        else ""
+      ageGroup
     }
 
   }
