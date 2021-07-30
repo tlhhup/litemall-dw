@@ -82,15 +82,18 @@ object MaxWellOdsDispatcher extends App {
         val sender = KafkaUtil.buildKafkaSender("kafka-master:9092")
 
         for (item <- iter) {
+          // 解析表名
+          val table = "ods_" + (item \ "table").extract[String]
+          // 解析数据
+          val data = write((item \ "data").extract[Map[String, Any]])
+
           // 处理类型
           (item \ "type").extract[String] match {
             case "bootstrap-insert" => {
-              // 解析表名
-              val table = "ods_" + (item \ "table").extract[String]
-              // 解析数据
-              val data = write((item \ "data").extract[Map[String, Any]])
-
               //7. 处理数据，转发到独立的ods表中
+              sender.send(new ProducerRecord[String, String](table, data))
+            }
+            case "insert" =>{
               sender.send(new ProducerRecord[String, String](table, data))
             }
             case _ =>

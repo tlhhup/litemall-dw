@@ -99,4 +99,14 @@ package object entity {
                       var brand_name: String
                      )
 
+  /**
+    * 首单用户信息
+    *
+    * @param userId
+    * @param is_first
+    */
+  case class UserOrderStatus(userId: Long, is_first: Boolean)
+
+  case class UserDwdDim(id: Long, gender: String, ageGroup: String)
+
 }
