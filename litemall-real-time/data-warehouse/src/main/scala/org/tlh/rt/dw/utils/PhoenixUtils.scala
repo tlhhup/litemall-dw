@@ -2,7 +2,7 @@ package org.tlh.rt.dw.utils
 
 import java.sql.{Connection, DriverManager, PreparedStatement, ResultSet, Statement}
 
-import org.tlh.rt.dw.entity.{GoodsBrand, GoodsCategory, RegionInfo, UserDwdDim}
+import org.tlh.rt.dw.entity.{GoodsBrand, GoodsCategory, GoodsSku, RegionInfo, UserDwdDim}
 
 import scala.collection.mutable
 
@@ -87,6 +87,37 @@ object PhoenixUtils {
         users.put(userId, UserDwdDim(userId, gender, age))
       }
       users
+    } finally {
+      release(connection, statement, set)
+    }
+  }
+
+  /**
+    * 查询商品sku信息
+    *
+    * @param skuIds
+    * @return
+    */
+  def querySku(skuIds: List[Int]): mutable.HashMap[Long, GoodsSku] = {
+    var connection: Connection = null
+    var statement: Statement = null
+    var set: ResultSet = null
+    try {
+      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
+      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      statement = connection.createStatement()
+      set = statement.executeQuery(s"SELECT * FROM LITEMALL.DWD_DIM_SKU WHERE ID IN (${skuIds.mkString(",")})")
+      val skus = new mutable.HashMap[Long, GoodsSku]()
+      while (set.next()) {
+        val id = set.getInt(1)
+        val name = set.getString(2)
+        val categoryId = set.getInt(3)
+        val categoryName = set.getString(5)
+        val brandId = set.getInt(4)
+        val brandName = set.getString(6)
+        skus.put(id, GoodsSku(id, name, categoryId, brandId, categoryName, brandName))
+      }
+      skus
     } finally {
       release(connection, statement, set)
     }
