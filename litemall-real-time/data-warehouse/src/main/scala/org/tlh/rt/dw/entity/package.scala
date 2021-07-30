@@ -95,8 +95,8 @@ package object entity {
                       category_id: Int,
                       brand_id: Int,
 
-                      var category_name: String,
-                      var brand_name: String
+                      var category_name: String = "",
+                      var brand_name: String = ""
                      )
 
   /**

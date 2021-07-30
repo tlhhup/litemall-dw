@@ -2,7 +2,7 @@ package org.tlh.rt.dw.utils
 
 import java.sql.{Connection, DriverManager, PreparedStatement, ResultSet, Statement}
 
-import org.tlh.rt.dw.entity.{RegionInfo, UserDwdDim}
+import org.tlh.rt.dw.entity.{GoodsBrand, GoodsCategory, RegionInfo, UserDwdDim}
 
 import scala.collection.mutable
 
@@ -114,6 +114,58 @@ object PhoenixUtils {
         regions.put(id, RegionInfo(id, name, code))
       }
       regions
+    } finally {
+      release(connection, statement, set)
+    }
+  }
+
+  /**
+    * 获取商品品牌
+    *
+    * @return
+    */
+  def queryBrands(): mutable.HashMap[Long, GoodsBrand] = {
+    var connection: Connection = null
+    var statement: Statement = null
+    var set: ResultSet = null
+    try {
+      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
+      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      statement = connection.createStatement()
+      set = statement.executeQuery("SELECT * FROM LITEMALL.BRAND")
+      val brands = new mutable.HashMap[Long, GoodsBrand]()
+      while (set.next()) {
+        val id = set.getInt(1)
+        val name = set.getString(2)
+        brands.put(id, GoodsBrand(id, name))
+      }
+      brands
+    } finally {
+      release(connection, statement, set)
+    }
+  }
+
+  /**
+    * 获取商品类别
+    *
+    * @return
+    */
+  def queryCategories(): mutable.HashMap[Long, GoodsCategory] = {
+    var connection: Connection = null
+    var statement: Statement = null
+    var set: ResultSet = null
+    try {
+      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
+      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      statement = connection.createStatement()
+      set = statement.executeQuery("SELECT * FROM LITEMALL.GOODS_CATEGORY")
+      val categories = new mutable.HashMap[Long, GoodsCategory]()
+      while (set.next()) {
+        val id = set.getInt(1)
+        val name = set.getString(2)
+        categories.put(id, GoodsCategory(id, name))
+      }
+      categories
     } finally {
       release(connection, statement, set)
     }
