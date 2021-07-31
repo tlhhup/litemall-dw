@@ -11,12 +11,9 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils, OffsetRange}
 import org.json4s.{DefaultFormats, Formats}
 import org.json4s.jackson.JsonMethods.parse
-import org.tlh.rt.dw.dwd.dim.DwdDimUserApp.args
-import org.tlh.rt.dw.entity
-import org.tlh.rt.dw.entity.{GoodsSku, UserInfo}
+import org.tlh.rt.dw.entity.GoodsSku
 import org.tlh.rt.dw.utils.{DwSerializers, KafkaUtil, PhoenixUtils}
 
-import scala.collection.mutable
 
 /**
   * @author 离歌笑
