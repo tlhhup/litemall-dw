@@ -1,6 +1,6 @@
 package org.tlh.rt.dw.entity
 
-import java.util.Date
+import java.sql.Timestamp
 
 /**
   * 订单详情宽表
@@ -9,40 +9,40 @@ import java.util.Date
   * @desc
   * @date 2021-07-31
   */
-class OrderWide(
-                 val orderId: Long,
-                 val user_id: Long, //用户ID
-                 val province: Long, //省份ID
-                 val city: Long, //城市ID
-                 val country: Long, //乡镇ID
-                 val actual_price: Double, // 实付金额 = order_price - integral_price
-                 val order_price: Double, //订单金额 = goods_price + freight_price - coupon_price
-                 val goods_price: Double, //商品总金额
-                 val freight_price: Double, //配送费用
-                 val coupon_price: Double, //优惠券减免
-                 val integral_price: Double, //用户积分减免
-                 val add_time: Date, //创建时间
-                 val is_first_order: Boolean, //是否是首单
-                 val province_name: String, //省份名称
-                 val province_code: Int, //省份编号
-                 val city_name: String, //城市名称
-                 val city_code: Int, //城市编号
-                 val country_code: Int, //乡镇编号
-                 val country_name: String, //乡镇名称
-                 val user_age_group: String, //用户年龄段
-                 val user_gender: String, //用户性别
+case class OrderWide(
+                      orderId: Long,
+                      user_id: Long, //用户ID
+                      province: Long, //省份ID
+                      city: Long, //城市ID
+                      country: Long, //乡镇ID
+                      actual_price: Double, // 实付金额 = order_price - integral_price
+                      order_price: Double, //订单金额 = goods_price + freight_price - coupon_price
+                      goods_price: Double, //商品总金额
+                      freight_price: Double, //配送费用
+                      coupon_price: Double, //优惠券减免
+                      integral_price: Double, //用户积分减免
+                      add_time: Timestamp, //创建时间
+                      is_first_order: Boolean, //是否是首单
+                      province_name: String, //省份名称
+                      province_code: Int, //省份编号
+                      city_name: String, //城市名称
+                      city_code: Int, //城市编号
+                      country_code: Int, //乡镇编号
+                      country_name: String, //乡镇名称
+                      user_age_group: String, //用户年龄段
+                      user_gender: String, //用户性别
 
-                 //订单详情信息
-                 val orderDetailId: Int,
-                 val goods_id: Int,
-                 val goods_name: String,
-                 val number: Int,
-                 val price: Double,
-                 val category_id: Int,
-                 val category_name: String,
-                 val brand_id: Int,
-                 val brand_name: String,
-                 var capitation_price: Double = 0 //该订单详情均摊金额
+                      //详情信息
+                      orderDetailId: Int,
+                      goods_id: Int,
+                      goods_name: String,
+                      number: Int,
+                      price: Double,
+                      category_id: Int,
+                      category_name: String,
+                      brand_id: Int,
+                      brand_name: String,
+                      var capitation_price: Double = 0 //该订单详情均摊金额
                ) extends Serializable{
 
 
@@ -64,7 +64,7 @@ object OrderWide {
       order.freight_price,
       order.coupon_price,
       order.integral_price,
-      order.add_time,
+      new Timestamp(order.add_time.getTime),
       order.is_first_order,
       order.province_name,
       order.province_code,

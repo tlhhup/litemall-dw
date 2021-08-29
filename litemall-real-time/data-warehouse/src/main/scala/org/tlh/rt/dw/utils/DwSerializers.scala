@@ -22,18 +22,18 @@ object DwSerializers {
 case object JDateSerializer extends CustomSerializer[Date](format => ( {
   case JString(s) => {
     try {
-      DateUtils.parseDate(s, "yyyy-MM-dd")
+      DateUtils.parseDate(s, "yyyy-MM-dd HH:mm:ss")
     } catch {
-      case _ => DateUtils.parseDate(s, "yyyy-MM-dd HH:mm:ss")
+      case _ => DateUtils.parseDate(s, "yyyy-MM-dd")
     }
   }
   case JNull => null
 }, {
   case date: Date => {
     try {
-      JString(DateFormatUtils.format(date, "yyyy-MM-dd"))
+      JString(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss"))
     } catch {
-      case _ => JString(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss"))
+      case _ => JString(DateFormatUtils.format(date, "yyyy-MM-dd"))
     }
   }
 }

@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
+import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils, OffsetRange}
@@ -192,8 +193,27 @@ object DwsOrderDetailCapitationApp extends App {
       orderWides.toIterator
     })
 
+  val resultDSCache = resultDs.cache()
+
+  // 将数据存储到clickhouse 便于olap(ad-hoc 即席查询)
+  resultDSCache.foreachRDD(rdd => {
+
+    val spark = SparkSession.builder().config(rdd.sparkContext.getConf).getOrCreate()
+    import spark.implicits._
+    rdd.toDF()
+      .write
+      .mode(SaveMode.Append)
+      .format("jdbc")
+      .option("url","jdbc:clickhouse://hadoop-master:8123/litemall")
+      .option("driver","ru.yandex.clickhouse.ClickHouseDriver")
+      .option("dbtable", "litemall.ads_order_wide_all")
+      .option("user", "default")
+      .save()
+  })
+
+
   // 8. 将数据存储到kafka
-  resultDs.foreachRDD(rdd => {
+  resultDSCache.foreachRDD(rdd => {
     rdd.foreachPartition(iter => {
       val producer = KafkaUtil.buildKafkaSender("kafka-master:9092")
 
