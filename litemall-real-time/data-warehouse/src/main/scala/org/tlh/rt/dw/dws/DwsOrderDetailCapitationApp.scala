@@ -15,7 +15,7 @@ import org.json4s.jackson.JsonMethods.parse
 import org.json4s.jackson.Serialization.write
 import org.json4s.{DefaultFormats, Formats}
 import org.tlh.rt.dw.entity.{OrderDetail, OrderInfo, OrderWide}
-import org.tlh.rt.dw.utils.{DwSerializers, KafkaUtil}
+import org.tlh.rt.dw.utils.{AppConf, DwSerializers, KafkaUtil}
 import org.tlh.spark.util.JedisUtil
 
 import collection.mutable
@@ -47,7 +47,7 @@ object DwsOrderDetailCapitationApp extends App {
   val orderGroupId = "order"
 
   var kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> orderGroupId,
@@ -82,7 +82,7 @@ object DwsOrderDetailCapitationApp extends App {
   val orderDetailGroupId = "order_detail"
 
   kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> orderDetailGroupId,
@@ -204,10 +204,10 @@ object DwsOrderDetailCapitationApp extends App {
       .write
       .mode(SaveMode.Append)
       .format("jdbc")
-      .option("url","jdbc:clickhouse://hadoop-master:8123/litemall")
-      .option("driver","ru.yandex.clickhouse.ClickHouseDriver")
-      .option("dbtable", "litemall.ads_order_wide_all")
-      .option("user", "default")
+      .option("url",AppConf.CLICKHOUSE_URL)
+      .option("driver",AppConf.CLICKHOUSE_DRIVER)
+      .option("dbtable", "litemall.dws_order_wide_all")
+      .option("user", AppConf.CLICKHOUSE_USER)
       .save()
   })
 
@@ -215,7 +215,7 @@ object DwsOrderDetailCapitationApp extends App {
   // 8. 将数据存储到kafka
   resultDSCache.foreachRDD(rdd => {
     rdd.foreachPartition(iter => {
-      val producer = KafkaUtil.buildKafkaSender("kafka-master:9092")
+      val producer = KafkaUtil.buildKafkaSender(AppConf.KAFKA_SERVERS)
 
       iter.foreach(item => {
         producer.send(new ProducerRecord[String, String]("dws_order_wide", write(item)))

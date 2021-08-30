@@ -24,8 +24,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery(s"SELECT USER_ID FROM litemall.user_order_status WHERE USER_ID IN (${userId.mkString(",")})")
       val userOder = new mutable.ArrayBuffer[Long]()
@@ -49,8 +49,8 @@ object PhoenixUtils {
     var connection: Connection = null
     var statement: PreparedStatement = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.prepareStatement("INSERT INTO LITEMALL.USER_ORDER_STATUS(USER_ID,IS_FIRST) values(?,?)")
       for (id <- userId) {
         statement.setLong(1, id)
@@ -75,8 +75,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery(s"SELECT ID,GENDER,AGE_GROUP FROM LITEMALL.USERS WHERE ID IN (${userId.mkString(",")})")
       val users = new mutable.HashMap[Long, UserDwdDim]()
@@ -103,8 +103,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery(s"SELECT * FROM LITEMALL.DWD_DIM_SKU WHERE ID IN (${skuIds.mkString(",")})")
       val skus = new mutable.HashMap[Long, GoodsSku]()
@@ -133,8 +133,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery("SELECT * FROM LITEMALL.REGION")
       val regions = new mutable.HashMap[Long, RegionInfo]()
@@ -160,8 +160,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery("SELECT * FROM LITEMALL.BRAND")
       val brands = new mutable.HashMap[Long, GoodsBrand]()
@@ -186,8 +186,8 @@ object PhoenixUtils {
     var statement: Statement = null
     var set: ResultSet = null
     try {
-      Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-      connection = DriverManager.getConnection("jdbc:phoenix:hadoop-master")
+      Class.forName(AppConf.PHOENIX_DRIVER)
+      connection = DriverManager.getConnection(AppConf.PHOENIX_URL)
       statement = connection.createStatement()
       set = statement.executeQuery("SELECT * FROM LITEMALL.GOODS_CATEGORY")
       val categories = new mutable.HashMap[Long, GoodsCategory]()

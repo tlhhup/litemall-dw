@@ -13,7 +13,7 @@ import org.json4s.{Formats, NoTypeHints}
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.write
-import org.tlh.rt.dw.utils.KafkaUtil
+import org.tlh.rt.dw.utils.{AppConf, KafkaUtil}
 
 /**
   * 导入历史数据
@@ -36,7 +36,7 @@ object MaxWellOdsDispatcher extends App {
   val groupId = "maxwell"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -79,7 +79,7 @@ object MaxWellOdsDispatcher extends App {
       rdd.foreachPartition(iter => {
 
         // 创建生产者
-        val sender = KafkaUtil.buildKafkaSender("kafka-master:9092")
+        val sender = KafkaUtil.buildKafkaSender(AppConf.KAFKA_SERVERS)
 
         for (item <- iter) {
           // 解析表名

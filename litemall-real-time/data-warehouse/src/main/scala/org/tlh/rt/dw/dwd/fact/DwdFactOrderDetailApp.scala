@@ -13,7 +13,7 @@ import org.json4s.{DefaultFormats, Formats}
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.jackson.Serialization.write
 import org.tlh.rt.dw.entity.OrderDetail
-import org.tlh.rt.dw.utils.{DwSerializers, KafkaUtil, PhoenixUtils}
+import org.tlh.rt.dw.utils.{AppConf, DwSerializers, KafkaUtil, PhoenixUtils}
 
 /**
   * @author 离歌笑
@@ -34,7 +34,7 @@ object DwdFactOrderDetailApp extends App {
   val groupId = "order_detail"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -93,7 +93,7 @@ object DwdFactOrderDetailApp extends App {
   //7.  将数据保存到Kafka中
   orderDs.foreachRDD(rdd => {
     rdd.foreachPartition(iter => {
-      val producer = KafkaUtil.buildKafkaSender("kafka-master:9092")
+      val producer = KafkaUtil.buildKafkaSender(AppConf.KAFKA_SERVERS)
 
       iter.foreach(item => {
         producer.send(new ProducerRecord[String, String]("dwd_fact_order_detail", write(item)))

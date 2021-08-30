@@ -13,8 +13,8 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.json4s.jackson.JsonMethods._
 import org.json4s._
 import org.json4s.jackson.Serialization
-import org.json4s.jackson.Serialization.{write}
-import org.tlh.rt.dw.utils.KafkaUtil
+import org.json4s.jackson.Serialization.write
+import org.tlh.rt.dw.utils.{AppConf, KafkaUtil}
 
 /**
   * @author 离歌笑
@@ -35,7 +35,7 @@ object CanalOdsDispatcherApp extends App {
   val groupId = "canal"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -78,7 +78,7 @@ object CanalOdsDispatcherApp extends App {
       rdd.foreachPartition(iter => {
 
         // 创建生产者
-        val sender = KafkaUtil.buildKafkaSender("kafka-master:9092")
+        val sender = KafkaUtil.buildKafkaSender(AppConf.KAFKA_SERVERS)
 
         for (item <- iter) {
           // 处理类型

@@ -12,7 +12,7 @@ import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils, OffsetR
 import org.json4s.{DefaultFormats, Formats}
 import org.json4s.jackson.JsonMethods.parse
 import org.tlh.rt.dw.entity.GoodsSku
-import org.tlh.rt.dw.utils.{DwSerializers, KafkaUtil, PhoenixUtils}
+import org.tlh.rt.dw.utils.{AppConf, DwSerializers, KafkaUtil, PhoenixUtils}
 
 
 /**
@@ -34,7 +34,7 @@ object DwdDimSkuApp extends App {
   val groupId = "sku"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -98,7 +98,7 @@ object DwdDimSkuApp extends App {
         "LITEMALL.DWD_DIM_SKU",
         Seq("ID", "NAME", "CATEGORY_ID", "BRAND_ID", "CATEGORY_NAME", "BRAND_NAME"),
         new Configuration,
-        Some("hadoop-master:2181")
+        Some(AppConf.HBASE_ZK)
       )
 
       //8. 更新offset

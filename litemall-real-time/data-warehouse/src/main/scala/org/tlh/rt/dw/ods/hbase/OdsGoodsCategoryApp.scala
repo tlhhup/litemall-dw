@@ -12,7 +12,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.json4s.jackson.JsonMethods.parse
 import org.json4s.{DefaultFormats, Formats}
 import org.tlh.rt.dw.entity.GoodsCategory
-import org.tlh.rt.dw.utils.KafkaUtil
+import org.tlh.rt.dw.utils.{AppConf, KafkaUtil}
 
 /**
   * 导入region数据
@@ -35,7 +35,7 @@ object OdsGoodsCategoryApp extends App {
   val groupId = "category"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -82,7 +82,7 @@ object OdsGoodsCategoryApp extends App {
         "LITEMALL.GOODS_CATEGORY",
         Seq("ID", "NAME"),
         new Configuration,
-        Some("hadoop-master:2181")
+        Some(AppConf.HBASE_ZK)
       )
 
       //8. 更新offset

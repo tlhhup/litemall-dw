@@ -10,7 +10,7 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.{HasOffsetRanges, KafkaUtils, OffsetRange}
 import org.tlh.rt.dw.entity.UserInfo
-import org.tlh.rt.dw.utils.{DwSerializers, KafkaUtil}
+import org.tlh.rt.dw.utils.{AppConf, DwSerializers, KafkaUtil}
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
@@ -35,7 +35,7 @@ object DwdDimUserApp extends App {
   val groupId = "dwd_dim_user"
 
   val kafkaParams = Map[String, Object](
-    "bootstrap.servers" -> "kafka-master:9092",
+    "bootstrap.servers" -> AppConf.KAFKA_SERVERS,
     "key.deserializer" -> classOf[StringDeserializer],
     "value.deserializer" -> classOf[StringDeserializer],
     "group.id" -> groupId,
@@ -88,7 +88,7 @@ object DwdDimUserApp extends App {
         "LITEMALL.USERS",
         Seq("ID", "USERNAME", "GENDER", "BIRTHDAY", "LAST_LOGIN_TIME", "LAST_LOGIN_IP", "USER_LEVEL", "NICKNAME", "AGE_GROUP"),
         new Configuration,
-        Some("hadoop-master:2181")
+        Some(AppConf.HBASE_ZK)
       )
 
       //8. 更新offset
