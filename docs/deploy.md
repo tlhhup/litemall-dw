@@ -67,3 +67,35 @@
 2. 执行画像模型
 	1. 参考`README.md`中的**用户画像**的**环境准备**搭建hbase到solr的etl
 	2. 执行`tags-model`模块中相应的模型即可将数据最终导入到solr中
+
+### Superset大屏
+1. 分类占比
+
+		SELECT category_id,category_name,number FROM dws_goods_action_all where dt=toDate(now())
+2. 区域订单
+
+		SELECT id,province,province_name,province_code,city,city_name,city_code,country,country_name,country_code,actual_price,order_price FROM dwd_fact_order_all where dt=toDate(now())
+3. 省份订单分布
+
+		SELECT 
+			c.*,
+			lr.iso_old_code 
+		FROM 
+		(
+		SELECT
+			province_name,
+			COUNT(1) as "total",
+			sum(order_price) as "total_amount"
+		FROM
+			dwd_fact_order_all
+		where
+			dt = toDate(now())
+		group by
+			province,
+			province_name
+		) c 
+		INNER JOIN litemall_region lr 
+		on c.province_name=lr.region_name
+4. 性别订单分布
+
+		SELECT user_id, user_age_group,user_gender,order_price,is_first_order FROM dwd_fact_order_all WHERE dt =toDate(now())	
