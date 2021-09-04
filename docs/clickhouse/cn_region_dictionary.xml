@@ -1,0 +1,49 @@
+<dictionaries>
+    <dictionary>
+        <name>china_region_code</name>
+
+        <structure>
+            <id>
+                <name>id</name>
+            </id>
+
+            <attribute>
+                <name>iso_code</name>
+                <type>String</type>
+                <null_value></null_value>
+            </attribute>
+            <attribute>
+                <name>iso_name</name>
+                <type>String</type>
+                <null_value></null_value>
+            </attribute>
+            <attribute>
+                <name>region_name</name>
+                <type>String</type>
+                <null_value></null_value>
+            </attribute>
+            <attribute>
+                <name>region_type</name>
+                <type>String</type>
+                <null_value></null_value>
+            </attribute>
+            <attribute>
+                <name>iso_old_code</name>
+                <type>String</type>
+                <null_value></null_value>
+            </attribute>
+        </structure>
+
+        <source>
+            <file>
+                <path>/data/clickhouse/dictionaries_lib/cn_region.csv</path>
+                <format>CSV</format>
+            </file>
+        </source>
+
+        <layout>
+            <flat/>
+        </layout>
+        <lifetime>300</lifetime>
+    </dictionary>
+</dictionaries>
