@@ -110,7 +110,7 @@ object DwdFactOrderApp extends App {
           order.user_age_group = userMap(order.user_id).ageGroup
 
           // 设置是否是首单
-          order.is_first_order = if (userOderList.contains(order.user_id)) true else false
+          order.is_first_order = if (userOderList.contains(order.user_id)) false else true
         }
       }
       orders.iterator
@@ -123,7 +123,7 @@ object DwdFactOrderApp extends App {
       case (_, orders) => {
         val orderedOrders = orders.toList.sortWith((a, b) => a.add_time.before(b.add_time))
         for (item <- orderedOrders.zipWithIndex) {
-          item._1.is_first_order = if (item._2 == 0) true else false
+          item._1.is_first_order = if (item._2 == 0) item._1.is_first_order else false
         }
 
         orderedOrders
