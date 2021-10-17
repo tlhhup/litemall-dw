@@ -31,6 +31,7 @@
         <flume.version>1.9.0</flume.version>
         <hive.version>3.1.2</hive.version>
         <scala.version>2.12.8</scala.version>
+        <scala.major.version>2.12</scala.major.version>
         <scala.maven.version>4.3.1</scala.maven.version>
         <spark.version>2.4.7</spark.version>
         <spark.mongo.version>2.4.2</spark.mongo.version>
