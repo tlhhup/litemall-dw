@@ -16,6 +16,7 @@ object AppConfig {
   val HBASE_ZK = config.getString("hbase.zk")
 
   val KAFKA_SERVERS = config.getString("kafka.servers")
+  val kafka_input_topic = config.getString("kafka.input.topic")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")

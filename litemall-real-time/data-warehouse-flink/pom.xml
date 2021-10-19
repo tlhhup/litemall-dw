@@ -18,12 +18,23 @@
         <jedis.version>2.9.0</jedis.version>
         <typesafe.version>1.4.1</typesafe.version>
         <junit.version>4.13.1</junit.version>
+        <json4s.version>3.6.6</json4s.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -43,6 +54,12 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-base</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-runtime-web_2.12</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <!--    log    -->
@@ -67,6 +84,11 @@
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
             <version>${typesafe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_2.12</artifactId>
+            <version>${json4s.version}</version>
         </dependency>
         <!--       junit -->
         <dependency>
