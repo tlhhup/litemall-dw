@@ -19,6 +19,7 @@
         <typesafe.version>1.4.1</typesafe.version>
         <junit.version>4.13.1</junit.version>
         <json4s.version>3.6.6</json4s.version>
+        <hadoop.vserion>3.3.1</hadoop.vserion>
     </properties>
 
     <dependencies>
@@ -85,10 +86,21 @@
             <artifactId>config</artifactId>
             <version>${typesafe.version}</version>
         </dependency>
+        <!--       json4s -->
         <dependency>
             <groupId>org.json4s</groupId>
             <artifactId>json4s-jackson_2.12</artifactId>
             <version>${json4s.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.vserion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-statebackend-rocksdb_2.12</artifactId>
+            <version>${flink.version}</version>
         </dependency>
         <!--       junit -->
         <dependency>

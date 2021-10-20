@@ -10,13 +10,12 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.functions.sink.{RichSinkFunction, SinkFunction}
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import org.slf4j.{Logger, LoggerFactory}
-import org.tlh.warehouse.entity.{MaxWellEntity, MaxWellEntitySchema}
-import org.tlh.warehouse.util.{AppConfig, KafkaUtil}
-
 import org.json4s._
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.write
+import org.slf4j.{Logger, LoggerFactory}
+import org.tlh.warehouse.entity.{MaxWellEntity, MaxWellEntitySchema}
+import org.tlh.warehouse.util.{AppConfig, KafkaUtil}
 
 /**
   * @author 离歌笑

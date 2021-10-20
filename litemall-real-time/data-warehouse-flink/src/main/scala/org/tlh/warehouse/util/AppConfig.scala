@@ -29,4 +29,7 @@ object AppConfig {
   val redis_pool_idle_min = config.getInt("redis.pool.idle.min")
   val redis_db_index = config.getInt("redis.db.index")
 
+  val flink_ck_dir = config.getString("flink.ck.dir")
+  val flink_ck_user = config.getString("flink.ck.user")
+
 }
