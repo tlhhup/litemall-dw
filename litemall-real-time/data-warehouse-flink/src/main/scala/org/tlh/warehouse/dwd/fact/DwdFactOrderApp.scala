@@ -11,6 +11,9 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.connector.kafka.source.KafkaSource
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer
+import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend
+import org.apache.flink.streaming.api.CheckpointingMode
+import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic
@@ -33,7 +36,32 @@ object DwdFactOrderApp extends App {
   val out_topic = "dwd_fact_litemall_order"
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
+  env.setParallelism(3)
 
+  // 设置hdfs用户
+  System.setProperty("HADOOP_USER_NAME", AppConfig.flink_ck_user)
+
+  // 设置状态后端 增量ck
+  val stateBackend = new EmbeddedRocksDBStateBackend(true)
+  env.setStateBackend(stateBackend)
+  // 配置checkpoint
+  env.enableCheckpointing(60 * 1000)
+  // 设置存储目录
+  env.getCheckpointConfig.setCheckpointStorage(AppConfig.flink_ck_dir + out_topic)
+  // 设置同时进行的ck数
+  env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
+  // 设置多长时间丢弃ck
+  env.getCheckpointConfig.setCheckpointTimeout(10 * 60 * 1000)
+  // 设置ck间的最小间隙
+  env.getCheckpointConfig.setMinPauseBetweenCheckpoints(10 * 1000)
+  // 设置ck模式
+  env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+  // 设置容错数
+  env.getCheckpointConfig.setTolerableCheckpointFailureNumber(2)
+  // job取消后保留ck
+  env.getCheckpointConfig.enableExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
+  // 开始实验特征
+  env.getCheckpointConfig.enableUnalignedCheckpoints()
   // 快照压缩
   env.getConfig.setUseSnapshotCompression(true)
 
