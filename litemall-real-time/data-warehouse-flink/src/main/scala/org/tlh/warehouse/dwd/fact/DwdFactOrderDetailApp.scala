@@ -2,7 +2,7 @@ package org.tlh.warehouse.dwd.fact
 
 import java.beans.Transient
 import java.time.Duration
-import java.util.Properties
+import java.util.Optional
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
@@ -15,25 +15,23 @@ import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic
 import org.json4s._
 import org.json4s.jackson.Serialization
-import org.json4s.jackson.Serialization.{read, write}
+import org.json4s.jackson.Serialization.read
 import org.slf4j.{Logger, LoggerFactory}
-import org.tlh.warehouse.entity.{Order, OrderWide, Region}
+import org.tlh.warehouse.entity.{GoodsBrand, GoodsCategory, GoodsItem, OrderDetail, OrderDetailWide}
 import org.tlh.warehouse.util.{AppConfig, JedisUtils}
 import redis.clients.jedis.Jedis
 
 /**
   * @author 离歌笑
   * @desc
-  * @date 2021-10-19
+  * @date 2021-10-21
   */
-object DwdFactOrderApp extends App {
+object DwdFactOrderDetailApp extends App {
 
-  val topic = Seq("ods_litemall_order")
-  val out_topic = "dwd_fact_litemall_order"
+  val topic = Seq("ods_litemall_order_goods")
+  val out_topic = "dwd_fact_litemall_order_detail"
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.setParallelism(3)
@@ -52,8 +50,8 @@ object DwdFactOrderApp extends App {
   env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
   // 设置多长时间丢弃ck
   env.getCheckpointConfig.setCheckpointTimeout(10 * 60 * 1000)
-  // 设置ck间的最小间隙
-  env.getCheckpointConfig.setMinPauseBetweenCheckpoints(10 * 1000)
+  // 设置ck间的最小间隙 该值应该长于ck的时间
+  env.getCheckpointConfig.setMinPauseBetweenCheckpoints(100 * 1000)
   // 设置ck模式
   env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
   // 设置容错数
@@ -69,7 +67,7 @@ object DwdFactOrderApp extends App {
   val source = KafkaSource.builder[String]()
     .setBootstrapServers(AppConfig.KAFKA_SERVERS)
     .setTopics(topic: _*)
-    .setGroupId("litemall_dwd_fact_order")
+    .setGroupId("litemall_dwd_fact_order_detail")
     .setStartingOffsets(OffsetsInitializer.earliest())
     .setValueOnlyDeserializer(new SimpleStringSchema())
     .build()
@@ -81,50 +79,29 @@ object DwdFactOrderApp extends App {
     .name("kafka source")
     .uid("source")
 
-  // 转化数据
-  val orderDs = stream.map(item => Order(item))
+  // 转化数据设置水位线
+  val orderDetailDs = stream.map(item => OrderDetail(item))
     .assignTimestampsAndWatermarks(
       WatermarkStrategy.forBoundedOutOfOrderness(Duration.ofSeconds(2))
-        .withTimestampAssigner(new SerializableTimestampAssigner[Order] {
-          override def extractTimestamp(element: Order, recordTimestamp: Long): Long = element.add_time.getTime
+        .withTimestampAssigner(new SerializableTimestampAssigner[OrderDetail] {
+          override def extractTimestamp(element: OrderDetail, recordTimestamp: Long): Long = element.add_time.getTime
         })
     )
 
-  // 将数据拉宽
-  val orderWideDs = orderDs
-    .map(new OrderWideMap)
-    .name("process_region")
-    .uid("region")
+  // 拉宽数据
+  orderDetailDs
+    .map(new OrderDetailWideMap)
+    .name("fill_goods")
+    .uid("fill_goods")
+    .print()
 
-  // 将数据保存到Kafka
-  val properties = new Properties
-  properties.setProperty("bootstrap.servers", AppConfig.KAFKA_SERVERS)
-  properties.setProperty("transaction.timeout.ms", s"${60 * 5 * 1000}")
-  val kafkaSink = new FlinkKafkaProducer[String](
-    out_topic,
-    new SimpleStringSchema(),
-    properties,
-    null,
-    Semantic.EXACTLY_ONCE,
-    FlinkKafkaProducer.DEFAULT_KAFKA_PRODUCERS_POOL_SIZE
-  )
-  implicit val formats: Formats = Serialization.formats(NoTypeHints)
-  orderWideDs
-    .map(item => write(item))
-    .name("convert_to_str")
-    .uid("to_str")
-    .addSink(kafkaSink)
-    .name("kakfa_sink")
-    .uid("sink_kafka")
 
-  // 将数据保存到clickhouse todo
-
-  env.execute("DwdFactOrderApp")
+  env.execute("DwdFactOrderDetailApp")
 }
 
-class OrderWideMap extends RichMapFunction[Order, OrderWide] {
+class OrderDetailWideMap extends RichMapFunction[OrderDetail, OrderDetailWide] {
 
-  private val logger: Logger = LoggerFactory.getLogger(classOf[OrderWideMap])
+  private val logger: Logger = LoggerFactory.getLogger(classOf[OrderDetailWideMap])
 
   @Transient private[this] var jedis: Jedis = _
 
@@ -138,41 +115,48 @@ class OrderWideMap extends RichMapFunction[Order, OrderWide] {
     JedisUtils.release(jedis)
   }
 
-  override def map(order: Order): OrderWide = {
+  override def map(element: OrderDetail): OrderDetailWide = {
     implicit val formats: Formats = Serialization.formats(NoTypeHints)
-    // 基础数据
-    val orderWide = OrderWide(
-      order.id,
-      order.user_id,
-      order.order_sn,
-      order.order_status,
-      order.goods_price,
-      order.freight_price,
-      order.coupon_price,
-      order.integral_price,
-      order.groupon_price,
-      order.order_price,
-      order.actual_price,
-      order.add_time,
-      order.province, order.city, order.country)
-    // 处理redis中的维度数据
-    val key = "litemall:dwd:dim:litemall_region"
-    // 读取省份信息
-    var json = jedis.hget(key, order.province.toString)
+
+    // 处理基础数据
+    val orderDetailWide = OrderDetailWide(element)
+    // 填充商品信息
+    val goods_id = element.goods_id
+    var key = "litemall:dwd:dim:litemall_goods"
+    var json = jedis.hget(key, goods_id.toString)
     if (StringUtils.isNotBlank(json)) {
-      orderWide.province_name = read[Region](json).name
-    }
-    // 城市名称
-    json = jedis.hget(key, order.city.toString)
-    if (StringUtils.isNotBlank(json)) {
-      orderWide.city_name = read[Region](json).name
-    }
-    // 乡镇信息
-    json = jedis.hget(key, order.country.toString)
-    if (StringUtils.isNotBlank(json)) {
-      orderWide.country_name = read[Region](json).name
+      val goodsItem = read[GoodsItem](json)
+      if (goodsItem != null) {
+        // 商品品牌
+        key = "litemall:dwd:dim:litemall_brand"
+        json = jedis.hget(key, goodsItem.brand_id.toString)
+        if (StringUtils.isNotBlank(json)) {
+          Optional.of(read[GoodsBrand](json)).ifPresent(item => {
+            orderDetailWide.brand_name = item.name
+          })
+        }
+        // 商品分类
+        key = "litemall:dwd:dim:litemall_category"
+        json = jedis.hget(key, goodsItem.category_id.toString)
+        if (StringUtils.isNotBlank(json)) {
+          Optional.of(read[GoodsCategory](json)).ifPresent(item => {
+            // 设置一级分类
+            orderDetailWide.first_category_id = item.id
+            orderDetailWide.first_category_name = item.name
+
+            // 设置二级分类
+            json = jedis.hget(key, item.pid.toString)
+            if (StringUtils.isNotBlank(json)) {
+              Optional.of(read[GoodsCategory](json)).ifPresent(item => {
+                orderDetailWide.second_category_id = item.id
+                orderDetailWide.second_category_name = item.name
+              })
+            }
+          })
+        }
+      }
     }
 
-    orderWide
+    orderDetailWide
   }
 }
