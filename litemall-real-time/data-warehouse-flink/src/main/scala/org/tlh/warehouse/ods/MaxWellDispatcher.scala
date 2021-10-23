@@ -92,6 +92,11 @@ class KafkaSink extends RichSinkFunction[MaxWellEntity] {
         // 将数据发送到Kafka中
         producer.send(new ProducerRecord[String, String](topic_name, write(element.data)))
       }
+      case "update" if "litemall_order".equals(element.table) => { // 处理订单表
+        // 将数据发送到Kafka中
+        logger.info("update order")
+        producer.send(new ProducerRecord[String, String](topic_name, write(element.data)))
+      }
       case _ =>
     }
   }

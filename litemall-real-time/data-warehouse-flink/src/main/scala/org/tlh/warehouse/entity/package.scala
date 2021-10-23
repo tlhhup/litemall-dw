@@ -24,7 +24,7 @@ package object entity {
                     id: Int,
                     user_id: Int,
                     order_sn: String, //订单编号
-                    order_status: Byte, //订单状态
+                    order_status: Int, //订单状态
                     goods_price: Double, //商品总费用
                     freight_price: Double, //配送费用
                     coupon_price: Double, //优惠券减免
@@ -50,10 +50,52 @@ package object entity {
 
   object Order {
 
+    val STATUS_CREATE = 101
+    val STATUS_PAY = 201
+    val STATUS_SHIP = 301
+    val STATUS_REFUND = 202
+
     def apply(message: String): Order = {
       read[Order](message)
     }
 
+  }
+
+  case class OrderRegion(
+                          id: Int,
+                          user_id: Int,
+                          order_sn: String, //订单编号
+                          order_status: Int, //订单状态
+                          goods_price: Double, //商品总费用
+                          freight_price: Double, //配送费用
+                          coupon_price: Double, //优惠券减免
+                          integral_price: Double, //用户积分减免
+                          groupon_price: Double, //团购优惠价减免
+                          order_price: Double, //订单费用， = goods_price + freight_price - coupon_price
+                          actual_price: Double, //实付费用， = order_price - integral_price
+                          pay_id: String, //支付
+                          pay_time: Date,
+                          ship_sn: String, //发货
+                          ship_channel: String,
+                          ship_time: Date,
+                          refund_amount: Option[Double], //退款
+                          refund_type: String,
+                          refund_time: Date,
+                          confirm_time: Date, //用户确认收货时间
+                          add_time: Date, //下单时间
+                          update_time: Date, //订单状态更新时间
+                          province: Int, //省份ID
+                          city: Int, //城市ID
+                          country: Int, //乡镇ID
+                          var province_name: String = "",
+                          var city_name: String = "",
+                          var country_name: String = ""
+                        ) {
+    def isNewOrder(): Boolean = order_status == Order.STATUS_CREATE
+
+    def isPaymentOrder(): Boolean = order_status == Order.STATUS_PAY
+
+    def isRefundOrder(): Boolean = order_status == Order.STATUS_REFUND
   }
 
   /**
@@ -63,7 +105,7 @@ package object entity {
                         id: Int,
                         user_id: Int,
                         order_sn: String, //订单编号
-                        order_status: Byte, //订单状态
+                        order_status: Int, //订单状态
                         goods_price: Double, //商品总费用
                         freight_price: Double, //配送费用
                         coupon_price: Double, //优惠券减免
@@ -75,10 +117,113 @@ package object entity {
                         province: Int, //省份ID
                         city: Int, //城市ID
                         country: Int, //乡镇ID
-                        var province_name: String = "",
-                        var city_name: String = "",
-                        var country_name: String = ""
+                        province_name: String,
+                        city_name: String,
+                        country_name: String
                       )
+
+  object OrderWide {
+
+    def apply(order: OrderRegion): OrderWide = {
+      new OrderWide(
+        order.id,
+        order.user_id,
+        order.order_sn,
+        order.order_status,
+        order.goods_price,
+        order.freight_price,
+        order.coupon_price,
+        order.integral_price,
+        order.groupon_price,
+        order.order_price,
+        order.actual_price,
+        order.add_time,
+        order.province,
+        order.city,
+        order.country,
+        order.province_name,
+        order.city_name,
+        order.country_name
+      )
+    }
+
+  }
+
+  case class OrderPayment(
+                           order_id: Int,
+                           user_id: Int,
+                           order_sn: String,
+                           pay_price: Double,
+                           pay_id: String,
+                           pay_time: Date,
+                           add_time: Date,
+                           province: Int, //省份ID
+                           city: Int, //城市ID
+                           country: Int, //乡镇ID
+                           province_name: String,
+                           city_name: String,
+                           country_name: String
+                         )
+
+  object OrderPayment {
+
+    def apply(order: OrderRegion): OrderPayment = {
+      new OrderPayment(
+        order.id,
+        order.user_id,
+        order.order_sn,
+        order.actual_price,
+        order.pay_id,
+        order.pay_time,
+        order.add_time,
+        order.province,
+        order.city,
+        order.country,
+        order.province_name,
+        order.city_name,
+        order.country_name
+      )
+    }
+
+  }
+
+  case class OrderRefund(
+                          order_id: Int,
+                          user_id: Int,
+                          order_sn: String,
+                          refund_amount: Double,
+                          refund_type: String,
+                          refund_time: Date,
+                          confirm_time: Date,
+                          province: Int, //省份ID
+                          city: Int, //城市ID
+                          country: Int, //乡镇ID
+                          province_name: String,
+                          city_name: String,
+                          country_name: String
+                        )
+
+  object OrderRefund {
+
+    def apply(order: OrderRegion): OrderRefund = {
+      new OrderRefund(
+        order.id,
+        order.user_id,
+        order.order_sn,
+        order.refund_amount.getOrElse(0),
+        order.refund_type,
+        order.refund_time,
+        order.confirm_time,
+        order.province,
+        order.city,
+        order.country,
+        order.province_name,
+        order.city_name,
+        order.country_name
+      )
+    }
+
+  }
 
 
   /**

@@ -95,6 +95,7 @@ object DwdFactOrderDetailApp extends App {
     .uid("fill_goods")
     .print()
 
+  // todo 数据保存到Kafka 和clickhouse
 
   env.execute("DwdFactOrderDetailApp")
 }

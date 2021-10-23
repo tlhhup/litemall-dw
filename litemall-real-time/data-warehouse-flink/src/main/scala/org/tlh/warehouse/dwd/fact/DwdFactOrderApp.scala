@@ -2,7 +2,7 @@ package org.tlh.warehouse.dwd.fact
 
 import java.beans.Transient
 import java.time.Duration
-import java.util.Properties
+import java.util.{Optional, Properties}
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
@@ -21,7 +21,7 @@ import org.json4s._
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.{read, write}
 import org.slf4j.{Logger, LoggerFactory}
-import org.tlh.warehouse.entity.{Order, OrderWide, Region}
+import org.tlh.warehouse.entity.{Order, OrderPayment, OrderRefund, OrderRegion, OrderWide, Region}
 import org.tlh.warehouse.util.{AppConfig, JedisUtils}
 import redis.clients.jedis.Jedis
 
@@ -33,7 +33,6 @@ import redis.clients.jedis.Jedis
 object DwdFactOrderApp extends App {
 
   val topic = Seq("ods_litemall_order")
-  val out_topic = "dwd_fact_litemall_order"
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.setParallelism(3)
@@ -47,7 +46,7 @@ object DwdFactOrderApp extends App {
   // 配置checkpoint
   env.enableCheckpointing(60 * 1000)
   // 设置存储目录
-  env.getCheckpointConfig.setCheckpointStorage(AppConfig.flink_ck_dir + out_topic)
+  env.getCheckpointConfig.setCheckpointStorage(AppConfig.flink_ck_dir + "litemall_order")
   // 设置同时进行的ck数
   env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
   // 设置多长时间丢弃ck
@@ -91,40 +90,101 @@ object DwdFactOrderApp extends App {
     )
 
   // 将数据拉宽
-  val orderWideDs = orderDs
-    .map(new OrderWideMap)
+  val orderRegionDs = orderDs
+    .map(new OrderRegionMap)
     .name("process_region")
     .uid("region")
+
+  // 过滤订单数据
+  val orderWideDs = orderRegionDs
+    .filter(item => item.isNewOrder())
+    .name("filter_order")
+    .uid("filter_order")
+    .map(item => OrderWide(item))
+    .name("order_create")
+    .uid("order_create")
 
   // 将数据保存到Kafka
   val properties = new Properties
   properties.setProperty("bootstrap.servers", AppConfig.KAFKA_SERVERS)
   properties.setProperty("transaction.timeout.ms", s"${60 * 5 * 1000}")
-  val kafkaSink = new FlinkKafkaProducer[String](
-    out_topic,
+  var kafkaSink = new FlinkKafkaProducer[String](
+    "dwd_fact_order_info",
     new SimpleStringSchema(),
     properties,
     null,
     Semantic.EXACTLY_ONCE,
-    FlinkKafkaProducer.DEFAULT_KAFKA_PRODUCERS_POOL_SIZE
+    3
   )
   implicit val formats: Formats = Serialization.formats(NoTypeHints)
   orderWideDs
     .map(item => write(item))
-    .name("convert_to_str")
-    .uid("to_str")
+    .name("convert_to_str_order")
+    .uid("to_str_order")
     .addSink(kafkaSink)
-    .name("kakfa_sink")
-    .uid("sink_kafka")
+    .name("kakfa_sink_order")
+    .uid("sink_kafka_order")
 
   // 将数据保存到clickhouse todo
+
+  // 过滤支付数据
+  val orderPayDs = orderRegionDs
+    .filter(item => item.isPaymentOrder())
+    .name("filter_payment")
+    .uid("filter_payment")
+    .map(item => OrderPayment(item))
+    .name("order_payment")
+    .uid("order_payment")
+
+  // 将数据保存到Kafka
+  kafkaSink = new FlinkKafkaProducer[String](
+    "dwd_fact_payment_info",
+    new SimpleStringSchema(),
+    properties,
+    null,
+    Semantic.EXACTLY_ONCE,
+    3
+  )
+  orderPayDs
+    .map(item => write(item))
+    .name("convert_to_str_payment")
+    .uid("to_str_payment")
+    .addSink(kafkaSink)
+    .name("kakfa_sink_payment")
+    .uid("sink_kafka_payment")
+
+  // 过滤退款数据
+  val orderRefundDs = orderRegionDs
+    .filter(item => item.isRefundOrder())
+    .name("filter_refund")
+    .uid("filter_refund")
+    .map(item => OrderRefund(item))
+    .name("order_refund")
+    .uid("order_refund")
+
+  // 将数据保存到Kafka
+  kafkaSink = new FlinkKafkaProducer[String](
+    "dwd_fact_refund_info",
+    new SimpleStringSchema(),
+    properties,
+    null,
+    Semantic.EXACTLY_ONCE,
+    3
+  )
+  orderRefundDs
+    .map(item => write(item))
+    .name("convert_to_str_refund")
+    .uid("to_str_refund")
+    .addSink(kafkaSink)
+    .name("kakfa_sink_refund")
+    .uid("sink_kafka_refund")
 
   env.execute("DwdFactOrderApp")
 }
 
-class OrderWideMap extends RichMapFunction[Order, OrderWide] {
+class OrderRegionMap extends RichMapFunction[Order, OrderRegion] {
 
-  private val logger: Logger = LoggerFactory.getLogger(classOf[OrderWideMap])
+  private val logger: Logger = LoggerFactory.getLogger(classOf[OrderRegionMap])
 
   @Transient private[this] var jedis: Jedis = _
 
@@ -138,10 +198,9 @@ class OrderWideMap extends RichMapFunction[Order, OrderWide] {
     JedisUtils.release(jedis)
   }
 
-  override def map(order: Order): OrderWide = {
+  override def map(order: Order): OrderRegion = {
     implicit val formats: Formats = Serialization.formats(NoTypeHints)
-    // 基础数据
-    val orderWide = OrderWide(
+    val result = OrderRegion(
       order.id,
       order.user_id,
       order.order_sn,
@@ -153,26 +212,39 @@ class OrderWideMap extends RichMapFunction[Order, OrderWide] {
       order.groupon_price,
       order.order_price,
       order.actual_price,
+      order.pay_id,
+      order.pay_time,
+      order.ship_sn,
+      order.ship_channel,
+      order.ship_time,
+      order.refund_amount,
+      order.refund_type,
+      order.refund_time,
+      order.confirm_time,
       order.add_time,
-      order.province, order.city, order.country)
+      order.update_time,
+      order.province,
+      order.city,
+      order.country
+    )
     // 处理redis中的维度数据
     val key = "litemall:dwd:dim:litemall_region"
     // 读取省份信息
     var json = jedis.hget(key, order.province.toString)
     if (StringUtils.isNotBlank(json)) {
-      orderWide.province_name = read[Region](json).name
+      Optional.of(read[Region](json)).ifPresent(item => result.province_name = item.name)
     }
     // 城市名称
     json = jedis.hget(key, order.city.toString)
     if (StringUtils.isNotBlank(json)) {
-      orderWide.city_name = read[Region](json).name
+      Optional.of(read[Region](json)).ifPresent(item => result.city_name = item.name)
     }
     // 乡镇信息
     json = jedis.hget(key, order.country.toString)
     if (StringUtils.isNotBlank(json)) {
-      orderWide.country_name = read[Region](json).name
+      Optional.of(read[Region](json)).ifPresent(item => result.country_name = item.name)
     }
 
-    orderWide
+    result
   }
 }
