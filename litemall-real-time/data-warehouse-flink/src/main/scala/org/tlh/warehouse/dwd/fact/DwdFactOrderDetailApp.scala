@@ -2,7 +2,7 @@ package org.tlh.warehouse.dwd.fact
 
 import java.beans.Transient
 import java.time.Duration
-import java.util.Optional
+import java.util.{Optional, Properties}
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
@@ -15,6 +15,8 @@ import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
 import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic
 import org.json4s._
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.read
@@ -31,7 +33,7 @@ import redis.clients.jedis.Jedis
 object DwdFactOrderDetailApp extends App {
 
   val topic = Seq("ods_litemall_order_goods")
-  val out_topic = "dwd_fact_litemall_order_detail"
+  val out_topic = "dwd_fact_order_detail"
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.setParallelism(3)
@@ -89,13 +91,33 @@ object DwdFactOrderDetailApp extends App {
     )
 
   // 拉宽数据
-  orderDetailDs
+  val orderDetailWideDs = orderDetailDs
     .map(new OrderDetailWideMap)
     .name("fill_goods")
     .uid("fill_goods")
-    .print()
 
-  // todo 数据保存到Kafka 和clickhouse
+  // 数据保存到Kafka
+  val properties = new Properties
+  properties.setProperty("bootstrap.servers", AppConfig.KAFKA_SERVERS)
+  properties.setProperty("transaction.timeout.ms", s"${60 * 5 * 1000}")
+  val kafkaSink = new FlinkKafkaProducer[String](
+    out_topic,
+    new SimpleStringSchema(),
+    properties,
+    null,
+    Semantic.EXACTLY_ONCE,
+    3
+  )
+
+  orderDetailWideDs
+    .map(item => item.toJson())
+    .name("convert_to_str_order_detail")
+    .uid("to_str_order_detail")
+    .addSink(kafkaSink)
+    .name("kakfa_sink_order_detail")
+    .uid("sink_kafka_order_detail")
+
+  // todo 数据保存到clickhouse
 
   env.execute("DwdFactOrderDetailApp")
 }

@@ -19,7 +19,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer.Semantic
 import org.json4s._
 import org.json4s.jackson.Serialization
-import org.json4s.jackson.Serialization.{read, write}
+import org.json4s.jackson.Serialization.read
 import org.slf4j.{Logger, LoggerFactory}
 import org.tlh.warehouse.entity.{Order, OrderPayment, OrderRefund, OrderRegion, OrderWide, Region}
 import org.tlh.warehouse.util.{AppConfig, JedisUtils}
@@ -116,9 +116,9 @@ object DwdFactOrderApp extends App {
     Semantic.EXACTLY_ONCE,
     3
   )
-  implicit val formats: Formats = Serialization.formats(NoTypeHints)
+
   orderWideDs
-    .map(item => write(item))
+    .map(item => item.toJson())
     .name("convert_to_str_order")
     .uid("to_str_order")
     .addSink(kafkaSink)
@@ -146,7 +146,7 @@ object DwdFactOrderApp extends App {
     3
   )
   orderPayDs
-    .map(item => write(item))
+    .map(item => item.toJson())
     .name("convert_to_str_payment")
     .uid("to_str_payment")
     .addSink(kafkaSink)
@@ -172,7 +172,7 @@ object DwdFactOrderApp extends App {
     3
   )
   orderRefundDs
-    .map(item => write(item))
+    .map(item => item.toJson())
     .name("convert_to_str_refund")
     .uid("to_str_refund")
     .addSink(kafkaSink)

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import org.json4s._
-import org.json4s.jackson.Serialization.read
+import org.json4s.jackson.Serialization.{read, write}
 
 /**
   * @author 离歌笑
@@ -15,6 +15,14 @@ package object entity {
 
   implicit val formats: Formats = new DefaultFormats {
     override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+  }
+
+  trait KafkaBase[T] {
+
+    def toJson(): String = {
+      write(this)
+    }
+
   }
 
   /** *
@@ -120,7 +128,7 @@ package object entity {
                         province_name: String,
                         city_name: String,
                         country_name: String
-                      )
+                      ) extends KafkaBase[OrderWide]
 
   object OrderWide {
 
@@ -147,6 +155,10 @@ package object entity {
       )
     }
 
+    def apply(message: String): OrderWide = {
+      read[OrderWide](message)
+    }
+
   }
 
   case class OrderPayment(
@@ -163,7 +175,7 @@ package object entity {
                            province_name: String,
                            city_name: String,
                            country_name: String
-                         )
+                         ) extends KafkaBase[OrderPayment]
 
   object OrderPayment {
 
@@ -201,7 +213,7 @@ package object entity {
                           province_name: String,
                           city_name: String,
                           country_name: String
-                        )
+                        ) extends KafkaBase[OrderRefund]
 
   object OrderRefund {
 
@@ -267,7 +279,7 @@ package object entity {
                               var first_category_name: String = "",
                               var second_category_id: Int = 0,
                               var second_category_name: String = ""
-                            )
+                            ) extends KafkaBase[OrderDetailWide]
 
   object OrderDetailWide {
 
@@ -287,6 +299,10 @@ package object entity {
       )
     }
 
+    def apply(message: String): OrderDetailWide = {
+      read[OrderDetailWide](message)
+    }
+
   }
 
 
@@ -300,7 +316,7 @@ package object entity {
                         id: Int,
                         goods_sn: String,
                         name: String,
-                        category_id: Int, //二级分类ID
+                        category_id: Int, //分类ID
                         brand_id: Int // 品牌ID
                       )
 
