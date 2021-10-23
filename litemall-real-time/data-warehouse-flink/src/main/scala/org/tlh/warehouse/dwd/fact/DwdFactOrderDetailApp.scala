@@ -155,6 +155,7 @@ class OrderDetailWideMap extends RichMapFunction[OrderDetail, OrderDetailWide] {
         json = jedis.hget(key, goodsItem.brand_id.toString)
         if (StringUtils.isNotBlank(json)) {
           Optional.of(read[GoodsBrand](json)).ifPresent(item => {
+            orderDetailWide.brand_id = item.id
             orderDetailWide.brand_name = item.name
           })
         }

@@ -305,6 +305,53 @@ package object entity {
 
   }
 
+  case class OrderDetailCap(
+                             id: Int,
+                             order_id: Int,
+                             goods_id: Int,
+                             goods_name: String,
+                             goods_sn: String,
+                             product_id: String,
+                             number: Int,
+                             price: Double,
+                             specifications: String,
+                             pic_url: String,
+                             add_time: Date,
+                             brand_id: Int, //商品品牌
+                             brand_name: String,
+                             first_category_id: Int, // 商品分类
+                             first_category_name: String,
+                             second_category_id: Int,
+                             second_category_name: String,
+                             var capitation_price: Double = 0
+                           ) extends KafkaBase[OrderDetailCap]
+
+  object OrderDetailCap {
+
+    def apply(orderDetailWide: OrderDetailWide): OrderDetailCap = {
+      new OrderDetailCap(
+        orderDetailWide.id,
+        orderDetailWide.order_id,
+        orderDetailWide.goods_id,
+        orderDetailWide.goods_name,
+        orderDetailWide.goods_sn,
+        orderDetailWide.product_id,
+        orderDetailWide.number,
+        orderDetailWide.price,
+        orderDetailWide.specifications,
+        orderDetailWide.pic_url,
+        orderDetailWide.add_time,
+        orderDetailWide.brand_id,
+        orderDetailWide.brand_name,
+        orderDetailWide.first_category_id,
+        orderDetailWide.first_category_name,
+        orderDetailWide.second_category_id,
+        orderDetailWide.second_category_name
+      )
+    }
+
+  }
+
 
   case class Region(
                      id: Int,
