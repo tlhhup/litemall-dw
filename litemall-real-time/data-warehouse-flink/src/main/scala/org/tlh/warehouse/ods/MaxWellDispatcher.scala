@@ -24,12 +24,17 @@ import org.tlh.warehouse.util.{AppConfig, KafkaUtil}
   */
 object MaxWellDispatcher extends App {
 
-  val attention_tables = Seq(
-    "litemall_cart",
-    "litemall_collect",
-    "litemall_comment",
-    "litemall_order",
-    "litemall_order_goods")
+  def filter(table: String): Boolean = {
+    val attention_tables = Seq(
+      "litemall_cart",
+      "litemall_collect",
+      "litemall_comment",
+      "litemall_order",
+      "litemall_order_goods")
+
+    attention_tables.contains(table)
+  }
+
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
@@ -48,19 +53,19 @@ object MaxWellDispatcher extends App {
       .withTimestampAssigner(new SerializableTimestampAssigner[MaxWellEntity] {
         override def extractTimestamp(element: MaxWellEntity, recordTimestamp: Long): Long = element.ts * 1000
       }),
-    "Kafka Source")
-    .name("kafka source")
+    "Kafka_Source")
+    .name("kafka_source")
     .uid("source")
 
   // 过滤表 及校验数据合法性
-  stream.filter(item => attention_tables.contains(item.table) && item.data.nonEmpty)
+  stream.filter(item => filter(item.table) && item.data.nonEmpty)
     .uid("filter")
-    .name("filter table")
+    .name("filter_table")
     .addSink(new KafkaSink) // 将数据转存到kafka
     .uid("sink")
-    .name("save to kafka")
+    .name("save_to_kafka")
 
-  env.execute("export to kafka")
+  env.execute("MaxWellDispatcher")
 
 }
 
