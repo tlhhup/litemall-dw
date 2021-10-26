@@ -2,7 +2,7 @@ package org.tlh.warehouse.util
 
 import java.util.Properties
 
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 
 /**
   * @author 离歌笑
@@ -28,6 +28,8 @@ object KafkaUtil {
     prop.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     // 配置超时时间
     prop.put("request.timeout.ms", "60000")
+    // 设置幂等性
+    prop.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true")
 
     // 得到生产者的实例
     new KafkaProducer[String, String](prop)
