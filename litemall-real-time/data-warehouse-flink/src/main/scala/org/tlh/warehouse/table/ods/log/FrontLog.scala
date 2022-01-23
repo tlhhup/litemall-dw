@@ -1,4 +1,4 @@
-package org.tlh.warehouse.ods.log
+package org.tlh.warehouse.table.ods.log
 
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.table.api.bridge.scala.StreamTableEnvironment

@@ -1,4 +1,4 @@
-package org.tlh.warehouse.ods
+package org.tlh.warehouse.datastream.ods
 
 import java.beans.Transient
 import java.time.Duration

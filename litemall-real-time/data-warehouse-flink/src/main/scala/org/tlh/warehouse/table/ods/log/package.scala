@@ -1,4 +1,4 @@
-package org.tlh.warehouse.ods
+package org.tlh.warehouse.table.ods
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.table.annotation.{DataTypeHint, FunctionHint}

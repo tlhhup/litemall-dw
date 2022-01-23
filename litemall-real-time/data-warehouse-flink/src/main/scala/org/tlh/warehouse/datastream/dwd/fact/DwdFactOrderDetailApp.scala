@@ -1,4 +1,4 @@
-package org.tlh.warehouse.dwd.fact
+package org.tlh.warehouse.datastream.dwd.fact
 
 import java.beans.Transient
 import java.time.Duration
