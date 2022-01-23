@@ -17,6 +17,9 @@ object AppConfig {
 
   val KAFKA_SERVERS = config.getString("kafka.servers")
   val kafka_input_topic = config.getString("kafka.input.topic")
+  val KAFKA_INPUT_FRONT_TOPIC = config.getString("kafka.input.front.topic")
+  val KAFKA_OUTPUT_ODS_LOG_START = config.getString("kafka.output.ods.log.start")
+  val KAFKA_OUTPUT_ODS_LOG_EVENT = config.getString("kafka.output.ods.log.event")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")
