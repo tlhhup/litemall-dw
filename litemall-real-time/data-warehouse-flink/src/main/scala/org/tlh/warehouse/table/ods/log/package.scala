@@ -39,22 +39,26 @@ package object log {
     }
   }
 
-  class ParseJsonObject extends ScalarFunction {
+  class GetJsonObject extends ScalarFunction {
 
     def eval(line: String, path: String): String = {
-      if (StringUtils.isEmpty(line)) {
+      if (StringUtils.isEmpty(line) || StringUtils.isEmpty(path) || path.charAt(0) != '$') {
         return ""
-      }
-      if (StringUtils.isEmpty(path)) {
-        return line
       } else {
         import org.json4s.{Formats, NoTypeHints}
         import org.json4s.jackson.JsonMethods.parse
 
         implicit val formats: Formats = Serialization.formats(NoTypeHints)
-        val item = parse(line)
+        var item = parse(line)
 
-        (item \ path).extract[String]
+        // 拆分表达式
+        val pathExpr = path.split("\\.")
+        // 迭代获取最里层元素
+        for (pathExprStart <- 1 to pathExpr.length-1) {
+          item = item \ pathExpr(pathExprStart)
+        }
+
+        item.extract[String]
       }
     }
 

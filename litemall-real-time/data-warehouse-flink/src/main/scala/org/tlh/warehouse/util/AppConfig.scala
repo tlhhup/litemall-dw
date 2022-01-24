@@ -20,6 +20,13 @@ object AppConfig {
   val KAFKA_INPUT_FRONT_TOPIC = config.getString("kafka.input.front.topic")
   val KAFKA_OUTPUT_ODS_LOG_START = config.getString("kafka.output.ods.log.start")
   val KAFKA_OUTPUT_ODS_LOG_EVENT = config.getString("kafka.output.ods.log.event")
+  val KAFKA_OUTPUT_DWD_LOG_AD = config.getString("kafka.output.dwd.log.ad")
+  val KAFKA_OUTPUT_DWD_LOG_ADD_CAR = config.getString("kafka.output.dwd.log.addCar")
+  val KAFKA_OUTPUT_DWD_LOG_COMMENT = config.getString("kafka.output.dwd.log.comment")
+  val KAFKA_OUTPUT_DWD_LOG_DISPLAY = config.getString("kafka.output.dwd.log.display")
+  val KAFKA_OUTPUT_DWD_LOG_FAVORITES = config.getString("kafka.output.dwd.log.favorites")
+  val KAFKA_OUTPUT_DWD_LOG_LOADING = config.getString("kafka.output.dwd.log.loading")
+  val KAFKA_OUTPUT_DWD_LOG_PRAISE = config.getString("kafka.output.dwd.log.praise")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")
