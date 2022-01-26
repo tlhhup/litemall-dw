@@ -13,6 +13,7 @@
     <properties>
         <scala.version>2.12.8</scala.version>
         <flink.version>1.13.2</flink.version>
+        <flink.cdc.version>2.1.0</flink.cdc.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.30</slf4j.version>
         <jedis.version>2.9.0</jedis.version>
@@ -123,6 +124,13 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-json</artifactId>
             <version>${flink.version}</version>
+        </dependency>
+
+        <!--   flink cdc     -->
+        <dependency>
+            <groupId>com.ververica</groupId>
+            <artifactId>flink-connector-mysql-cdc</artifactId>
+            <version>${flink.cdc.version}</version>
         </dependency>
 
         <!--       junit -->

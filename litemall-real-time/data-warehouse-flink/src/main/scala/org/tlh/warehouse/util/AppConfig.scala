@@ -27,6 +27,9 @@ object AppConfig {
   val KAFKA_OUTPUT_DWD_LOG_FAVORITES = config.getString("kafka.output.dwd.log.favorites")
   val KAFKA_OUTPUT_DWD_LOG_LOADING = config.getString("kafka.output.dwd.log.loading")
   val KAFKA_OUTPUT_DWD_LOG_PRAISE = config.getString("kafka.output.dwd.log.praise")
+  val KAFKA_OUTPUT_DWD_DB_PAYMENT = config.getString("kafka.output.dwd.db.payment")
+  val KAFKA_OUTPUT_DWD_DB_REFUND = config.getString("kafka.output.dwd.db.refund")
+  val KAFKA_OUTPUT_DWD_DB_ORDER = config.getString("kafka.output.dwd.db.order")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")
@@ -41,5 +44,13 @@ object AppConfig {
 
   val flink_ck_dir = config.getString("flink.ck.dir")
   val flink_ck_user = config.getString("flink.ck.user")
+
+  val MYSQL_HOST = config.getString("mysql.host")
+  val MYSQL_PORT = config.getInt("mysql.port")
+  val MYSQL_USERNAME = config.getString("mysql.username")
+  val MYSQL_PASSWORD = config.getString("mysql.password")
+  val MYSQL_CDC_DB = config.getString("mysql.cdc.db")
+  val MYSQL_CDC_ODS_ORDER = config.getString("mysql.cdc.ods.order")
+  val MYSQL_CDC_ODS_GROUPON = config.getString("mysql.cdc.ods.groupon")
 
 }
