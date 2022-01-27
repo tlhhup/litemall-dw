@@ -30,6 +30,7 @@ object AppConfig {
   val KAFKA_OUTPUT_DWD_DB_PAYMENT = config.getString("kafka.output.dwd.db.payment")
   val KAFKA_OUTPUT_DWD_DB_REFUND = config.getString("kafka.output.dwd.db.refund")
   val KAFKA_OUTPUT_DWD_DB_ORDER = config.getString("kafka.output.dwd.db.order")
+  val KAFKA_OUTPUT_DWD_DB_GOODS = config.getString("kafka.output.dwd.db.goods")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")
@@ -52,5 +53,9 @@ object AppConfig {
   val MYSQL_CDC_DB = config.getString("mysql.cdc.db")
   val MYSQL_CDC_ODS_ORDER = config.getString("mysql.cdc.ods.order")
   val MYSQL_CDC_ODS_GROUPON = config.getString("mysql.cdc.ods.groupon")
+  val MYSQL_CDC_ODS_PRODUCTS = config.getString("mysql.cdc.ods.products")
+  val MYSQL_CDC_ODS_GOODS = config.getString("mysql.cdc.ods.goods")
+  val MYSQL_CDC_ODS_BRAND = config.getString("mysql.cdc.ods.brand")
+  val MYSQL_CDC_ODS_CATEGORY = config.getString("mysql.cdc.ods.category")
 
 }
