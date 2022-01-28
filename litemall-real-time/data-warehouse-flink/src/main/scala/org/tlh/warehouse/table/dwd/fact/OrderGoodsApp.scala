@@ -12,6 +12,7 @@ import org.tlh.warehouse.util.AppConfig
 object OrderGoodsApp extends App {
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
+  env.enableCheckpointing(3 * 1000)
   env.setParallelism(3)
   val tableEnv = StreamTableEnvironment.create(env)
 
@@ -100,30 +101,30 @@ object OrderGoodsApp extends App {
   // 订单详情事实表
   tableEnv.executeSql(
     s"""
-      |create table dwd_fact_order_goods_info(
-      |	`id` int,
-      |	`order_id` int COMMENT '订单表的订单ID',
-      |	`goods_id` int COMMENT '商品表的商品ID  spu_id',
-      |	`goods_name` string COMMENT '商品名称',
-      |	`goods_sn` string COMMENT '商品编号',
-      |	`product_id` int COMMENT '商品货品表的货品ID sku_id',
-      |	`number` smallint COMMENT '商品货品的购买数量',
-      |	`price` decimal(10,2)  COMMENT '商品货品的售价',
-      |	`add_time` string COMMENT '创建时间',
-      |	`user_id` int comment '用户id',
-      | `province` int COMMENT '省份ID',
-      | `city` int COMMENT '城市ID',
-      | `country` int COMMENT '乡镇ID',
-      | PRIMARY KEY(id) NOT ENFORCED
-      |)comment '订单详情事实表'
-      |WITH (
-      |  'connector' = 'upsert-kafka',
-      |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWD_DB_ORDER_GOODS}',
-      |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
-      |  'properties.group.id' = 'dwd_db_refund',
-      |  'key.format' = 'json',
-      |  'value.format' = 'json'
-      |)
+       |create table dwd_fact_order_goods_info(
+       |	`id` int,
+       |	`order_id` int COMMENT '订单表的订单ID',
+       |	`goods_id` int COMMENT '商品表的商品ID  spu_id',
+       |	`goods_name` string COMMENT '商品名称',
+       |	`goods_sn` string COMMENT '商品编号',
+       |	`product_id` int COMMENT '商品货品表的货品ID sku_id',
+       |	`number` smallint COMMENT '商品货品的购买数量',
+       |	`price` decimal(10,2)  COMMENT '商品货品的售价',
+       |	`add_time` string COMMENT '创建时间',
+       |	`user_id` int comment '用户id',
+       | `province` int COMMENT '省份ID',
+       | `city` int COMMENT '城市ID',
+       | `country` int COMMENT '乡镇ID',
+       | PRIMARY KEY(id) NOT ENFORCED
+       |)comment '订单详情事实表'
+       |WITH (
+       |  'connector' = 'upsert-kafka',
+       |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWD_DB_ORDER_GOODS}',
+       |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
+       |  'properties.group.id' = 'dwd_db_order_goods',
+       |  'key.format' = 'json',
+       |  'value.format' = 'json'
+       |)
     """.stripMargin)
 
   // 处理数据

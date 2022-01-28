@@ -12,6 +12,7 @@ import org.tlh.warehouse.util.AppConfig
 object OdsOrderApp extends App {
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
+  env.enableCheckpointing(3 * 1000)
   env.setParallelism(3)
 
   val tableEnv = StreamTableEnvironment.create(env)
