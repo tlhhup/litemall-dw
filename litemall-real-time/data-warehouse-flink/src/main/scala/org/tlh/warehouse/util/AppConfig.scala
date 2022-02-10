@@ -33,7 +33,9 @@ object AppConfig {
   val KAFKA_OUTPUT_DWD_DB_GOODS = config.getString("kafka.output.dwd.db.goods")
   val KAFKA_OUTPUT_DWD_DB_ORDER_GOODS = config.getString("kafka.output.dwd.db.orderGoods")
   val KAFKA_OUTPUT_DWD_DB_REGION = config.getString("kafka.output.dwd.db.region")
-  val KAFKA_OUTPUT_DWD_DB_GOODS_DETAIL = config.getString("kafka.output.dwd.db.goodsDetail")
+  val KAFKA_OUTPUT_DWS_DB_GOODS_DETAIL = config.getString("kafka.output.dws.db.goodsDetail")
+  val KAFKA_OUTPUT_DWS_DB_PAYMENT = config.getString("kafka.output.dws.db.payment")
+  val KAFKA_OUTPUT_DWS_DB_REFUND = config.getString("kafka.output.dws.db.refund")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")

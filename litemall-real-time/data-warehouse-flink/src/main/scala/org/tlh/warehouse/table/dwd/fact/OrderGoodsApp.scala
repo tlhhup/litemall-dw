@@ -171,7 +171,7 @@ object OrderGoodsApp extends App {
        |)
        |WITH (
        |  'connector' = 'upsert-kafka',
-       |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWD_DB_GOODS_DETAIL}',
+       |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWS_DB_GOODS_DETAIL}',
        |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
        |  'properties.group.id' = 'dwd_db_goods',
        |  'key.format' = 'json',
