@@ -51,8 +51,7 @@ object GoodsItemTopic extends App {
        |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWS_DB_GOODS_DETAIL}',
        |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
        |  'properties.group.id' = 'dwd_db_goods',
-       |  'format' = 'json',
-       |  'scan.startup.mode' = 'earliest-offset'
+       |  'format' = 'json'
        |)
     """.stripMargin)
 
@@ -79,8 +78,7 @@ object GoodsItemTopic extends App {
        |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWS_DB_GOODS_COLLECT}',
        |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
        |  'properties.group.id' = 'dws_db_collect',
-       |  'format' = 'json',
-       |  'scan.startup.mode' = 'earliest-offset'
+       |  'format' = 'json'
        |)
     """.stripMargin)
 
