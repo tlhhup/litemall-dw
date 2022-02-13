@@ -177,12 +177,6 @@ object OdsOrderApp extends App {
        |	`order_price` decimal(10,2) COMMENT '订单费用， = goods_price + freight_price - coupon_price',
        |	`actual_price` decimal(10,2) COMMENT '实付费用， = order_price - integral_price',
        |	`add_time` timestamp(3) COMMENT '创建时间',
-       |	`pay_id` string COMMENT '微信付款编号',
-       |	`pay_time` timestamp(3) COMMENT '微信付款时间',
-       |	`ship_sn` string COMMENT '发货编号',
-       |	`ship_time` timestamp(3) COMMENT '发货开始时间',
-       |	`refund_time` timestamp(3) COMMENT '退款时间',
-       |	`confirm_time` timestamp(3) COMMENT '用户确认收货时间',
        |	`province` int COMMENT '省份ID',
        |	`city` int COMMENT '城市ID',
        |	`country` int COMMENT '乡镇ID',
@@ -201,30 +195,30 @@ object OdsOrderApp extends App {
   // 处理团购数据
   tableEnv.executeSql(
     s"""
-      |create table ods_groupon(
-      |  `id` int,
-      |  `order_id` int COMMENT '关联的订单ID',
-      |  `groupon_id` int COMMENT '如果是开团用户，则groupon_id是0；如果是参团用户，则groupon_id是团购活动ID',
-      |  `rules_id` int COMMENT '团购规则ID，关联litemall_groupon_rules表ID字段',
-      |  `user_id` int COMMENT '用户ID',
-      |  `share_url` string COMMENT '团购分享图片地址',
-      |  `creator_user_id` int COMMENT '开团用户ID',
-      |  `creator_user_time` timestamp(3) COMMENT '开团时间',
-      |  `status` smallint COMMENT '团购活动状态，开团未支付则0，开团中则1，开团失败则2',
-      |  `add_time` timestamp(3) COMMENT '创建时间',
-      |  `update_time` timestamp(3) COMMENT '更新时间',
-      |  `deleted` tinyint COMMENT '逻辑删除',
-      |  PRIMARY KEY (id) NOT ENFORCED
-      |)comment '团购活动表'
-      |WITH (
-      | 'connector' = 'mysql-cdc',
-      | 'hostname' = '${AppConfig.MYSQL_HOST}',
-      | 'port' = '${AppConfig.MYSQL_PORT}',
-      | 'username' = '${AppConfig.MYSQL_USERNAME}',
-      | 'password' = '${AppConfig.MYSQL_PASSWORD}',
-      | 'database-name' = '${AppConfig.MYSQL_CDC_DB}',
-      | 'table-name' = '${AppConfig.MYSQL_CDC_ODS_GROUPON}'
-      |)
+       |create table ods_groupon(
+       |  `id` int,
+       |  `order_id` int COMMENT '关联的订单ID',
+       |  `groupon_id` int COMMENT '如果是开团用户，则groupon_id是0；如果是参团用户，则groupon_id是团购活动ID',
+       |  `rules_id` int COMMENT '团购规则ID，关联litemall_groupon_rules表ID字段',
+       |  `user_id` int COMMENT '用户ID',
+       |  `share_url` string COMMENT '团购分享图片地址',
+       |  `creator_user_id` int COMMENT '开团用户ID',
+       |  `creator_user_time` timestamp(3) COMMENT '开团时间',
+       |  `status` smallint COMMENT '团购活动状态，开团未支付则0，开团中则1，开团失败则2',
+       |  `add_time` timestamp(3) COMMENT '创建时间',
+       |  `update_time` timestamp(3) COMMENT '更新时间',
+       |  `deleted` tinyint COMMENT '逻辑删除',
+       |  PRIMARY KEY (id) NOT ENFORCED
+       |)comment '团购活动表'
+       |WITH (
+       | 'connector' = 'mysql-cdc',
+       | 'hostname' = '${AppConfig.MYSQL_HOST}',
+       | 'port' = '${AppConfig.MYSQL_PORT}',
+       | 'username' = '${AppConfig.MYSQL_USERNAME}',
+       | 'password' = '${AppConfig.MYSQL_PASSWORD}',
+       | 'database-name' = '${AppConfig.MYSQL_CDC_DB}',
+       | 'table-name' = '${AppConfig.MYSQL_CDC_ODS_GROUPON}'
+       |)
     """.stripMargin)
 
   tableEnv.executeSql(
@@ -244,18 +238,13 @@ object OdsOrderApp extends App {
       |    oo.order_price,
       |    oo.actual_price,
       |    oo.add_time,
-      |    oo.pay_id,
-      |    oo.pay_time,
-      |    oo.ship_sn,
-      |    oo.ship_time,
-      |    oo.refund_time,
-      |    oo.confirm_time,
       |    oo.province,
       |    oo.city,
       |    oo.country
       |from ods_order oo
       |left join ods_groupon og
       |on og.order_id=oo.id
+      |where oo.order_status=101
     """.stripMargin)
 
 }

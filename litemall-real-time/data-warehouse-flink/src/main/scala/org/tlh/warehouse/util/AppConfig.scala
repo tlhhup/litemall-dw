@@ -38,6 +38,7 @@ object AppConfig {
   val KAFKA_OUTPUT_DWS_DB_PAYMENT = config.getString("kafka.output.dws.db.payment")
   val KAFKA_OUTPUT_DWS_DB_REFUND = config.getString("kafka.output.dws.db.refund")
   val KAFKA_OUTPUT_DWS_DB_GOODS_COLLECT = config.getString("kafka.output.dws.db.collect")
+  val KAFKA_OUTPUT_DWS_DB_ORDER = config.getString("kafka.output.dws.db.order")
 
   val CLICKHOUSE_DRIVER = config.getString("clickhouse.driver")
   val CLICKHOUSE_URL = config.getString("clickhouse.url")
