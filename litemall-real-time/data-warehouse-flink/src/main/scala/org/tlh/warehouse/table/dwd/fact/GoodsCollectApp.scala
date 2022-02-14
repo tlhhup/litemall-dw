@@ -70,6 +70,7 @@ object GoodsCollectApp extends App {
   tableEnv.executeSql(
     s"""
        |create table dws_goods_collect_wide(
+       |  `id` int,
        |	`spu_id` int COMMENT '商品表的商品ID  spu_id',
        |  `sku_id` int COMMENT '商品货品表的货品ID',
        |	`goods_sn` string COMMENT '商品编号',
@@ -82,7 +83,7 @@ object GoodsCollectApp extends App {
        |  `brand_id` int comment '品牌ID',
        |  `brand_name` string comment '品牌名称',
        |	`collect_time` timestamp(3) COMMENT '收藏时间',
-       |   PRIMARY KEY(spu_id) NOT ENFORCED
+       |   PRIMARY KEY(id) NOT ENFORCED
        |)
        |WITH (
        |  'connector' = 'upsert-kafka',
@@ -98,6 +99,7 @@ object GoodsCollectApp extends App {
     """
       |insert into dws_goods_collect_wide
       |select
+      |  c.id,
       |  c.value_id,
       |  g.sku_id,
       |  g.goods_sn,
