@@ -82,8 +82,37 @@ object GoodsItemTopic extends App {
        |)
     """.stripMargin)
 
+  // 商品展示宽表
+  tableEnv.executeSql(
+    s"""
+       |create table dws_goods_display_wide(
+       |  `app_time` string comment '时间戳',
+       |	`spu_id` int COMMENT '商品表的商品ID  spu_id',
+       |  `sku_id` int COMMENT '商品货品表的货品ID',
+       |  `mid` string comment '设备id',
+       |	`goods_sn` string COMMENT '商品编号',
+       |	`goods_name` string COMMENT '商品名称',
+       |	`user_id` int comment '用户id',
+       |  `category_id` int COMMENT '商品所属一级类目ID',
+       |  `category_name` string comment '商品所属一级类目名称',
+       |  `category2_id` int COMMENT '商品所属二级类目ID',
+       |  `category2_name` string comment '商品所属二级类目名称',
+       |  `brand_id` int comment '品牌ID',
+       |  `brand_name` string comment '品牌名称',
+       |	`display_time` timestamp(3) COMMENT '展示时间',
+       |  WATERMARK FOR display_time AS display_time - INTERVAL '5' SECOND
+       |)
+       |WITH (
+       |  'connector' = 'kafka',
+       |  'topic' = '${AppConfig.KAFKA_OUTPUT_DWS_LOG_GOODS_DISPLAY}',
+       |  'properties.bootstrap.servers' = '${AppConfig.KAFKA_SERVERS}',
+       |  'properties.group.id' = 'dws_log_display',
+       |  'format' = 'json'
+       |)
+    """.stripMargin)
+
   /**
-    * 商品ID 下单次数 下单数量 收藏次数
+    * 商品ID 展示次数 下单次数 下单数量 收藏次数
     */
 
   // 定义窗口函数
@@ -93,11 +122,24 @@ object GoodsItemTopic extends App {
       | TUMBLE_START(add_time, INTERVAL '10' SECOND),
       | TUMBLE_END(add_time, INTERVAL '10' SECOND),
       | spu_id,
+      | sum(if(display_count>0,1,0)),
       | sum(if(order_id>0,1,0)),
       | sum(number),
       | sum(collect_number)
       |from
       |(
+      |
+      |select
+      |  spu_id,
+      |  1 as display_count,
+      |  0 as order_id,
+      |  0 as number,
+      |  0 as collect_number,
+      |  display_time as add_time
+      |from dws_goods_display_wide
+      |
+      |union all
+      |
       |select
       | goods_id as spu_id,
       | order_id,
