@@ -194,7 +194,8 @@
 
 		# 修改 hive-env.sh
 		ATLAS_HOOK=/opt/apache-atlas-hive-hook-2.1.0/hook/hive
-		ATLAS_JARS=""
+		# 设置一个初始值
+		ATLAS_JARS=$ATLAS_HOOK/atlas-plugin-classloader-2.1.0.jar
 		for jar in `ls $ATLAS_HOOK | grep jar`; do
 		        ATLAS_JARS=$ATLAS_JARS:$ATLAS_HOOK/$jar
 		done
