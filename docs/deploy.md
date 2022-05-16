@@ -247,6 +247,9 @@
 		solr status
 		
 ### Ranger
+
+用户权限控制，agent周期性的从ranger-admin中获取相应的权限控制信息，本地组建在使用时，通过对应的权限控制实现策略来控制权限
+
 #### 编译安装
 1. 前置
 	1. maven需要3.6.2+
@@ -312,3 +315,104 @@
 		./setup.sh
 		# 提示成功执行
 		./set_globals.sh
+		
+#### 使用
+##### hdfs
+1. 解压
+
+		tar -zxvf ranger-2.1.0-hdfs-plugin.tar.gz -C /opt/
+2. 修改配置文件
+	
+		cd /opt/ranger-2.1.0-hdfs-plugin/
+		# 修改配置
+		POLICY_MGR_URL=http://atlas:6080
+		# 仓库名称，后面需要使用
+		REPOSITORY_NAME=hadoopdev
+		# Hadoop安装路径
+		COMPONENT_INSTALL_DIR_NAME=/opt/hadoop
+		
+		# 审计信息
+		XAAUDIT.SOLR.ENABLE=true
+		XAAUDIT.SOLR.URL=http://hadoop-master:8983/solr/ranger_audits
+		XAAUDIT.SOLR.USER=NONE
+		XAAUDIT.SOLR.PASSWORD=NONE
+		XAAUDIT.SOLR.ZOOKEEPER=hadoop-master:2181
+3. 安装(相应的策略信息会存储在`/etc/ranger`文件夹下)
+
+		# 安装
+		./enable-hdfs-plugin.sh
+		# 驱动
+		./disable-hdfs-plugin.sh
+4. 添加授权
+	1. 登录ranger-admin添加授权 
+
+		![](ranger/hdfs-ranger.png)
+
+##### hive
+1. 准备
+	1. 添加Linux用户
+
+			su root
+			adduser -g hadoop hive
+	2. 修改权限
+
+			su root
+			# 修改本地文件系统权限
+			chmod 733 /tmp/hive
+			# 修改hdfs权限
+			hdfs dfs -chmod 733 /tmp/hive
+	3. 修改hdfs配置 
+
+			vim core-siet.xml
+			# 添加如下内容
+			<property>
+			    <name>hadoop.proxyuser.hive.hosts</name>
+			    <value>*</value>
+			</property>
+			<property>
+			    <name>hadoop.proxyuser.hive.groups</name>
+			    <value>*</value>
+			</property>
+2. 解压
+
+		tar -zxvf ranger-2.1.0-hive-plugin.tar.gz -C /opt/
+3. 修改配置
+
+		cd /opt/ranger-2.1.0-hive-plugin/
+		vim install.properties
+		# 修改如下内容
+		POLICY_MGR_URL=http://atlas:6080
+		# 仓库名称，后面需要使用
+		REPOSITORY_NAME=hivedev
+		# hive安装路径
+		COMPONENT_INSTALL_DIR_NAME=/opt/apache-hive
+		
+		# 审计信息
+		XAAUDIT.SOLR.ENABLE=true
+		XAAUDIT.SOLR.URL=http://hadoop-master:8983/solr/ranger_audits
+		XAAUDIT.SOLR.USER=NONE
+		XAAUDIT.SOLR.PASSWORD=NONE
+		XAAUDIT.SOLR.ZOOKEEPER=hadoop-master:2181
+4. 安装(相应的策略信息会存储在`/etc/ranger`文件夹下)
+
+		# 安装
+		./enable-hive-plugin.sh
+		# 驱动
+		./disable-hive-plugin.sh
+5. 添加授权	
+	1. 登录ranger-admin添加授权 
+
+		![](ranger/hive-ranger.png)
+	2. 添加hdfs中hive用户权限
+
+		![](ranger/range-hdfs-hive.png)
+6. hive中使用
+	1. 启动`hiveserver2`
+
+			#切换用户
+			su hive
+			# 启动
+			hiveserver2 
+	2. 链接
+
+			beeline -n hive -u jdbc:hive2://localhost:10000	
