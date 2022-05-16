@@ -246,3 +246,69 @@
 		# 查看状态
 		solr status
 		
+### Ranger
+#### 编译安装
+1. 前置
+	1. maven需要3.6.2+
+	2. 需要安装python3 
+2. 下载
+
+		curl -O https://mirrors.ustc.edu.cn/apache/ranger/2.1.0/apache-ranger-2.1.0.tar.gz
+		# 解压
+		tar -zxvf apache-ranger-2.1.0.tar.gz
+3. 编译
+
+		mvn -DskipTests=true clean compile package install assembly:assembly 
+
+#### 安装
+1. 前置：
+	1. `关闭mysql的ssl认证`
+	2. solr审计配置
+		1. 解压
+				
+				# 改文件可以 通过/opt/ranger-2.1.0-admin/contrib/solr_for_audit_setup 生成
+				tar -zxvf ranger_audit_server.tar.gz
+		2. 上传配置
+				
+				cd ranger_audit_server
+				# 同时可以使用scripts文件夹中的add_ranger_audits_conf_to_zk.sh脚本执行(注意修改配置)
+				/opt/solr-7.5.0/server/scripts/cloud-scripts/zkcli.sh -cmd upconfig -zkhost hadoop-master:2181 -confname ranger_audits -confdir ./conf
+		3. 创建collection 
+
+				# 同时可以使用scripts文件夹中的create_ranger_audits_collection.sh脚本执行(注意修改配置)
+				curl --negotiate -u : "http://hadoop-master:8983/solr/admin/collections?action=CREATE&name=ranger_audits&numShards=1&replicationFactor=1&collection.configName=ranger_audits&maxShardsPerNode=100"
+2. 解压
+
+		tar -zxvf apache-ranger-2.1.0-admin.tar.gz -C /opt
+3. 修改配置文件
+
+		cd /opt/ranger-2.1.0-admin
+		vim 	install.properties
+		# 设置mysql驱动包位置，事先需要自行添加
+		SQL_CONNECTOR_JAR=/usr/share/java/mysql-connector-java.jar
+		# 设置mysql root用户
+		db_root_user=root
+		db_root_password=XXXXX
+		db_host=mysql:3306
+		# 设置ranger数据库用户信息
+		db_name=ranger
+		db_user=rangeradmin
+		db_password=rangeradmiN!23
+		
+		# 这个要设置，不然会报错
+		audit_db_name=rangeraudit
+		audit_db_user=xalogger
+		audit_db_password=
+		
+		# 审计使用solr
+		audit_solr_urls= http://hadoop-master:8983/solr/ranger_audits
+		audit_solr_user=
+		audit_solr_password=
+		audit_solr_zookeepers=hadoop-master:2181
+		
+		audit_solr_collection_name=ranger_audits
+3. 安装 
+
+		./setup.sh
+		# 提示成功执行
+		./set_globals.sh
